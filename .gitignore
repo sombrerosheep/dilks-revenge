@@ -1,1 +1,10 @@
+# emacs tmp/lock
+*~
+\#*\#
+.\#*
+
+# build dir
 build/
+
+# ide
+.vscode/
