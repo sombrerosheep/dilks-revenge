@@ -17,6 +17,8 @@ set(game_include_dir "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 set(PROCESSOR_ARCH "x64")
 
+set(CMAKE_CC_COMPILER "/usr/bin/gcc")
+
 # Dependencies
 set(SDL_SOURCE "$ENV{sdl_src_dir}/")
 set(SDL_SHARED OFF CACHE BOOL "" FORCE)
@@ -30,7 +32,7 @@ message(STATUS "====== ${PROJECT_NAME} (${PROJECT_VERSION}) ======")
 message(STATUS "${game_description}")
 message(STATUS "")
 message(STATUS "Platform:   ${CMAKE_SYSTEM}")
-message(STATUS "Compiler:   ${CMAKE_CXX_COMPILER}")
+message(STATUS "Compiler:   ${CMAKE_CC_COMPILER}")
 message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "")
 message(STATUS "Project Variables:")
