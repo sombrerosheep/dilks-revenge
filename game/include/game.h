@@ -1,6 +1,8 @@
 #ifndef DREV_GAME_H
 #define DREV_GAME_H
 
+#include <player.h>
+
 #include <SDL.h>
 
 typedef struct _game Game;
@@ -8,6 +10,7 @@ typedef struct _game Game;
 struct _game {
   SDL_Window *window;
   SDL_Renderer *renderer;
+  Player *player;
 };
 
 Game *Game_Create();
