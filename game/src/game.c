@@ -38,6 +38,11 @@ Game *Game_Create() {
     Game_Destroy(g);
     return NULL;
   }
+  if (Player_Init(g->player, Vec2_Zero) != 0) {
+    printf("ERROR :: Unable to initialize player\n");
+    Game_Destroy(g);
+    return NULL;
+  }
 
   if (Controller_Init(&g->controller) != 0) {
     printf("ERROR :: Unable to initialize controller\n");
@@ -64,6 +69,7 @@ void Game_Run(Game *g) {
 
     // Input & Update
     Controller_Update(&g->controller);
+    Player_Update(g->player, &g->controller);
 
     // Draw
     Game_Draw(g);
