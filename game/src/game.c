@@ -39,6 +39,12 @@ Game *Game_Create() {
     return NULL;
   }
 
+  if (Controller_Init(&g->controller) != 0) {
+    printf("ERROR :: Unable to initialize controller\n");
+    Game_Destroy(g);
+    return NULL;
+  }
+
   return g;
 }
 
@@ -57,6 +63,7 @@ void Game_Run(Game *g) {
     }
 
     // Input & Update
+    Controller_Update(&g->controller);
 
     // Draw
     Game_Draw(g);

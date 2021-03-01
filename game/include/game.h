@@ -2,6 +2,7 @@
 #define DREV_GAME_H
 
 #include <player.h>
+#include <controller.h>
 
 #include <SDL.h>
 
@@ -11,6 +12,7 @@ struct _game {
   SDL_Window *window;
   SDL_Renderer *renderer;
   Player *player;
+  Controller controller;
 };
 
 Game *Game_Create();
