@@ -1,8 +1,17 @@
 #include <game.h>
 
+#include <clock.h>
+
 #include <stdio.h>
 
 static const char *title = "dilks revenge";
+
+static void Game_Update(Game *game, Frame delta) {
+  Controller_Update(&game->controller);
+  printf("frame: %u (%f)\n", delta.milli, delta.sec);
+
+  Player_Update(game->player, &game->controller, delta.sec);
+}
 
 static void Game_Draw(Game *game) {
   SDL_SetRenderDrawColor(game->renderer, 0x0, 0x0, 0x0, 0xFF);
@@ -14,6 +23,9 @@ static void Game_Draw(Game *game) {
 }
 
 Game *Game_Create() {
+  #define WINDOW_HEIGHT 600
+  #define WINDOW_WIDTH 800
+
   Game *g = NULL;
 
   if ((g = malloc(sizeof(Game))) == NULL) {
@@ -21,7 +33,7 @@ Game *Game_Create() {
     return NULL;
   }
 
-  if ((g->window = SDL_CreateWindow(title, 100, 50, 800, 600, SDL_WINDOW_OPENGL)) == NULL) {
+  if ((g->window = SDL_CreateWindow(title, 100, 50, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL)) == NULL) {
     printf("ERROR :: Unable to allocate memory for window. SDL Error: %s\n", SDL_GetError());
     Game_Destroy(g);
     return NULL;
@@ -38,7 +50,7 @@ Game *Game_Create() {
     Game_Destroy(g);
     return NULL;
   }
-  if (Player_Init(g->player, Vec2_Zero) != 0) {
+  if (Player_Init(g->player, (Vec2){ (float)WINDOW_WIDTH / 2.f, (float)WINDOW_HEIGHT / 2.f }) != 0) {
     printf("ERROR :: Unable to initialize player\n");
     Game_Destroy(g);
     return NULL;
@@ -56,6 +68,7 @@ Game *Game_Create() {
 void Game_Run(Game *g) {
   SDL_Event event;
   int running = 1;
+  Clock *game_clock = Clock_Create();
 
   while (running) {
     while (SDL_PollEvent(&event)) {
@@ -68,8 +81,8 @@ void Game_Run(Game *g) {
     }
 
     // Input & Update
-    Controller_Update(&g->controller);
-    Player_Update(g->player, &g->controller);
+    Frame frame = Clock_Reset(game_clock);
+    Game_Update(g, frame);
 
     // Draw
     Game_Draw(g);

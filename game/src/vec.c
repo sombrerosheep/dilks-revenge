@@ -17,10 +17,13 @@ Vec2 Vec2_Normalize(Vec2 vec) {
   Vec2 norm;
   float mag;
 
+  norm = Vec2_Zero;
   mag = Vec2_Magnitude(vec);
 
-  norm.x = vec.x / mag;
-  norm.y = vec.y / mag;
+  if (mag > 0.f) {
+    norm.x = vec.x / mag;
+    norm.y = vec.y / mag;
+  }
 
   return norm;
 }
