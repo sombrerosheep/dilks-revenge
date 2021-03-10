@@ -41,8 +41,8 @@ void Player_Update(Player *player, const Controller *controller, float delta) {
 
 void Player_Draw(const Player *player, SDL_Renderer *renderer) {
   SDL_FRect player_rect = (SDL_FRect){
-    player->position.x,
-    player->position.y,
+    player->position.x - PLAYER_WIDTH / 2.f,
+    player->position.y - PLAYER_HEIGHT / 2.f,
     PLAYER_WIDTH,
     PLAYER_HEIGHT
   };

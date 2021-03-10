@@ -1,7 +1,7 @@
 #ifndef DREV_CONTROLLER_H
 #define DREV_CONTROLLER_H
 
-typedef struct  _controller             Controller;
+typedef struct  _controller Controller;
 
 struct _controller {
   unsigned int up;

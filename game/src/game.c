@@ -8,7 +8,6 @@ static const char *title = "dilks revenge";
 
 static void Game_Update(Game *game, Frame delta) {
   Controller_Update(&game->controller);
-  printf("frame: %u (%f)\n", delta.milli, delta.sec);
 
   Player_Update(game->player, &game->controller, delta.sec);
 }
