@@ -1,10 +1,13 @@
 #include <game.h>
 
 #include <clock.h>
+#include <enemy.h>
 
 #include <stdio.h>
 
 static const char *title = "dilks revenge";
+
+Enemy e;
 
 static void Game_Update(Game *game, Frame delta) {
   Controller_Update(&game->controller);
@@ -17,6 +20,8 @@ static void Game_Draw(Game *game) {
   SDL_RenderClear(game->renderer);
 
   Player_Draw(game->player, game->renderer);
+
+  Enemey_Draw(&e, game->renderer);
 
   SDL_RenderPresent(game->renderer);
 }
@@ -82,6 +87,8 @@ void Game_Run(Game *g) {
     // Input & Update
     Frame frame = Clock_Reset(game_clock);
     Game_Update(g, frame);
+
+    Enemy_Init(&e, (Vec2){ 10.f, 10.f}, 100);
 
     // Draw
     Game_Draw(g);
