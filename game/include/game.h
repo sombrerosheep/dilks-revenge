@@ -3,6 +3,7 @@
 
 #include <player.h>
 #include <controller.h>
+#include <enemy_rail.h>
 
 #include <SDL.h>
 
@@ -12,6 +13,7 @@ struct _game {
   SDL_Window *window;
   SDL_Renderer *renderer;
   Player *player;
+  EnemyRail *rail;
   Controller controller;
 };
 

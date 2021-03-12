@@ -7,12 +7,11 @@
 
 static const char *title = "dilks revenge";
 
-Enemy e;
-
 static void Game_Update(Game *game, Frame delta) {
   Controller_Update(&game->controller);
 
   Player_Update(game->player, &game->controller, delta.sec);
+  EnemyRail_Update(game->rail);
 }
 
 static void Game_Draw(Game *game) {
@@ -20,8 +19,7 @@ static void Game_Draw(Game *game) {
   SDL_RenderClear(game->renderer);
 
   Player_Draw(game->player, game->renderer);
-
-  Enemey_Draw(&e, game->renderer);
+  EnemyRail_Draw(game->rail, game->renderer);
 
   SDL_RenderPresent(game->renderer);
 }
@@ -59,6 +57,12 @@ Game *Game_Create() {
     Game_Destroy(g);
     return NULL;
   }
+  
+  if ((g->rail = EnemyRail_Create((Vec2){ 100.f, 100.f }, (Vec2){ 600.f, 100.f })) == NULL) {
+    printf("ERROR :: Unable to initialize enemy rail\n");
+    Game_Destroy(g);
+    return NULL;
+  }
 
   if (Controller_Init(&g->controller) != 0) {
     printf("ERROR :: Unable to initialize controller\n");
@@ -88,8 +92,6 @@ void Game_Run(Game *g) {
     Frame frame = Clock_Reset(game_clock);
     Game_Update(g, frame);
 
-    Enemy_Init(&e, (Vec2){ 10.f, 10.f}, 100);
-
     // Draw
     Game_Draw(g);
   }
@@ -106,6 +108,10 @@ void Game_Destroy(Game *g) {
 
   if (g->player != NULL) {
     free(g->player);
+  }
+
+  if (g->rail != NULL) {
+    free(g->rail);
   }
 
   return;
