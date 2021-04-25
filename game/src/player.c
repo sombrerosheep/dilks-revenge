@@ -11,6 +11,8 @@ int Player_Init(Player *player, Vec2 starting_pos) {
   player->position.y = starting_pos.y - (PLAYER_WIDTH / 2.f);
   player->velocity = Vec2_Zero;
 
+  Shield_Init(&player->shield, player->position.x, player->position.y);
+
   return 0;
 }
 
@@ -49,6 +51,8 @@ void Player_Draw(const Player *player, SDL_Renderer *renderer) {
 
   SDL_SetRenderDrawColor(renderer, 0xAA, 0x00, 0xAA, 0xFF);
   SDL_RenderFillRectF(renderer, &player_rect);
+
+  Shield_Draw(&player->shield, renderer);
 
   return;
 }

@@ -3,6 +3,7 @@
 
 #include <vec.h>
 #include <controller.h>
+#include <shield.h>
 
 #include <SDL.h>
 
@@ -11,6 +12,7 @@ typedef struct _player Player;
 struct _player {
   Vec2 position;
   Vec2 velocity;
+  Shield shield;
 };
 
 int Player_Init(Player *player, Vec2 starting_pos);
