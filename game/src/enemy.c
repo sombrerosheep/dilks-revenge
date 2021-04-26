@@ -2,6 +2,7 @@
 
 #define ENEMY_HEIGHT 10.f
 #define ENEMY_WIDTH 20.f
+#define ENEMY_SPEED 150.f
 
 int Enemy_Init(Enemy *enemy, Vec2 position, unsigned int health) {
   enemy->position = position;
@@ -11,9 +12,9 @@ int Enemy_Init(Enemy *enemy, Vec2 position, unsigned int health) {
   return 0;
 }
 
-void Enemy_Update(Enemy *enemy) {
-  enemy->position.x += enemy->velocity.x;
-  enemy->position.y += enemy->velocity.y;
+void Enemy_Update(Enemy *enemy, float delta) {
+  enemy->position.x += enemy->velocity.x * ENEMY_SPEED * delta;
+  enemy->position.y += enemy->velocity.y * ENEMY_SPEED * delta;
 }
 
 void Enemey_Draw(const Enemy *enemy, SDL_Renderer *renderer) {

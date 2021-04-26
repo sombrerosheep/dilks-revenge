@@ -2,12 +2,40 @@
 
 #include <stdio.h>
 
+typedef struct _enemy_rail_enemy RailEnemy;
+
+struct _enemy_rail_enemy {
+  int in_use;
+  Enemy enemy;
+};
+
 struct _enemy_rail {
   Vec2 start;
   Vec2 end;
-  Enemy *enemies;
-  unsigned int num_enemies;
+  Vec2 slope;
+  RailEnemy *enemies;
+  unsigned int enemies_count;
+  unsigned int enemies_capacity;
 };
+
+static int EnemyRail_Resize_Enemies(EnemyRail *rail, unsigned int new_cap) {
+  void *tmp;
+
+  tmp = realloc(rail->enemies, sizeof(RailEnemy) * new_cap);
+
+  if (tmp == NULL) {
+    return -1;
+  }
+
+  rail->enemies = tmp;
+  rail->enemies_capacity = new_cap;
+
+  for (unsigned int i = rail->enemies_count; i < rail->enemies_capacity; i++) {
+    rail->enemies[i].in_use = 0;
+  }
+
+  return 0;
+}
 
 EnemyRail *EnemyRail_Create(Vec2 start, Vec2 end) {
   EnemyRail *rail = NULL;
@@ -19,42 +47,94 @@ EnemyRail *EnemyRail_Create(Vec2 start, Vec2 end) {
 
   rail->start = start;
   rail->end = end;
-  
-  rail->num_enemies = 3;
-  if ((rail->enemies = malloc(sizeof(Enemy) * 3)) == NULL) {
-    printf("ERROR :: Unable to allocate memory for enemy rail enemies");
-    EnemyRail_Destroy(rail);
-    free(rail);
+  rail->slope = (Vec2) {
+    end.x - start.x,
+    end.y - start.y 
+  };
+
+  rail->enemies_count = 0;
+  rail->enemies_capacity = 5;
+
+  rail->enemies = NULL;
+
+  if (EnemyRail_Resize_Enemies(rail, 5) != 0) {
+    printf("ERROR :: Unable to resize rail enemies\n");
     return NULL;
   }
-
-  Enemy_Init(&rail->enemies[0], rail->start, 100);
-  Vec2 middle = (Vec2){
-    start.x == end.x ? start.x : start.x + ((SDL_fabsf(start.x - end.x) / 2.f)),
-    start.y == end.y ? start.y : start.x + ((SDL_fabsf(start.y - end.y) / 2.f))
-  };
-  Enemy_Init(&rail->enemies[1], middle, 100);
-  Enemy_Init(&rail->enemies[2], rail->end, 100);
-
+  
   return rail;
 }
 
-void EnemyRail_Update(EnemyRail *rail) {
-  for (unsigned int i = 0; i < rail->num_enemies; i++) {
-   Enemy_Update(&rail->enemies[i]);
+int EnemyRail_Add(EnemyRail *rail) {
+  if (rail->enemies_count == rail->enemies_capacity) {
+    unsigned int new_cap = rail->enemies_capacity * 2;
+
+    if (EnemyRail_Resize_Enemies(rail, new_cap) != 0) {
+      printf("ERROR :: Unable to resize rail enemies\n");
+      return -1;
+    }
+  }
+
+  for (unsigned int i = 0; i < rail->enemies_capacity; i++) {
+    if (rail->enemies[i].in_use == 1) {
+      continue;
+    }
+
+    Enemy_Init(&rail->enemies[i].enemy, rail->start, 100);
+    Vec2 slope_norm = Vec2_Normalize(rail->slope);
+    rail->enemies[i].enemy.velocity = slope_norm;
+
+    rail->enemies[i].in_use = 1;
+    rail->enemies_count++;
+    return 0;
+  }
+
+  return -1;
+}
+
+void EnemyRail_Update(EnemyRail *rail, float delta) {
+  for (unsigned int i = 0; i < rail->enemies_count; i++) {
+    if (rail->slope.x > 0.f && rail->slope.y == 0.f) {
+      // L->R
+      if (rail->enemies[i].enemy.position.x > rail->end.x) {
+        rail->enemies[i].enemy.position.x = rail->start.x;
+      }
+    } else if (rail->slope.x < 0.f && rail->slope.y == 0.f) {
+      // R->L
+      if (rail->enemies[i].enemy.position.x < rail->end.x) {
+        rail->enemies[i].enemy.position.x = rail->start.x;
+      }
+    } else if (rail->slope.x == 0.f && rail->slope.y > 0.f) {
+      // U->D
+      if (rail->enemies[i].enemy.position.y > rail->end.y) {
+        rail->enemies[i].enemy.position.y = rail->start.y;
+      }
+    } else if (rail->slope.x == 0.f && rail->slope.y < 0.f) {
+      // D->U
+      if (rail->enemies[i].enemy.position.y < rail->end.y) {
+        rail->enemies[i].enemy.position.y = rail->start.y;
+      }
+    }
+
+    Enemy_Update(&rail->enemies[i].enemy, delta);
   }
 }
 
 void EnemyRail_Draw(const EnemyRail *rail, SDL_Renderer *renderer) {
-  for (unsigned int i = 0; i < rail->num_enemies; i++) {
-    Enemey_Draw(&rail->enemies[i], renderer);
+  SDL_SetRenderDrawColor(renderer, 0xCC, 0xCC, 0xCC, 0xFF);
+  SDL_RenderDrawLineF(renderer, rail->start.x, rail->start.y, rail->end.x, rail->end.y);
+
+  for (unsigned int i = 0; i < rail->enemies_count; i++) {
+    if (rail->enemies[i].in_use > 0) {
+      Enemey_Draw(&rail->enemies[i].enemy, renderer);
+    }
   }
 }
 
 void EnemyRail_Destroy(EnemyRail *rail) {
   rail->start = Vec2_Zero;
   rail->end = Vec2_Zero;
-  rail->num_enemies = 0;
+  rail->enemies_count = 0;
   
   if (rail->enemies != NULL) {
     free(rail->enemies);

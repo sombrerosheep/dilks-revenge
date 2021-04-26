@@ -11,7 +11,7 @@ static void Game_Update(Game *game, Frame delta) {
   Controller_Update(&game->controller);
 
   Player_Update(game->player, &game->controller, delta.sec);
-  EnemyRail_Update(game->rail);
+  EnemyRail_Update(game->rail, delta.sec);
 }
 
 static void Game_Draw(Game *game) {
@@ -58,10 +58,13 @@ Game *Game_Create() {
     return NULL;
   }
   
-  if ((g->rail = EnemyRail_Create((Vec2){ 100.f, 100.f }, (Vec2){ 600.f, 100.f })) == NULL) {
+  if ((g->rail = EnemyRail_Create((Vec2){ 100.f, 100.f }, (Vec2){ 700.f, 100.f })) == NULL) {
     printf("ERROR :: Unable to initialize enemy rail\n");
     Game_Destroy(g);
     return NULL;
+  }
+  if (EnemyRail_Add(g->rail) != 0) {
+    printf("ERROR :: Error adding enemy to rail\n");
   }
 
   if (Controller_Init(&g->controller) != 0) {

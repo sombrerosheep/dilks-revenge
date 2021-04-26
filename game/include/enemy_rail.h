@@ -8,7 +8,8 @@
 typedef struct _enemy_rail EnemyRail;
 
 EnemyRail *EnemyRail_Create(Vec2 start, Vec2 end);
-void EnemyRail_Update(EnemyRail *rail);
+int EnemyRail_Add(EnemyRail *rail);
+void EnemyRail_Update(EnemyRail *rail, float delta);
 void EnemyRail_Draw(const EnemyRail *rail, SDL_Renderer *renderer);
 
 void EnemyRail_Destroy(EnemyRail *rail);
