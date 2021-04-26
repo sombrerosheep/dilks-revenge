@@ -11,7 +11,10 @@ static void Game_Update(Game *game, Frame delta) {
   Controller_Update(&game->controller);
 
   Player_Update(game->player, &game->controller, delta.sec);
-  EnemyRail_Update(game->rail, delta.sec);
+  EnemyRail_Update(game->rails[0], delta.sec);
+  EnemyRail_Update(game->rails[1], delta.sec);
+  EnemyRail_Update(game->rails[2], delta.sec);
+  EnemyRail_Update(game->rails[3], delta.sec);
 }
 
 static void Game_Draw(Game *game) {
@@ -19,7 +22,10 @@ static void Game_Draw(Game *game) {
   SDL_RenderClear(game->renderer);
 
   Player_Draw(game->player, game->renderer);
-  EnemyRail_Draw(game->rail, game->renderer);
+  EnemyRail_Draw(game->rails[0], game->renderer);
+  EnemyRail_Draw(game->rails[1], game->renderer);
+  EnemyRail_Draw(game->rails[2], game->renderer);
+  EnemyRail_Draw(game->rails[3], game->renderer);
 
   SDL_RenderPresent(game->renderer);
 }
@@ -58,12 +64,40 @@ Game *Game_Create() {
     return NULL;
   }
   
-  if ((g->rail = EnemyRail_Create((Vec2){ 100.f, 100.f }, (Vec2){ 700.f, 100.f })) == NULL) {
+  // Init rails
+  if ((g->rails[0] = EnemyRail_Create((Vec2){ -100.f, 100.f }, (Vec2){ 900.f, 100.f })) == NULL) {
     printf("ERROR :: Unable to initialize enemy rail\n");
     Game_Destroy(g);
     return NULL;
   }
-  if (EnemyRail_Add(g->rail) != 0) {
+  if (EnemyRail_Add(g->rails[0]) != 0) {
+    printf("ERROR :: Error adding enemy to rail\n");
+  }
+  
+  if ((g->rails[1] = EnemyRail_Create((Vec2){ 700.f, -100.f }, (Vec2){ 700.f, 700.f })) == NULL) {
+    printf("ERROR :: Unable to initialize enemy rail\n");
+    Game_Destroy(g);
+    return NULL;
+  }
+  if (EnemyRail_Add(g->rails[1]) != 0) {
+    printf("ERROR :: Error adding enemy to rail\n");
+  }
+
+  if ((g->rails[2] = EnemyRail_Create((Vec2){ -100.f, 500.f }, (Vec2){ 900.f, 500.f })) == NULL) {
+    printf("ERROR :: Unable to initialize enemy rail\n");
+    Game_Destroy(g);
+    return NULL;
+  }
+  if (EnemyRail_Add(g->rails[2]) != 0) {
+    printf("ERROR :: Error adding enemy to rail\n");
+  }
+
+  if ((g->rails[3] = EnemyRail_Create((Vec2){ 100.f, -100.f }, (Vec2){ 100.f, 700.f })) == NULL) {
+    printf("ERROR :: Unable to initialize enemy rail\n");
+    Game_Destroy(g);
+    return NULL;
+  }
+  if (EnemyRail_Add(g->rails[3]) != 0) {
     printf("ERROR :: Error adding enemy to rail\n");
   }
 
@@ -113,8 +147,17 @@ void Game_Destroy(Game *g) {
     free(g->player);
   }
 
-  if (g->rail != NULL) {
-    free(g->rail);
+  if (g->rails[0] != NULL) {
+    EnemyRail_Destroy(g->rails[0]);
+  }
+  if (g->rails[1] != NULL) {
+    EnemyRail_Destroy(g->rails[0]);
+  }
+  if (g->rails[2] != NULL) {
+    EnemyRail_Destroy(g->rails[0]);
+  }
+  if (g->rails[3] != NULL) {
+    EnemyRail_Destroy(g->rails[0]);
   }
 
   return;

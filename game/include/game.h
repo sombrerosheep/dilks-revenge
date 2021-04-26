@@ -7,13 +7,15 @@
 
 #include <SDL.h>
 
+#define RAIL_COUNT 4
+
 typedef struct _game Game;
 
 struct _game {
   SDL_Window *window;
   SDL_Renderer *renderer;
   Player *player;
-  EnemyRail *rail;
+  EnemyRail *rails[RAIL_COUNT];
   Controller controller;
 };
 
