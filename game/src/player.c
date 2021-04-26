@@ -39,6 +39,8 @@ void Player_Update(Player *player, const Controller *controller, float delta) {
 
   player->position.x += player->velocity.x * PLAYER_SPEED * delta;
   player->position.y += player->velocity.y * PLAYER_SPEED * delta;
+
+  Shield_EvalTarget(&player->shield, player->position.x, player->position.y, PLAYER_WIDTH, PLAYER_HEIGHT);
 }
 
 void Player_Draw(const Player *player, SDL_Renderer *renderer) {
