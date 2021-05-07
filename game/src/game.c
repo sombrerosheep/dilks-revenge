@@ -66,7 +66,7 @@ Game *Game_Create() {
     Game_Destroy(g);
     return NULL;
   }
-  if (EnemyRail_Add(g->rail_manager.rails[0]) != 0) {
+  if (EnemyRail_Add_Enemy(g->rail_manager.rails[0]) != 0) {
     printf("ERROR :: Error adding enemy to rail\n");
   }
   
@@ -75,7 +75,7 @@ Game *Game_Create() {
     Game_Destroy(g);
     return NULL;
   }
-  if (EnemyRail_Add(g->rail_manager.rails[1]) != 0) {
+  if (EnemyRail_Add_Enemy(g->rail_manager.rails[1]) != 0) {
     printf("ERROR :: Error adding enemy to rail\n");
   }
 
@@ -84,7 +84,7 @@ Game *Game_Create() {
     Game_Destroy(g);
     return NULL;
   }
-  if (EnemyRail_Add(g->rail_manager.rails[2]) != 0) {
+  if (EnemyRail_Add_Enemy(g->rail_manager.rails[2]) != 0) {
     printf("ERROR :: Error adding enemy to rail\n");
   }
 
@@ -93,7 +93,7 @@ Game *Game_Create() {
     Game_Destroy(g);
     return NULL;
   }
-  if (EnemyRail_Add(g->rail_manager.rails[3]) != 0) {
+  if (EnemyRail_Add_Enemy(g->rail_manager.rails[3]) != 0) {
     printf("ERROR :: Error adding enemy to rail\n");
   }
 

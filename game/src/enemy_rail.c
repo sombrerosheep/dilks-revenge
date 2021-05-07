@@ -65,7 +65,7 @@ EnemyRail *EnemyRail_Create(Vec2 start, Vec2 end) {
   return rail;
 }
 
-int EnemyRail_Add(EnemyRail *rail) {
+int EnemyRail_Add_Enemy(EnemyRail *rail) {
   if (rail->enemies_count == rail->enemies_capacity) {
     unsigned int new_cap = rail->enemies_capacity * 2;
 
@@ -92,27 +92,45 @@ int EnemyRail_Add(EnemyRail *rail) {
   return -1;
 }
 
+int EnemyRail_Remove_Enemy(EnemyRail *rail, Enemy *enemy) {
+  if (rail->enemies_count == 0) {
+    return -1;
+  }
+
+  for (unsigned int i = 0; i < rail->enemies_count; i++) {
+    if (
+      rail->enemies[i].in_use == 1 &&
+      &rail->enemies[i].enemy == enemy
+    ) {
+      rail->enemies[i].in_use = 0;
+      return 0;
+    }
+  }
+
+  return -1;
+}
+
 void EnemyRail_Update(EnemyRail *rail, float delta) {
   for (unsigned int i = 0; i < rail->enemies_count; i++) {
     if (rail->slope.x > 0.f && rail->slope.y == 0.f) {
       // L->R
       if (rail->enemies[i].enemy.position.x > rail->end.x) {
-        rail->enemies[i].enemy.position.x = rail->start.x;
+        EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
       }
     } else if (rail->slope.x < 0.f && rail->slope.y == 0.f) {
       // R->L
       if (rail->enemies[i].enemy.position.x < rail->end.x) {
-        rail->enemies[i].enemy.position.x = rail->start.x;
+        EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
       }
     } else if (rail->slope.x == 0.f && rail->slope.y > 0.f) {
       // U->D
       if (rail->enemies[i].enemy.position.y > rail->end.y) {
-        rail->enemies[i].enemy.position.y = rail->start.y;
+        EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
       }
     } else if (rail->slope.x == 0.f && rail->slope.y < 0.f) {
       // D->U
       if (rail->enemies[i].enemy.position.y < rail->end.y) {
-        rail->enemies[i].enemy.position.y = rail->start.y;
+        EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
       }
     }
 
