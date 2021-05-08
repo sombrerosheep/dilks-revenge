@@ -9,10 +9,13 @@ typedef struct _enemy_rail_manager EnemyRailManager;
 struct _enemy_rail_manager {
   EnemyRail **rails;
   unsigned int num_rails;
+  unsigned int *last_add;
 };
 
-void EnemyRailManager_Init(EnemyRailManager *manager, unsigned int num);
+int EnemyRailManager_Init(EnemyRailManager *manager, unsigned int num);
 void EnemyRailManager_Update(EnemyRailManager *manager, float delta);
 void EnemyRailManager_Draw(EnemyRailManager *manager, SDL_Renderer *renderer);
+
+void EnemyRailManager_Destroy(EnemyRailManager *manager);
 
 #endif
