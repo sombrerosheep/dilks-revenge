@@ -17,6 +17,14 @@ int Player_Init(Player *player, Vec2 starting_pos) {
 }
 
 void Player_Update(Player *player, const Controller *controller, float delta) {
+  int mouse_x, mouse_y;
+  SDL_GetMouseState(&mouse_x, &mouse_y);
+  player->aim = (Vec2){
+    (float)mouse_x - player->position.x,
+    (float)mouse_y - player->position.y
+  };
+  player->aim = Vec2_Normalize(player->aim);
+
   player->velocity = Vec2_Zero;
 
   if (controller->up) {
@@ -55,6 +63,15 @@ void Player_Draw(const Player *player, SDL_Renderer *renderer) {
   SDL_RenderFillRectF(renderer, &player_rect);
 
   Shield_Draw(&player->shield, renderer);
+
+  unsigned int aim_arm_len = 35.f;
+  SDL_FRect aim_rect = {
+    player->aim.x * aim_arm_len + player->position.x,
+    player->aim.y * aim_arm_len + player->position.y,
+    5.f,
+    5.f
+  };
+  SDL_RenderFillRectF(renderer, &aim_rect);
 
   return;
 }

@@ -12,6 +12,7 @@ typedef struct _player Player;
 struct _player {
   Vec2 position;
   Vec2 velocity;
+  Vec2 aim;
   Shield shield;
 };
 
