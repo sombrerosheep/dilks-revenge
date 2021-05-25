@@ -10,6 +10,7 @@ typedef struct drev_managed_enemy_rail ManagedEnemyRail;
 struct drev_managed_enemy_rail {
   EnemyRail *rail;
   char name[RAIL_NAME_MAX];
+  unsigned int last_added;
   int initialized;
 };
 
@@ -17,7 +18,6 @@ struct drev_enemy_rail_manager {
   ManagedEnemyRail *rails;
   unsigned int num_rails;
   unsigned int cap_rails;
-  unsigned int *last_add;
 };
 
 static ManagedEnemyRail *EnemyRailManager_GetRegisteredRail(EnemyRailManager *manager, char *rail_name) {
@@ -40,6 +40,7 @@ void ManagedEnemyRail_Destroy(ManagedEnemyRail *managed_rail) {
   managed_rail->name[0] = '\0';
   managed_rail->initialized = 0;
   managed_rail->rail = NULL;
+  managed_rail->last_added = 0;
 }
 
 EnemyRailManager *EnemyRailManager_Create(unsigned int num_rails_capacity) {
@@ -50,7 +51,6 @@ EnemyRailManager *EnemyRailManager_Create(unsigned int num_rails_capacity) {
   }
 
   manager->rails = NULL;
-  manager->last_add = NULL;
   manager->cap_rails = num_rails_capacity;
   manager->num_rails = 0;
 
@@ -66,12 +66,6 @@ EnemyRailManager *EnemyRailManager_Create(unsigned int num_rails_capacity) {
 
   for (unsigned int i = 0; i < manager->cap_rails; i++) {
     ManagedEnemyRail_Destroy(&manager->rails[i]);
-  }
-
-  if ((manager->last_add = malloc(sizeof(unsigned int) * num_rails_capacity)) == NULL) {
-    printf("ERROR :: unable to allocate memory for enemy rail counters\n");
-    EnemyRailManager_Destroy(manager);
-    return NULL;
   }
 
   return manager;
@@ -143,11 +137,11 @@ void EnemyRailManager_Update(EnemyRailManager *manager, float delta) {
   for (unsigned int i = 0; i < manager->num_rails; i++) {
     if (manager->rails[i].initialized == 1) {
       EnemyRail_Update(manager->rails[i].rail, delta);
-      manager->last_add[i] += (unsigned int)(delta * 1000.f);
+      manager->rails[i].last_added += (unsigned int)(delta * 1000.f);
 
-      if (manager->last_add[i] > 3000 + 250 * i) {
+      if (manager->rails[i].last_added > 3000 + 250 * i) {
        EnemyRail_Add_Enemy(manager->rails[i].rail);
-       manager->last_add[i] = 0;
+       manager->rails[i].last_added = 0;
       }
     }
   }
@@ -162,10 +156,6 @@ void EnemyRailManager_Draw(EnemyRailManager *manager, SDL_Renderer *renderer) {
 }
 
 void EnemyRailManager_Destroy(EnemyRailManager *manager) {
-  if (manager->last_add != NULL) {
-    free(manager->last_add);
-  }
-
   if (manager->rails != NULL) {
     for (unsigned int i = 0; i < manager->num_rails; i++) {
       ManagedEnemyRail_Destroy(&manager->rails[i]);
