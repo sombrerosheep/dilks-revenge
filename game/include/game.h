@@ -13,7 +13,7 @@ struct _game {
   SDL_Window *window;
   SDL_Renderer *renderer;
   Player *player;
-  EnemyRailManager rail_manager;
+  EnemyRailManager *rail_manager;
   Controller controller;
 };
 
