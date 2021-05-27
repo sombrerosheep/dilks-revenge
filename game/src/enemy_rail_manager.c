@@ -1,5 +1,7 @@
 #include <enemy_rail_manager.h>
 
+#include <random.h>
+
 #include <string.h>
 #include <stdio.h>
 
@@ -18,6 +20,7 @@ struct drev_enemy_rail_manager {
   ManagedEnemyRail *rails;
   unsigned int num_rails;
   unsigned int cap_rails;
+  RailManagerPlacementConfig placement;
 };
 
 static ManagedEnemyRail *EnemyRailManager_GetRegisteredRail(EnemyRailManager *manager, char *rail_name) {
@@ -53,6 +56,16 @@ EnemyRailManager *EnemyRailManager_Create(unsigned int num_rails_capacity) {
   manager->rails = NULL;
   manager->cap_rails = num_rails_capacity;
   manager->num_rails = 0;
+
+  manager->placement.type = RAIL_MANAGER_PLACEMENT_TYPE_RANDOM;
+  manager->placement.config.min = 300;
+  manager->placement.config.max = 900;
+  manager->placement.config.next = 
+    random_get_between(
+      manager->placement.config.min,
+      manager->placement.config.max
+    );
+  manager->placement.config.since = 0;
 
   if (manager->cap_rails < 1) {
     return manager;
@@ -133,16 +146,51 @@ int EnemyRailManager_RemoveRail(EnemyRailManager *manager, char* rail_name) {
   return 0;
 }
 
+void EnemyRailManager_SetPlacementConfig(EnemyRailManager *manager, RailManagerPlacementConfig config) {
+  manager->placement = config;
+  manager->placement.config.next = random_get_between(
+    manager->placement.config.min,
+    manager->placement.config.max
+  );
+  manager->placement.config.since = 0;
+  manager->placement.config.rand = random_get_eskil(manager->placement.config.rand);
+}
+
+
 void EnemyRailManager_Update(EnemyRailManager *manager, float delta) {
+  manager->placement.config.since += (unsigned int)(delta * 1000);
+
+  if (manager->placement.config.since > manager->placement.config.next) {
+    manager->placement.config.since = 0;
+    manager->placement.config.rand = random_get();
+    manager->placement.config.next = random_get_between(
+      manager->placement.config.min,
+      manager->placement.config.max
+    );
+
+    switch (manager->placement.type) {
+      case RAIL_MANAGER_PLACEMENT_TYPE_RANDOM: {
+        unsigned int rail_index = manager->placement.config.rand % manager->num_rails;
+        EnemyRail_Add_Enemy(manager->rails[rail_index].rail);
+
+        break;
+      };
+      default: {
+        printf("Unsupported placement type: %u\n", manager->placement.type);
+        break;
+      }
+    }
+  }
+
   for (unsigned int i = 0; i < manager->num_rails; i++) {
     if (manager->rails[i].initialized == 1) {
       EnemyRail_Update(manager->rails[i].rail, delta);
-      manager->rails[i].last_added += (unsigned int)(delta * 1000.f);
+      // manager->rails[i].last_added += (unsigned int)(delta * 1000.f);
 
-      if (manager->rails[i].last_added > 3000 + 250 * i) {
-       EnemyRail_Add_Enemy(manager->rails[i].rail);
-       manager->rails[i].last_added = 0;
-      }
+      // if (manager->rails[i].last_added > 3000 + 250 * i) {
+      //  EnemyRail_Add_Enemy(manager->rails[i].rail);
+      //  manager->rails[i].last_added = 0;
+      // }
     }
   }
 }

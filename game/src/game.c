@@ -1,5 +1,6 @@
 #include <game.h>
 
+#include <random.h>
 #include <clock.h>
 #include <enemy.h>
 
@@ -28,6 +29,7 @@ Game *Game_Create() {
   #define WINDOW_HEIGHT 600
   #define WINDOW_WIDTH 800
 
+  random_init(42);
   Game *g = NULL;
 
   if ((g = malloc(sizeof(Game))) == NULL) {
@@ -66,50 +68,33 @@ Game *Game_Create() {
   }
 
   { // Init rails
-    EnemyRail *rail = NULL;
-    rail = EnemyRailManager_AddRail(
+    EnemyRailManager_AddRail(
       g->rail_manager,
       "top",
       (Vec2){ -100.f, 100.f },
       (Vec2){ 900.f, 100.f }
     );
-    if (rail != NULL) {
-      EnemyRail_Add_Enemy(rail);
-      rail = NULL;
-    }
     
-    rail = EnemyRailManager_AddRail(
+    EnemyRailManager_AddRail(
       g->rail_manager,
       "right",
       (Vec2){ 700.f, -100.f },
       (Vec2){ 700.f, 700.f }
     );
-    if (rail != NULL) {
-      EnemyRail_Add_Enemy(rail);
-      rail = NULL;
-    }
 
-    rail = EnemyRailManager_AddRail(
+    EnemyRailManager_AddRail(
       g->rail_manager,
       "bottom",
       (Vec2){ -100.f, 500.f },
       (Vec2){ 900.f, 500.f }
     );
-    if (rail != NULL) {
-      EnemyRail_Add_Enemy(rail);
-      rail = NULL;
-    }
 
-    rail = EnemyRailManager_AddRail(
+    EnemyRailManager_AddRail(
       g->rail_manager,
       "left",
       (Vec2){ 100.f, -100.f },
       (Vec2){ 100.f, 700.f }
     );
-    if (rail != NULL) {
-      EnemyRail_Add_Enemy(rail);
-      rail = NULL;
-    }
   }
 
   if (Controller_Init(&g->controller) != 0) {
