@@ -10,9 +10,12 @@ typedef struct drev_rail_manager_placement_config RailManagerPlacementConfig;
 
 typedef enum drev_rail_manager_placement_type {
   RAIL_MANAGER_PLACEMENT_TYPE_RANDOM, // each rail gets an enemy at random times
-  RAIL_MANAGER_PLACEMENT_TYPE_RANDOM_SPREAD, // random rail gets enemy at random timing
   RAIL_MANAGER_PLACEMENT_TYPE_STATIC, // add enemy at set interval
-  RAIL_MANAGER_PLACEMENT_TYPE_STATIC_SPREAD // add enemy to random rail at set interval
+
+  // putting a different placement type on each rail doesn't make sense with any of
+  // the spread things
+  // RAIL_MANAGER_PLACEMENT_TYPE_RANDOM_SPREAD, // random rail gets enemy at random timing
+  // RAIL_MANAGER_PLACEMENT_TYPE_STATIC_SPREAD // add enemy to random rail at set interval
 } RailManagerPlacementType;
 typedef struct drev_rail_manager_placement_params RailManagerPlacementParams;
 
@@ -21,7 +24,6 @@ struct drev_rail_manager_placement_params {
   unsigned int max;
   unsigned int next;
   unsigned int since;
-  unsigned int rand;
 };
 
 struct drev_rail_manager_placement_config {
@@ -34,7 +36,11 @@ EnemyRail *EnemyRailManager_AddRail(EnemyRailManager *manager, char *rail_name, 
 EnemyRail *EnemyRailManager_GetRail(EnemyRailManager *manager, char* rail_name);
 int EnemyRailManager_RemoveRail(EnemyRailManager *manager, char* rail_name);
 
-void EnemyRailManager_SetPlacementConfig(EnemyRailManager *manager, RailManagerPlacementConfig config);
+void EnemyRailManager_SetPlacementConfig(
+  EnemyRailManager *manager,
+  char *rail_name,
+  RailManagerPlacementConfig config
+);
 
 void EnemyRailManager_Update(EnemyRailManager *manager, float delta);
 void EnemyRailManager_Draw(EnemyRailManager *manager, SDL_Renderer *renderer);
