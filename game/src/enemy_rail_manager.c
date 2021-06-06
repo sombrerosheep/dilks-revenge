@@ -102,8 +102,8 @@ EnemyRail *EnemyRailManager_AddRail(EnemyRailManager *manager, char *rail_name, 
       strncpy(managed_rail->name, rail_name, RAIL_NAME_MAX);
 
       managed_rail->placement.type = RAIL_MANAGER_PLACEMENT_TYPE_RANDOM;
-      managed_rail->placement.config.min = 300;
-      managed_rail->placement.config.max = 900;
+      managed_rail->placement.config.min = 600;
+      managed_rail->placement.config.max = 1200;
       managed_rail->placement.config.next = 
         random_get_between(
           managed_rail->placement.config.min,

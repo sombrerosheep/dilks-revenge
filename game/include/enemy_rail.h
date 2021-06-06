@@ -10,6 +10,7 @@ typedef struct _enemy_rail EnemyRail;
 EnemyRail *EnemyRail_Create(Vec2 start, Vec2 end);
 int EnemyRail_Add_Enemy(EnemyRail *rail, SDL_Renderer *rendere);
 int EnemyRail_Remove_Enemy(EnemyRail *rail, Enemy *enemy);
+void EnemyRail_SetFocus(EnemyRail *rail, Vec2 point);
 void EnemyRail_Update(EnemyRail *rail, float delta);
 void EnemyRail_Draw(const EnemyRail *rail, SDL_Renderer *renderer);
 

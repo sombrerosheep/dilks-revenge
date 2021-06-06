@@ -6,18 +6,7 @@
 #define ENEMY_WIDTH 20.f
 #define ENEMY_SPEED 150.f
 
-int Enemy_Init(Enemy *enemy, Vec2 position, unsigned int health, SDL_Renderer *renderer) {
-  SDL_RendererInfo info;
-  SDL_GetRendererInfo(renderer, &info);
-  if (!(info.flags & SDL_RENDERER_TARGETTEXTURE)) {
-    printf("ERROR :: rendering to texture not supported. cannot render enemy\n");
-  }
-
-  enemy->position = position;
-  enemy->velocity = Vec2_Zero;
-  enemy->health = health;
-  enemy->rotation = 0.f;
-
+static void Enemy_SetTexture(Enemy *enemy, SDL_Renderer *renderer) {
   SDL_FRect src_rect = {
     0.f,
     0.f,
@@ -39,6 +28,21 @@ int Enemy_Init(Enemy *enemy, Vec2 position, unsigned int health, SDL_Renderer *r
   SDL_RenderFillRectF(renderer, &src_rect);
 
   SDL_SetRenderTarget(renderer, NULL);
+}
+
+int Enemy_Init(Enemy *enemy, Vec2 position, unsigned int health, SDL_Renderer *renderer) {
+  SDL_RendererInfo info;
+  SDL_GetRendererInfo(renderer, &info);
+  if (!(info.flags & SDL_RENDERER_TARGETTEXTURE)) {
+    printf("ERROR :: rendering to texture not supported. cannot render enemy\n");
+  }
+
+  enemy->position = position;
+  enemy->velocity = Vec2_Zero;
+  enemy->health = health;
+  enemy->rotation = 0.f;
+
+  Enemy_SetTexture(enemy, renderer);
 
   return 0;
 }
@@ -65,6 +69,17 @@ void Enemey_Draw(const Enemy *enemy, SDL_Renderer *renderer) {
     NULL,
     SDL_FLIP_NONE
   );
+}
+
+void Enemy_FacePoint(Enemy *enemy, Vec2 point) {
+  Vec2 diff = (Vec2){
+    point.x - enemy->position.x,
+    enemy->position.y - point.y
+  };
+
+  enemy->rotation = SDL_atan2f(diff.x, diff.y) * (180.f / M_PI);
+
+  return;
 }
 
 void Enemy_Destroy(Enemy *enemy) {

@@ -110,6 +110,14 @@ int EnemyRail_Remove_Enemy(EnemyRail *rail, Enemy *enemy) {
   return -1;
 }
 
+void EnemyRail_SetFocus(EnemyRail *rail, Vec2 point) {
+  for (unsigned int i = 0; i < rail->enemies_count; i++) {
+    if (rail->enemies[i].in_use == 1) {
+      Enemy_FacePoint(&rail->enemies[i].enemy, point);
+    }
+  }
+}
+
 void EnemyRail_Update(EnemyRail *rail, float delta) {
   for (unsigned int i = 0; i < rail->enemies_count; i++) {
     if (rail->slope.x > 0.f && rail->slope.y == 0.f) {

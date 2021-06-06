@@ -18,6 +18,9 @@ struct _enemy {
 int Enemy_Init(Enemy *enemy, Vec2 position, unsigned int health, SDL_Renderer *renderer);
 void Enemy_Update(Enemy *enemy, float delta);
 void Enemey_Draw(const Enemy *enemy, SDL_Renderer *renderer);
+
+void Enemy_FacePoint(Enemy *enemy, Vec2 point);
+
 void Enemy_Destroy(Enemy *enemy);
 
 #endif // DREV_ENEMY_H
