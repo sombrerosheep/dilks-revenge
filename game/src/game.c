@@ -12,7 +12,7 @@ static void Game_Update(Game *game, Frame delta) {
   Controller_Update(&game->controller);
 
   Player_Update(game->player, &game->controller, delta.sec);
-  EnemyRailManager_Update(game->rail_manager, delta.sec);
+  EnemyRailManager_Update(game->rail_manager, delta.sec, game->renderer);
 }
 
 static void Game_Draw(Game *game) {

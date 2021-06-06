@@ -163,7 +163,7 @@ void EnemyRailManager_SetPlacementConfig(
 }
 
 
-void EnemyRailManager_Update(EnemyRailManager *manager, float delta) {
+void EnemyRailManager_Update(EnemyRailManager *manager, float delta, SDL_Renderer *renderer) {
   for (unsigned int i = 0; i < manager->num_rails; i++) {
     ManagedEnemyRail *managed_rail = &manager->rails[i];
 
@@ -180,7 +180,7 @@ void EnemyRailManager_Update(EnemyRailManager *manager, float delta) {
         switch (managed_rail->placement.type) {
           case RAIL_MANAGER_PLACEMENT_TYPE_RANDOM: {
             unsigned int rail_index = random_get() % manager->num_rails;
-            EnemyRail_Add_Enemy(manager->rails[rail_index].rail);
+            EnemyRail_Add_Enemy(manager->rails[rail_index].rail, renderer);
 
             break;
           };

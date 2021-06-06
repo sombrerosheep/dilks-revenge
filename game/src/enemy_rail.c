@@ -65,7 +65,7 @@ EnemyRail *EnemyRail_Create(Vec2 start, Vec2 end) {
   return rail;
 }
 
-int EnemyRail_Add_Enemy(EnemyRail *rail) {
+int EnemyRail_Add_Enemy(EnemyRail *rail, SDL_Renderer *renderer) {
   if (rail->enemies_count == rail->enemies_capacity) {
     unsigned int new_cap = rail->enemies_capacity * 2;
 
@@ -80,7 +80,7 @@ int EnemyRail_Add_Enemy(EnemyRail *rail) {
       continue;
     }
 
-    Enemy_Init(&rail->enemies[i].enemy, rail->start, 100);
+    Enemy_Init(&rail->enemies[i].enemy, rail->start, 100, renderer);
     Vec2 slope_norm = Vec2_Normalize(rail->slope);
     rail->enemies[i].enemy.velocity = slope_norm;
 

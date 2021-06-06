@@ -42,7 +42,7 @@ void EnemyRailManager_SetPlacementConfig(
   RailManagerPlacementConfig config
 );
 
-void EnemyRailManager_Update(EnemyRailManager *manager, float delta);
+void EnemyRailManager_Update(EnemyRailManager *manager, float delta, SDL_Renderer *renderer);
 void EnemyRailManager_Draw(EnemyRailManager *manager, SDL_Renderer *renderer);
 
 void EnemyRailManager_Destroy(EnemyRailManager *manager);
