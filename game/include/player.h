@@ -4,16 +4,27 @@
 #include <vec.h>
 #include <controller.h>
 #include <shield.h>
+#include <bullet.h>
 
 #include <SDL.h>
 
-typedef struct _player Player;
+#define PLAYER_MAX_BULLETS 128
 
-struct _player {
+typedef struct drev_player Player;
+typedef struct drev_player_bullet PlayerBullet;
+
+struct drev_player_bullet {
+  int in_use;
+  Bullet bullet;
+};
+
+struct drev_player {
   Vec2 position;
   Vec2 velocity;
   Vec2 aim;
   Shield shield;
+  unsigned int last_fire;
+  PlayerBullet bullets[PLAYER_MAX_BULLETS];
 };
 
 int Player_Init(Player *player, Vec2 starting_pos);

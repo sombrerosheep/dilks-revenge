@@ -8,6 +8,10 @@ struct _controller {
   unsigned int down;
   unsigned int left;
   unsigned int right;
+  unsigned int space;
+  unsigned int mouse_left;
+  float mouse_x;
+  float mouse_y;
 };
 
 int Controller_Init(Controller *controller);
