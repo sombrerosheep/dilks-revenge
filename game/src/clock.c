@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <SDL.h>
 
-struct _clock {
+struct drev_clock {
   unsigned int start;
 };
 

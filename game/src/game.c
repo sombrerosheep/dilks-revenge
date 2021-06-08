@@ -18,15 +18,15 @@ static void Game_Update(Game *game, Frame delta) {
     EnemyRail_SetFocus(rail, game->player->position);
     rail = NULL;
   }
-  if (( rail = EnemyRailManager_GetRail(game->rail_manager, "bottom")) != NULL) {
+  if ((rail = EnemyRailManager_GetRail(game->rail_manager, "bottom")) != NULL) {
     EnemyRail_SetFocus(rail, game->player->position);
     rail = NULL;
   }
-  if (( rail = EnemyRailManager_GetRail(game->rail_manager, "left")) != NULL) {
+  if ((rail = EnemyRailManager_GetRail(game->rail_manager, "left")) != NULL) {
     EnemyRail_SetFocus(rail, game->player->position);
     rail = NULL;
   }
-  if (( rail = EnemyRailManager_GetRail(game->rail_manager, "right")) != NULL) {
+  if ((rail = EnemyRailManager_GetRail(game->rail_manager, "right")) != NULL) {
     EnemyRail_SetFocus(rail, game->player->position);
     rail = NULL;
   }

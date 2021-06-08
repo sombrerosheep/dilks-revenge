@@ -2,14 +2,14 @@
 
 #include <stdio.h>
 
-typedef struct _enemy_rail_enemy RailEnemy;
+typedef struct drev_enemy_rail_enemy RailEnemy;
 
-struct _enemy_rail_enemy {
+struct drev_enemy_rail_enemy {
   int in_use;
   Enemy enemy;
 };
 
-struct _enemy_rail {
+struct drev_enemy_rail {
   Vec2 start;
   Vec2 end;
   Vec2 slope;

@@ -1,10 +1,10 @@
 #ifndef DREV_CLOCK_H
 #define DREV_CLOCK_H
 
-typedef struct _clock Clock;
-typedef struct _frame Frame;
+typedef struct drev_clock Clock;
+typedef struct drev_frame Frame;
 
-struct _frame {
+struct drev_frame {
   unsigned int milli;
   float sec;
 };

@@ -1,9 +1,9 @@
 #ifndef DREV_VEC_H
 #define DREV_VEC_H
 
-typedef struct _vec2 Vec2;
+typedef struct drev_vec2 Vec2;
 
-struct _vec2 {
+struct drev_vec2 {
   float x, y;
 };
 

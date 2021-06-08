@@ -7,9 +7,9 @@
 
 #include <SDL.h>
 
-typedef struct _game Game;
+typedef struct drev_game Game;
 
-struct _game {
+struct drev_game {
   SDL_Window *window;
   SDL_Renderer *renderer;
   Player *player;

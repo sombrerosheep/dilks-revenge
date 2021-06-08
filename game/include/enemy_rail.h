@@ -5,7 +5,7 @@
 #include <enemy.h>
 #include <SDL.h>
 
-typedef struct _enemy_rail EnemyRail;
+typedef struct drev_enemy_rail EnemyRail;
 
 EnemyRail *EnemyRail_Create(Vec2 start, Vec2 end);
 int EnemyRail_Add_Enemy(EnemyRail *rail, SDL_Renderer *rendere);

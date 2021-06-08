@@ -1,9 +1,9 @@
 #ifndef DREV_CONTROLLER_H
 #define DREV_CONTROLLER_H
 
-typedef struct  _controller Controller;
+typedef struct drev_controller Controller;
 
-struct _controller {
+struct drev_controller {
   unsigned int up;
   unsigned int down;
   unsigned int left;
