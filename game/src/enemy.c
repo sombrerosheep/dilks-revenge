@@ -43,15 +43,16 @@ static void Enemy_SetTexture(Enemy *enemy, SDL_Renderer *renderer) {
 static void Enemy_Fire(Enemy *enemy) {
   for (unsigned int i = 0; i < ENEMY_MAX_BULLETS; i++) {
     if (enemy->bullets[i].in_use == 0) {
-      float x = SDL_cosf(enemy->rotation);
-      float y = SDL_sinf(enemy->rotation);
-
-      enemy->bullets[i].bullet.position = enemy->position;
-      enemy->bullets[i].bullet.velocity = (Vec2){ x, y };
-      enemy->bullets[i].bullet.velocity = Vec2_Normalize((Vec2){
+      Vec2 vel = Vec2_Normalize((Vec2){
         enemy->target.x - enemy->position.x,
         enemy->target.y - enemy->position.y
       });
+      Bullet_Init(
+        &enemy->bullets[i].bullet,
+        enemy->position,
+        vel
+      );
+
       enemy->bullets[i].in_use = 1;
 
       return;
@@ -93,7 +94,11 @@ void Enemy_Update(Enemy *enemy, float delta) {
 
   for (unsigned int i = 0; i < ENEMY_MAX_BULLETS; i++) {
     if (enemy->bullets[i].in_use == 1) {
-      Bullet_Update(&enemy->bullets[i].bullet, delta);
+      if (enemy->bullets[i].bullet.health <= 0.f) {
+        enemy->bullets[i].in_use = 0;
+      } else {
+        Bullet_Update(&enemy->bullets[i].bullet, delta);
+      }
     }
   }
 }

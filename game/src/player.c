@@ -11,11 +11,16 @@
 static void Player_Fire(Player *player) {
   for (unsigned int i = 0; i < PLAYER_MAX_BULLETS; i++) {
     if (player->bullets[i].in_use == 0) {
-      player->bullets[i].bullet.position = (Vec2){
+      Vec2 position = (Vec2){
         player->aim.x * PLAYER_AIM_ARM_LEN + player->position.x,
         player->aim.y * PLAYER_AIM_ARM_LEN + player->position.y
       };
-      player->bullets[i].bullet.velocity = Vec2_Normalize(player->aim);
+      Bullet_Init(
+        &player->bullets[i].bullet,
+        position,
+        Vec2_Normalize(player->aim)
+      );
+      
       player->bullets[i].in_use = 1;
 
       return;
@@ -82,7 +87,11 @@ void Player_Update(Player *player, const Controller *controller, float delta) {
 
   for (unsigned int i = 0; i < PLAYER_MAX_BULLETS; i++) {
     if (player->bullets[i].in_use == 1) {
-      Bullet_Update(&player->bullets[i].bullet, delta);
+      if (player->bullets[i].bullet.health <= 0.f) {
+        player->bullets[i].in_use = 0;
+      } else {
+        Bullet_Update(&player->bullets[i].bullet, delta);
+      }
     }
   }
 }
