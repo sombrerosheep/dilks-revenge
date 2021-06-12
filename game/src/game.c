@@ -13,24 +13,7 @@ static void Game_Update(Game *game, Frame delta) {
 
   Player_Update(game->player, &game->controller, delta.sec);
 
-  EnemyRail *rail;
-  if ((rail = EnemyRailManager_GetRail(game->rail_manager, "top")) != NULL) {
-    EnemyRail_SetFocus(rail, game->player->position);
-    rail = NULL;
-  }
-  if ((rail = EnemyRailManager_GetRail(game->rail_manager, "bottom")) != NULL) {
-    EnemyRail_SetFocus(rail, game->player->position);
-    rail = NULL;
-  }
-  if ((rail = EnemyRailManager_GetRail(game->rail_manager, "left")) != NULL) {
-    EnemyRail_SetFocus(rail, game->player->position);
-    rail = NULL;
-  }
-  if ((rail = EnemyRailManager_GetRail(game->rail_manager, "right")) != NULL) {
-    EnemyRail_SetFocus(rail, game->player->position);
-    rail = NULL;
-  }
-
+  EnemyRailManager_SetFocus(game->rail_manager, game->player->position);
   EnemyRailManager_Update(game->rail_manager, delta.sec, game->renderer);
 }
 

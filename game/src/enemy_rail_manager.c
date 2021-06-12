@@ -162,6 +162,11 @@ void EnemyRailManager_SetPlacementConfig(
   managed_rail->placement.config.since = 0;
 }
 
+void EnemyRailManager_SetFocus(EnemyRailManager *manager, Vec2 point) {
+  for (unsigned int i = 0; i < manager->num_rails; i++) {
+    EnemyRail_SetFocus(manager->rails[i].rail, point);
+  }
+}
 
 void EnemyRailManager_Update(EnemyRailManager *manager, float delta, SDL_Renderer *renderer) {
   for (unsigned int i = 0; i < manager->num_rails; i++) {

@@ -13,6 +13,9 @@
 
 ## Enemy
 * Types - list of enemy types to deploy?
+* bullets die when enemy expires
+  * when should they expire?
+  * shared list of bullets?
 
 ## Collisions
 * detection
@@ -22,3 +25,4 @@
 * stretchy buffer for collections
 
 ## Chores
+* window size out of pre-processor
