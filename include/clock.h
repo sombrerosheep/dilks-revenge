@@ -5,8 +5,8 @@ typedef struct drev_clock Clock;
 typedef struct drev_frame Frame;
 
 struct drev_frame {
-  unsigned int milli;
-  float sec;
+    unsigned int milli;
+    float        sec;
 };
 
 Clock *Clock_Create(void);

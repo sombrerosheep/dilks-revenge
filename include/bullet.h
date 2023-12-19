@@ -8,9 +8,9 @@
 typedef struct drev_bullet Bullet;
 
 struct drev_bullet {
-  Vec2 position;
-  Vec2 velocity;
-  float health;
+    Vec2  position;
+    Vec2  velocity;
+    float health;
 };
 
 void Bullet_Init(Bullet *bullet, Vec2 pos, Vec2 vel);

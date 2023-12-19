@@ -4,14 +4,14 @@
 typedef struct drev_controller Controller;
 
 struct drev_controller {
-  unsigned int up;
-  unsigned int down;
-  unsigned int left;
-  unsigned int right;
-  unsigned int space;
-  unsigned int mouse_left;
-  float mouse_x;
-  float mouse_y;
+    unsigned int up;
+    unsigned int down;
+    unsigned int left;
+    unsigned int right;
+    unsigned int space;
+    unsigned int mouse_left;
+    float        mouse_x;
+    float        mouse_y;
 };
 
 int Controller_Init(Controller *controller);

@@ -1,15 +1,15 @@
 #ifndef DREV_SHIELD_H
 #define DREV_SHIELD_H
 
-#include <vec.h>
 #include <SDL.h>
+#include <vec.h>
 
 typedef struct shield Shield;
 
 struct shield {
-  Vec2 position;
-  float radius;
-  int target_inside;
+    Vec2  position;
+    float radius;
+    int   target_inside;
 };
 
 void Shield_Init(Shield *s, float x, float y);
