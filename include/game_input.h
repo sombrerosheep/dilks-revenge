@@ -1,6 +1,8 @@
 #ifndef DREV_CONTROLLER_H
 #define DREV_CONTROLLER_H
 
+#include "system.h"
+
 typedef struct drev_controller GameInput;
 
 struct drev_controller {
@@ -16,6 +18,6 @@ struct drev_controller {
 
 int Controller_Init(GameInput *controller);
 
-void Controller_Update(GameInput *controller);
+void Controller_Update(GameInput *controller, System *sys);
 
 #endif // DREV_CONTROLLER_H

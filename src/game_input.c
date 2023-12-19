@@ -1,3 +1,4 @@
+#include "SDL_render.h"
 #include <game_input.h>
 
 #include <SDL.h>
@@ -13,10 +14,12 @@ int Controller_Init(GameInput *controller) {
     return 0;
 }
 
-void Controller_Update(GameInput *controller) {
+void Controller_Update(GameInput *controller, System *sys) {
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
-    int          mouse_x, mouse_y;
+    int          mouse_x, mouse_y, ww, wh, rw, rh;
     Uint32       mouse_state = SDL_GetMouseState(&mouse_x, &mouse_y);
+    SDL_GetWindowSize(sys->window, &ww, &wh);
+    SDL_RenderGetLogicalSize(sys->renderer, &rw, &rh);
 
     controller->up    = keys[SDL_GetScancodeFromKey(SDLK_w)];
     controller->left  = keys[SDL_GetScancodeFromKey(SDLK_a)];
@@ -24,8 +27,8 @@ void Controller_Update(GameInput *controller) {
     controller->right = keys[SDL_GetScancodeFromKey(SDLK_d)];
     controller->space = keys[SDL_GetScancodeFromKey(SDLK_SPACE)];
 
-    controller->mouse_x    = (float)mouse_x;
-    controller->mouse_y    = (float)mouse_y;
+    controller->mouse_x    = (float)mouse_x / (float)ww * (float)rw;
+    controller->mouse_y    = (float)mouse_y / (float)wh * (float)rh;
     controller->mouse_left = mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT);
 
     return;

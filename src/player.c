@@ -24,8 +24,8 @@ static void Player_Fire(Player *player) {
 }
 
 int Player_Init(Player *player, Vec2 starting_pos) {
-    player->position.x = starting_pos.x - (PLAYER_HEIGHT / 2.f);
-    player->position.y = starting_pos.y - (PLAYER_WIDTH / 2.f);
+    player->position.x = starting_pos.x - (PLAYER_WIDTH / 2.f);
+    player->position.y = starting_pos.y - (PLAYER_HEIGHT / 2.f);
     player->velocity   = Vec2_Zero;
     player->last_fire  = 0;
 

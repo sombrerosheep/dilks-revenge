@@ -1,3 +1,4 @@
+#include "SDL_render.h"
 #include <game.h>
 
 #include <clock.h>
@@ -16,7 +17,7 @@ struct drev_game {
 };
 
 static void Game_Update(Game *game, System *sys, Frame delta) {
-    Controller_Update(&game->controller);
+    Controller_Update(&game->controller, sys);
 
     Player_Update(game->player, &game->controller, delta.sec);
 
@@ -25,7 +26,7 @@ static void Game_Update(Game *game, System *sys, Frame delta) {
 }
 
 static void Game_Draw(Game *game, System *sys) {
-    SDL_SetRenderDrawColor(sys->renderer, 0x0, 0x0, 0x0, 0xFF);
+    SDL_SetRenderDrawColor(sys->renderer, 0x33, 0x33, 0x33, 0xFF);
     SDL_RenderClear(sys->renderer);
 
     Player_Draw(game->player, sys->renderer);
@@ -34,10 +35,7 @@ static void Game_Draw(Game *game, System *sys) {
     SDL_RenderPresent(sys->renderer);
 }
 
-Game *Game_Create() {
-#define WINDOW_HEIGHT 600
-#define WINDOW_WIDTH  800
-
+Game *Game_Create(int game_width, int game_height) {
     random_init(42);
     Game *g = NULL;
 
@@ -51,7 +49,8 @@ Game *Game_Create() {
         Game_Destroy(g);
         return NULL;
     }
-    if (Player_Init(g->player, (Vec2){(float)WINDOW_WIDTH / 2.f, (float)WINDOW_HEIGHT / 2.f}) !=
+
+    if (Player_Init(g->player, (Vec2){(float)game_width / 2.f, (float)game_height / 2.f}) !=
         0) {
         printf("ERROR :: Unable to initialize player\n");
         Game_Destroy(g);

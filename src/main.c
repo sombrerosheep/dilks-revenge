@@ -3,13 +3,18 @@
 #include <game.h>
 #include <system.h>
 
+#define WINDOW_HEIGHT 1200
+#define WINDOW_WIDTH  1600
+#define GAME_HEIGHT   600
+#define GAME_WIDTH    800
+
 int main() {
     printf("start\n");
 
     System sys;
 
-    System_Init(&sys, "Dilks Revenge", 800, 600);
-    Game *dr_game = Game_Create();
+    System_Init(&sys, "Dilks Revenge", WINDOW_WIDTH, WINDOW_HEIGHT, GAME_WIDTH, GAME_HEIGHT);
+    Game *dr_game = Game_Create(GAME_WIDTH, GAME_HEIGHT);
 
     Game_Run(dr_game, &sys);
 
