@@ -1,9 +1,9 @@
 #include <game.h>
 
 #include <clock.h>
-#include <controller.h>
 #include <enemy.h>
 #include <enemy_rail_manager.h>
+#include <game_input.h>
 #include <player.h>
 #include <random.h>
 
@@ -12,7 +12,7 @@
 struct drev_game {
     Player           *player;
     EnemyRailManager *rail_manager;
-    Controller        controller;
+    GameInput         controller;
 };
 
 static void Game_Update(Game *game, System *sys, Frame delta) {

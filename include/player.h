@@ -2,7 +2,7 @@
 #define DREV_PLAYER_H
 
 #include <bullet.h>
-#include <controller.h>
+#include <game_input.h>
 #include <shield.h>
 #include <vec.h>
 
@@ -28,7 +28,7 @@ struct drev_player {
 };
 
 int  Player_Init(Player *player, Vec2 starting_pos);
-void Player_Update(Player *player, const Controller *controller, float delta);
+void Player_Update(Player *player, const GameInput *controller, float delta);
 void Player_Draw(const Player *player, SDL_Renderer *renderer);
 
 void Player_Destroy(Player *player);

@@ -1,8 +1,8 @@
-#include <controller.h>
+#include <game_input.h>
 
 #include <SDL.h>
 
-int Controller_Init(Controller *controller) {
+int Controller_Init(GameInput *controller) {
     controller->up         = 0;
     controller->down       = 0;
     controller->left       = 0;
@@ -13,7 +13,7 @@ int Controller_Init(Controller *controller) {
     return 0;
 }
 
-void Controller_Update(Controller *controller) {
+void Controller_Update(GameInput *controller) {
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
     int          mouse_x, mouse_y;
     Uint32       mouse_state = SDL_GetMouseState(&mouse_x, &mouse_y);

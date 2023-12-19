@@ -12,7 +12,7 @@ AlignConsecutiveMacros: Consecutive
 
 AlignEscapedNewlines: Left
 AlignTrailingComments: true
-AlignAfterOpenBracket: Align
+AlignAfterOpenBracket: BlockIndent
 
 BinPackParameters: false
 ColumnLimit: 100
@@ -21,7 +21,6 @@ AllowAllArgumentsOnNextLine: false
 AllowAllConstructorInitializersOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 
-AlignAfterOpenBracket: BlockIndent
 BinPackArguments: false
 BinPackParameters: false
 

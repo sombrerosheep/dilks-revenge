@@ -38,7 +38,7 @@ int Player_Init(Player *player, Vec2 starting_pos) {
     return 0;
 }
 
-void Player_Update(Player *player, const Controller *controller, float delta) {
+void Player_Update(Player *player, const GameInput *controller, float delta) {
     player->last_fire += delta * 1000.f;
 
     player->aim = (Vec2

@@ -1,7 +1,7 @@
 #ifndef DREV_CONTROLLER_H
 #define DREV_CONTROLLER_H
 
-typedef struct drev_controller Controller;
+typedef struct drev_controller GameInput;
 
 struct drev_controller {
     unsigned int up;
@@ -14,8 +14,8 @@ struct drev_controller {
     float        mouse_y;
 };
 
-int Controller_Init(Controller *controller);
+int Controller_Init(GameInput *controller);
 
-void Controller_Update(Controller *controller);
+void Controller_Update(GameInput *controller);
 
 #endif // DREV_CONTROLLER_H

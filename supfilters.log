@@ -1,0 +1,54 @@
+{
+   sdl_shared_leak
+   Memcheck:Leak
+   ...
+   obj:*/libSDL2*.so*
+   ...
+}
+
+{
+    mesa_leak
+    Memcheck:Leak
+    ...
+    obj:*/libGLX_mesa.so*
+    ...
+}
+
+{
+   glicb_mesa_dlopen
+   Memcheck:Addr8
+   ...
+   fun:dlopen@@GLIBC_2.34
+   obj:/usr/lib/x86_64-linux-gnu/libGLX_mesa.so.0.0.0
+}
+
+{
+   sdl_shared_addr8
+   Memcheck:Addr8
+   obj:*/libSDL2*.so.*
+   ...
+}
+
+{
+   iris_dri_leak
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/dri/iris_dri.so
+}
+
+{
+   llvm_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1
+   ...
+}
+
+{
+   glXChooseVisual_leak
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+   fun:glXChooseVisual
+}
