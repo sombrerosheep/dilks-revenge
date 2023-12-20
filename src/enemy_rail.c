@@ -112,7 +112,7 @@ void EnemyRail_SetFocus(EnemyRail *rail, Vec2 point) {
     }
 }
 
-void EnemyRail_Update(EnemyRail *rail, float delta) {
+void EnemyRail_Update(EnemyRail *rail, BulletContainer *c, float delta) {
     for (unsigned int i = 0; i < rail->enemies_count; i++) {
         if (rail->slope.x > 0.f && rail->slope.y == 0.f) {
             // L->R
@@ -136,7 +136,7 @@ void EnemyRail_Update(EnemyRail *rail, float delta) {
             }
         }
 
-        Enemy_Update(&rail->enemies[i].enemy, delta);
+        Enemy_Update(&rail->enemies[i].enemy, c, delta);
     }
 }
 

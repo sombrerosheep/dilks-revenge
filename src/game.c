@@ -1,4 +1,5 @@
 #include "SDL_render.h"
+#include "bullet.h"
 #include <game.h>
 
 #include <clock.h>
@@ -12,6 +13,7 @@
 
 struct drev_game {
     Player            player;
+    BulletContainer   bullets;
     EnemyRailManager *rail_manager;
     GameInput         controller;
 };
@@ -19,16 +21,19 @@ struct drev_game {
 static void Game_Update(Game *game, System *sys, Frame delta) {
     Controller_Update(&game->controller, sys);
 
-    Player_Update(&game->player, &game->controller, delta.sec);
+    Player_Update(&game->player, &game->controller, &game->bullets, delta.sec);
 
     EnemyRailManager_SetFocus(game->rail_manager, game->player.position);
-    EnemyRailManager_Update(game->rail_manager, delta.sec, sys->renderer);
+    EnemyRailManager_Update(game->rail_manager, &game->bullets, delta.sec, sys->renderer);
+
+    BulletContainer_Update(&game->bullets, delta.sec);
 }
 
 static void Game_Draw(Game *game, System *sys) {
     SDL_SetRenderDrawColor(sys->renderer, 0x33, 0x33, 0x33, 0xFF);
     SDL_RenderClear(sys->renderer);
 
+    BulletContainer_Draw(&game->bullets, sys->renderer);
     Player_Draw(&game->player, sys->renderer);
     EnemyRailManager_Draw(game->rail_manager, sys->renderer);
 
@@ -46,6 +51,12 @@ Game *Game_Create(int game_width, int game_height) {
 
     if (Player_Init(&g->player, (Vec2){(float)game_width / 2.f, (float)game_height / 2.f}) != 0) {
         printf("ERROR :: Unable to initialize player\n");
+        Game_Destroy(g);
+        return NULL;
+    }
+
+    if (BulletContainer_Init(&g->bullets) != 0) {
+        printf("ERROR :: Unable to initialize bullet container\n");
         Game_Destroy(g);
         return NULL;
     }

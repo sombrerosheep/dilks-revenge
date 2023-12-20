@@ -1,3 +1,4 @@
+#include "bullet.h"
 #include <enemy.h>
 
 #include <stdio.h>
@@ -29,18 +30,10 @@ static void Enemy_SetTexture(Enemy *enemy, SDL_Renderer *renderer) {
     SDL_SetRenderTarget(renderer, NULL);
 }
 
-static void Enemy_Fire(Enemy *enemy) {
-    for (unsigned int i = 0; i < ENEMY_MAX_BULLETS; i++) {
-        if (enemy->bullets[i].in_use == 0) {
-            Vec2 vel = Vec2_Normalize((Vec2
-            ){enemy->target.x - enemy->position.x, enemy->target.y - enemy->position.y});
-            Bullet_Init(&enemy->bullets[i].bullet, BulletType_Enemy, enemy->position, vel);
-
-            enemy->bullets[i].in_use = 1;
-
-            return;
-        }
-    }
+static void Enemy_Fire(Enemy *enemy, BulletContainer *c) {
+    Vec2 vel = (Vec2){enemy->target.x - enemy->position.x, enemy->target.y - enemy->position.y};
+    vel      = Vec2_Normalize(vel);
+    BulletContainer_Add(c, BulletType_Enemy, enemy->position, vel);
 }
 
 int Enemy_Init(Enemy *enemy, Vec2 position, unsigned int health, SDL_Renderer *renderer) {
@@ -58,31 +51,17 @@ int Enemy_Init(Enemy *enemy, Vec2 position, unsigned int health, SDL_Renderer *r
 
     Enemy_SetTexture(enemy, renderer);
 
-    for (unsigned int i = 0; i < ENEMY_MAX_BULLETS; i++) {
-        enemy->bullets[i].in_use = 0;
-    }
-
     return 0;
 }
 
-void Enemy_Update(Enemy *enemy, float delta) {
+void Enemy_Update(Enemy *enemy, BulletContainer *c, float delta) {
     enemy->position.x += enemy->velocity.x * ENEMY_SPEED * delta;
     enemy->position.y += enemy->velocity.y * ENEMY_SPEED * delta;
 
     enemy->last_fired += (unsigned int)(delta * 1000.f);
     if (enemy->last_fired >= ENEMY_FIRE_RATE_MS) {
         enemy->last_fired = 0;
-        Enemy_Fire(enemy);
-    }
-
-    for (unsigned int i = 0; i < ENEMY_MAX_BULLETS; i++) {
-        if (enemy->bullets[i].in_use == 1) {
-            if (enemy->bullets[i].bullet.health <= 0.f) {
-                enemy->bullets[i].in_use = 0;
-            } else {
-                Bullet_Update(&enemy->bullets[i].bullet, delta);
-            }
-        }
+        Enemy_Fire(enemy, c);
     }
 }
 
@@ -93,15 +72,6 @@ void Enemey_Draw(const Enemy *enemy, SDL_Renderer *renderer) {
         ENEMY_WIDTH,
         ENEMY_HEIGHT};
 
-    // SDL_SetRenderDrawColor(renderer, 0xFF, 0x0A, 0x0A, 0xFF);
-    // SDL_RenderDrawLineF(
-    //   renderer,
-    //   enemy->position.x,
-    //   enemy->position.y,
-    //   enemy->target.x,
-    //   enemy->target.y
-    // );
-
     SDL_RenderCopyExF(
         renderer,
         enemy->texture,
@@ -111,12 +81,6 @@ void Enemey_Draw(const Enemy *enemy, SDL_Renderer *renderer) {
         NULL,
         SDL_FLIP_NONE
     );
-
-    for (unsigned int i = 0; i < ENEMY_MAX_BULLETS; i++) {
-        if (enemy->bullets[i].in_use == 1) {
-            Bullet_Draw(&enemy->bullets[i].bullet, renderer);
-        }
-    }
 }
 
 void Enemy_FacePoint(Enemy *enemy, Vec2 point) {

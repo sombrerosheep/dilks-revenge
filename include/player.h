@@ -8,8 +8,6 @@
 
 #include <SDL.h>
 
-#define PLAYER_MAX_BULLETS 128
-
 typedef struct drev_player        Player;
 typedef struct drev_player_bullet PlayerBullet;
 
@@ -24,11 +22,10 @@ struct drev_player {
     Vec2         aim;
     Shield       shield;
     unsigned int last_fire;
-    PlayerBullet bullets[PLAYER_MAX_BULLETS];
 };
 
 int  Player_Init(Player *player, Vec2 starting_pos);
-void Player_Update(Player *player, const GameInput *controller, float delta);
+void Player_Update(Player *player, const GameInput *controller, BulletContainer *c, float delta);
 void Player_Draw(const Player *player, SDL_Renderer *renderer);
 
 void Player_Destroy(Player *player);

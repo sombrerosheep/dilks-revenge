@@ -1,3 +1,4 @@
+#include "bullet.h"
 #include <enemy_rail_manager.h>
 
 #include <random.h>
@@ -167,7 +168,12 @@ void EnemyRailManager_SetFocus(EnemyRailManager *manager, Vec2 point) {
     }
 }
 
-void EnemyRailManager_Update(EnemyRailManager *manager, float delta, SDL_Renderer *renderer) {
+void EnemyRailManager_Update(
+    EnemyRailManager *manager,
+    BulletContainer  *c,
+    float             delta,
+    SDL_Renderer     *renderer
+) {
     for (unsigned int i = 0; i < manager->num_rails; i++) {
         ManagedEnemyRail *managed_rail = &manager->rails[i];
 
@@ -195,7 +201,7 @@ void EnemyRailManager_Update(EnemyRailManager *manager, float delta, SDL_Rendere
                 }
             }
 
-            EnemyRail_Update(managed_rail->rail, delta);
+            EnemyRail_Update(managed_rail->rail, c, delta);
         }
     }
 }

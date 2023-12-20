@@ -1,3 +1,4 @@
+#include "vec.h"
 #include <bullet.h>
 
 #define BULLET_HEIGHT      5.f
@@ -11,6 +12,7 @@ void Bullet_Init(Bullet *bullet, BulletType type, Vec2 pos, Vec2 vel) {
     bullet->position = pos;
     bullet->velocity = vel;
     bullet->health   = BULLET_INIT_HEALTH;
+    bullet->in_use   = 1;
 }
 
 void Bullet_Update(Bullet *bullet, float delta) {
@@ -19,6 +21,8 @@ void Bullet_Update(Bullet *bullet, float delta) {
 
         bullet->position.x += bullet->velocity.x * BULLET_SPEED * delta;
         bullet->position.y += bullet->velocity.y * BULLET_SPEED * delta;
+    } else if (bullet->health < 0.f) {
+        *bullet = Bullet_Zero;
     }
 }
 
@@ -28,4 +32,47 @@ void Bullet_Draw(const Bullet *bullet, SDL_Renderer *renderer) {
         SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderFillRectF(renderer, &rect);
     }
+}
+
+///////////////////
+// BulletContainer
+
+int BulletContainer_Init(BulletContainer *c) {
+    for (unsigned int i = 0; i < GAME_MAX_BULLETS; i++) {
+        c->bullets[i] = Bullet_Zero;
+    }
+
+    return 0;
+}
+
+int BulletContainer_Add(BulletContainer *c, BulletType type, Vec2 pos, Vec2 vel) {
+    for (unsigned int i = 0; i < GAME_MAX_BULLETS; i++) {
+        if (c->bullets[i].in_use == 0) {
+            Bullet_Init(&c->bullets[i], type, pos, vel);
+
+            return 0;
+        }
+    }
+
+    return -1;
+}
+
+void BulletContainer_Update(BulletContainer *c, float delta) {
+    for (unsigned int i = 0; i < GAME_MAX_BULLETS; i++) {
+        if (c->bullets[i].in_use == 1) {
+            Bullet_Update(&c->bullets[i], delta);
+        }
+    }
+}
+
+void BulletContainer_Draw(BulletContainer *c, SDL_Renderer *r) {
+    for (unsigned int i = 0; i < GAME_MAX_BULLETS; i++) {
+        if (c->bullets[i].in_use == 1) {
+            Bullet_Draw(&c->bullets[i], r);
+        }
+    }
+}
+
+void BulletContainer_Clear(BulletContainer *c) {
+    BulletContainer_Init(c);
 }

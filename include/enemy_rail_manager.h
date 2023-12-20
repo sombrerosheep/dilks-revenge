@@ -45,7 +45,12 @@ void EnemyRailManager_SetPlacementConfig(
 
 void EnemyRailManager_SetFocus(EnemyRailManager *manager, Vec2 point);
 
-void EnemyRailManager_Update(EnemyRailManager *manager, float delta, SDL_Renderer *renderer);
+void EnemyRailManager_Update(
+    EnemyRailManager *manager,
+    BulletContainer  *c,
+    float             delta,
+    SDL_Renderer     *renderer
+);
 void EnemyRailManager_Draw(EnemyRailManager *manager, SDL_Renderer *renderer);
 
 void EnemyRailManager_Destroy(EnemyRailManager *manager);

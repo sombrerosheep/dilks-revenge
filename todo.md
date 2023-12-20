@@ -13,9 +13,6 @@
 
 ## Enemy
 * Types - list of enemy types to deploy?
-* bullets die when enemy expires
-  * when should they expire?
-  * shared list of bullets?
 
 ## Collisions
 * detection

@@ -9,24 +9,12 @@
 #define PLAYER_AIM_ARM_LEN   35.f
 #define PLAYER_FIRE_COOLDOWN 600
 
-static void Player_Fire(Player *player) {
-    for (unsigned int i = 0; i < PLAYER_MAX_BULLETS; i++) {
-        if (player->bullets[i].in_use == 0) {
-            Vec2 position = (Vec2
-            ){player->aim.x * PLAYER_AIM_ARM_LEN + player->position.x,
-              player->aim.y * PLAYER_AIM_ARM_LEN + player->position.y};
-            Bullet_Init(
-                &player->bullets[i].bullet,
-                BulletType_Player,
-                position,
-                Vec2_Normalize(player->aim)
-            );
+static void Player_Fire(Player *player, BulletContainer *c) {
+    Vec2 position = (Vec2
+    ){player->aim.x * PLAYER_AIM_ARM_LEN + player->position.x,
+      player->aim.y * PLAYER_AIM_ARM_LEN + player->position.y};
 
-            player->bullets[i].in_use = 1;
-
-            return;
-        }
-    }
+    BulletContainer_Add(c, BulletType_Player, position, Vec2_Normalize(player->aim));
 }
 
 int Player_Init(Player *player, Vec2 starting_pos) {
@@ -37,14 +25,10 @@ int Player_Init(Player *player, Vec2 starting_pos) {
 
     Shield_Init(&player->shield, player->position.x, player->position.y);
 
-    for (unsigned int i = 0; i < PLAYER_MAX_BULLETS; i++) {
-        player->bullets[i].in_use = 0;
-    }
-
     return 0;
 }
 
-void Player_Update(Player *player, const GameInput *controller, float delta) {
+void Player_Update(Player *player, const GameInput *controller, BulletContainer *c, float delta) {
     player->last_fire += delta * 1000.f;
 
     player->aim = (Vec2
@@ -72,7 +56,7 @@ void Player_Update(Player *player, const GameInput *controller, float delta) {
 
     if ((controller->mouse_left || controller->space) &&
         player->last_fire >= PLAYER_FIRE_COOLDOWN) {
-        Player_Fire(player);
+        Player_Fire(player, c);
         player->last_fire = 0;
     }
 
@@ -88,16 +72,6 @@ void Player_Update(Player *player, const GameInput *controller, float delta) {
         PLAYER_WIDTH,
         PLAYER_HEIGHT
     );
-
-    for (unsigned int i = 0; i < PLAYER_MAX_BULLETS; i++) {
-        if (player->bullets[i].in_use == 1) {
-            if (player->bullets[i].bullet.health <= 0.f) {
-                player->bullets[i].in_use = 0;
-            } else {
-                Bullet_Update(&player->bullets[i].bullet, delta);
-            }
-        }
-    }
 }
 
 void Player_Draw(const Player *player, SDL_Renderer *renderer) {
@@ -118,12 +92,6 @@ void Player_Draw(const Player *player, SDL_Renderer *renderer) {
         5.f,
         5.f};
     SDL_RenderFillRectF(renderer, &aim_rect);
-
-    for (unsigned int i = 0; i < PLAYER_MAX_BULLETS; i++) {
-        if (player->bullets[i].in_use == 1) {
-            Bullet_Draw(&player->bullets[i].bullet, renderer);
-        }
-    }
 
     return;
 }
