@@ -38,20 +38,16 @@ EnemyRailManager_AddRail(EnemyRailManager *manager, char *rail_name, Vec2 start,
 EnemyRail *EnemyRailManager_GetRail(EnemyRailManager *manager, char *rail_name);
 int        EnemyRailManager_RemoveRail(EnemyRailManager *manager, char *rail_name);
 
-void EnemyRailManager_SetPlacementConfig(
-    EnemyRailManager          *manager,
-    char                      *rail_name,
-    RailManagerPlacementConfig config
-);
+void EnemyRailManager_SetPlacementConfig(EnemyRailManager          *manager,
+                                         char                      *rail_name,
+                                         RailManagerPlacementConfig config);
 
 void EnemyRailManager_SetFocus(EnemyRailManager *manager, Vec2 point);
 
-void EnemyRailManager_Update(
-    EnemyRailManager *manager,
-    BulletContainer  *c,
-    float             delta,
-    SDL_Renderer     *renderer
-);
+void EnemyRailManager_Update(EnemyRailManager *manager,
+                             BulletContainer  *c,
+                             float             delta,
+                             SDL_Renderer     *renderer);
 void EnemyRailManager_Draw(EnemyRailManager *manager, SDL_Renderer *renderer);
 
 void EnemyRailManager_Destroy(EnemyRailManager *manager);

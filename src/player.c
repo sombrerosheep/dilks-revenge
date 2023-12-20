@@ -11,9 +11,8 @@
 #define PLAYER_FIRE_COOLDOWN 600
 
 static void Player_Fire(Player *player, BulletContainer *c) {
-    Vec2 position = (Vec2
-    ){player->aim.x * PLAYER_AIM_ARM_LEN + player->position.x,
-      player->aim.y * PLAYER_AIM_ARM_LEN + player->position.y};
+    Vec2 position = (Vec2){player->aim.x * PLAYER_AIM_ARM_LEN + player->position.x,
+                           player->aim.y * PLAYER_AIM_ARM_LEN + player->position.y};
 
     BulletContainer_Add(c, BulletType_Player, position, Vec2_Normalize(player->aim));
 }
@@ -32,9 +31,8 @@ int Player_Init(Player *player, Vec2 starting_pos) {
 void Player_Update(Player *player, const GameInput *controller, BulletContainer *c, float delta) {
     player->last_fire += delta * 1000.f;
 
-    player->aim = (Vec2
-    ){(float)controller->mouse_x - player->position.x,
-      (float)controller->mouse_y - player->position.y};
+    player->aim = (Vec2){(float)controller->mouse_x - player->position.x,
+                         (float)controller->mouse_y - player->position.y};
     player->aim = Vec2_Normalize(player->aim);
 
     player->velocity = Vec2_Zero;
@@ -66,41 +64,38 @@ void Player_Update(Player *player, const GameInput *controller, BulletContainer 
     player->position.x += player->velocity.x * PLAYER_SPEED * delta;
     player->position.y += player->velocity.y * PLAYER_SPEED * delta;
 
-    Shield_EvalTarget(
-        &player->shield,
-        player->position.x,
-        player->position.y,
-        PLAYER_WIDTH,
-        PLAYER_HEIGHT
-    );
+    Shield_EvalTarget(&player->shield,
+                      player->position.x,
+                      player->position.y,
+                      PLAYER_WIDTH,
+                      PLAYER_HEIGHT);
 }
 
 void Player_Draw(const Player *player, SDL_Renderer *renderer) {
-    SDL_FRect player_rect = (SDL_FRect
-    ){player->position.x - PLAYER_WIDTH / 2.f,
-      player->position.y - PLAYER_HEIGHT / 2.f,
-      PLAYER_WIDTH,
-      PLAYER_HEIGHT};
+    SDL_FRect player_rect = (SDL_FRect){player->position.x - PLAYER_WIDTH / 2.f,
+                                        player->position.y - PLAYER_HEIGHT / 2.f,
+                                        PLAYER_WIDTH,
+                                        PLAYER_HEIGHT};
 
     SDL_SetRenderDrawColor(renderer, 0xAA, 0x00, 0xAA, 0xFF);
     SDL_RenderFillRectF(renderer, &player_rect);
 
     Shield_Draw(&player->shield, renderer);
 
-    SDL_FRect aim_rect = {
-        player->aim.x * PLAYER_AIM_ARM_LEN + player->position.x,
-        player->aim.y * PLAYER_AIM_ARM_LEN + player->position.y,
-        5.f,
-        5.f};
+    SDL_FRect aim_rect = {player->aim.x * PLAYER_AIM_ARM_LEN + player->position.x,
+                          player->aim.y * PLAYER_AIM_ARM_LEN + player->position.y,
+                          5.f,
+                          5.f};
     SDL_RenderFillRectF(renderer, &aim_rect);
 
     return;
 }
 
 SDL_FRect Player_BoundingBox(Player *player) {
-    SDL_FRect box = (SDL_FRect) {
-        .x = player->position.x, .y = player->position.y, .w = PLAYER_WIDTH, .h = PLAYER_HEIGHT
-    };
+    SDL_FRect box = (SDL_FRect){.x = player->position.x,
+                                .y = player->position.y,
+                                .w = PLAYER_WIDTH,
+                                .h = PLAYER_HEIGHT};
 
     return box;
 }

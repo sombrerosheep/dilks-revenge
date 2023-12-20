@@ -2,22 +2,19 @@
 
 #include <stdio.h>
 
-int System_Init(
-    System *sys,
-    char   *title,
-    int     win_width,
-    int     win_height,
-    int     game_width,
-    int     game_height
-) {
-    if ((sys->window = SDL_CreateWindow(
-             title,
-             100,
-             50,
-             win_width,
-             win_height,
-             SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI
-         )) == NULL) {
+int System_Init(System *sys,
+                char   *title,
+                int     win_width,
+                int     win_height,
+                int     game_width,
+                int     game_height) {
+    if ((sys->window = SDL_CreateWindow(title,
+                                        100,
+                                        50,
+                                        win_width,
+                                        win_height,
+                                        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE |
+                                            SDL_WINDOW_ALLOW_HIGHDPI)) == NULL) {
         printf("ERROR :: Unable to allocate memory for window. SDL Error: %s\n", SDL_GetError());
         System_Destroy(sys);
         return -1;

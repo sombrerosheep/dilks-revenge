@@ -68,33 +68,25 @@ Game *Game_Create(int game_width, int game_height) {
     }
 
     { // Init rails
-        EnemyRailManager_AddRail(
-            g->rail_manager,
-            "top",
-            (Vec2){-100.f, 100.f},
-            (Vec2){900.f, 100.f}
-        );
+        EnemyRailManager_AddRail(g->rail_manager,
+                                 "top",
+                                 (Vec2){-100.f, 100.f},
+                                 (Vec2){900.f, 100.f});
 
-        EnemyRailManager_AddRail(
-            g->rail_manager,
-            "right",
-            (Vec2){700.f, -100.f},
-            (Vec2){700.f, 700.f}
-        );
+        EnemyRailManager_AddRail(g->rail_manager,
+                                 "right",
+                                 (Vec2){700.f, -100.f},
+                                 (Vec2){700.f, 700.f});
 
-        EnemyRailManager_AddRail(
-            g->rail_manager,
-            "bottom",
-            (Vec2){-100.f, 500.f},
-            (Vec2){900.f, 500.f}
-        );
+        EnemyRailManager_AddRail(g->rail_manager,
+                                 "bottom",
+                                 (Vec2){-100.f, 500.f},
+                                 (Vec2){900.f, 500.f});
 
-        EnemyRailManager_AddRail(
-            g->rail_manager,
-            "left",
-            (Vec2){100.f, -100.f},
-            (Vec2){100.f, 700.f}
-        );
+        EnemyRailManager_AddRail(g->rail_manager,
+                                 "left",
+                                 (Vec2){100.f, -100.f},
+                                 (Vec2){100.f, 700.f});
     }
 
     if (Controller_Init(&g->controller) != 0) {

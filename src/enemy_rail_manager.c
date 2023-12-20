@@ -24,8 +24,8 @@ struct drev_enemy_rail_manager {
     unsigned int      cap_rails;
 };
 
-static ManagedEnemyRail *
-EnemyRailManager_GetRegisteredRail(EnemyRailManager *manager, char *rail_name) {
+static ManagedEnemyRail *EnemyRailManager_GetRegisteredRail(EnemyRailManager *manager,
+                                                            char             *rail_name) {
     ManagedEnemyRail *managed_rail = NULL;
 
     for (unsigned int i = 0; i < manager->num_rails; i++) {
@@ -104,13 +104,12 @@ EnemyRailManager_AddRail(EnemyRailManager *manager, char *rail_name, Vec2 start,
             managed_rail->rail        = rail;
             strncpy(managed_rail->name, rail_name, RAIL_NAME_MAX);
 
-            managed_rail->placement.type        = RAIL_MANAGER_PLACEMENT_TYPE_RANDOM;
-            managed_rail->placement.config.min  = 2000;
-            managed_rail->placement.config.max  = 12000;
-            managed_rail->placement.config.next = random_get_between(
-                managed_rail->placement.config.min,
-                managed_rail->placement.config.max
-            );
+            managed_rail->placement.type       = RAIL_MANAGER_PLACEMENT_TYPE_RANDOM;
+            managed_rail->placement.config.min = 2000;
+            managed_rail->placement.config.max = 12000;
+            managed_rail->placement.config.next =
+                random_get_between(managed_rail->placement.config.min,
+                                   managed_rail->placement.config.max);
             managed_rail->placement.config.since = 0;
 
             break;
@@ -150,11 +149,9 @@ int EnemyRailManager_RemoveRail(EnemyRailManager *manager, char *rail_name) {
     return 0;
 }
 
-void EnemyRailManager_SetPlacementConfig(
-    EnemyRailManager          *manager,
-    char                      *rail_name,
-    RailManagerPlacementConfig config
-) {
+void EnemyRailManager_SetPlacementConfig(EnemyRailManager          *manager,
+                                         char                      *rail_name,
+                                         RailManagerPlacementConfig config) {
     ManagedEnemyRail *managed_rail = EnemyRailManager_GetRegisteredRail(manager, rail_name);
     managed_rail->placement        = config;
     managed_rail->placement.config.next =
@@ -168,12 +165,10 @@ void EnemyRailManager_SetFocus(EnemyRailManager *manager, Vec2 point) {
     }
 }
 
-void EnemyRailManager_Update(
-    EnemyRailManager *manager,
-    BulletContainer  *c,
-    float             delta,
-    SDL_Renderer     *renderer
-) {
+void EnemyRailManager_Update(EnemyRailManager *manager,
+                             BulletContainer  *c,
+                             float             delta,
+                             SDL_Renderer     *renderer) {
     for (unsigned int i = 0; i < manager->num_rails; i++) {
         ManagedEnemyRail *managed_rail = &manager->rails[i];
 
@@ -182,10 +177,9 @@ void EnemyRailManager_Update(
 
             if (managed_rail->placement.config.since > managed_rail->placement.config.next) {
                 managed_rail->placement.config.since = 0;
-                managed_rail->placement.config.next  = random_get_between(
-                    managed_rail->placement.config.min,
-                    managed_rail->placement.config.max
-                );
+                managed_rail->placement.config.next =
+                    random_get_between(managed_rail->placement.config.min,
+                                       managed_rail->placement.config.max);
 
                 switch (managed_rail->placement.type) {
                     case RAIL_MANAGER_PLACEMENT_TYPE_RANDOM: {
