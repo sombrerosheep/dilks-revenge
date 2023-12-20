@@ -2,7 +2,7 @@
 
 #define BULLET_HEIGHT      5.f
 #define BULLET_WIDTH       5.f
-#define BULLET_SPEED       200.f
+#define BULLET_SPEED       300.f
 #define BULLET_INIT_HEALTH 100.f
 #define BULLET_DECAY_RATE  (BULLET_INIT_HEALTH) / 3.f
 
