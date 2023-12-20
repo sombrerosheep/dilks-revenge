@@ -21,8 +21,5 @@
 * detection
 * resolution
 
-## General
-* stretchy buffer for collections
-
 ## Chores
 * window size out of pre-processor

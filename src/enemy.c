@@ -34,7 +34,7 @@ static void Enemy_Fire(Enemy *enemy) {
         if (enemy->bullets[i].in_use == 0) {
             Vec2 vel = Vec2_Normalize((Vec2
             ){enemy->target.x - enemy->position.x, enemy->target.y - enemy->position.y});
-            Bullet_Init(&enemy->bullets[i].bullet, enemy->position, vel);
+            Bullet_Init(&enemy->bullets[i].bullet, BulletType_Enemy, enemy->position, vel);
 
             enemy->bullets[i].in_use = 1;
 

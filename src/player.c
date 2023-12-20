@@ -1,3 +1,4 @@
+#include "bullet.h"
 #include <player.h>
 
 #include <stdio.h>
@@ -14,7 +15,12 @@ static void Player_Fire(Player *player) {
             Vec2 position = (Vec2
             ){player->aim.x * PLAYER_AIM_ARM_LEN + player->position.x,
               player->aim.y * PLAYER_AIM_ARM_LEN + player->position.y};
-            Bullet_Init(&player->bullets[i].bullet, position, Vec2_Normalize(player->aim));
+            Bullet_Init(
+                &player->bullets[i].bullet,
+                BulletType_Player,
+                position,
+                Vec2_Normalize(player->aim)
+            );
 
             player->bullets[i].in_use = 1;
 

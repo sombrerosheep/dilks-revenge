@@ -6,7 +6,8 @@
 #define BULLET_INIT_HEALTH 100.f
 #define BULLET_DECAY_RATE  (BULLET_INIT_HEALTH) / 3.f
 
-void Bullet_Init(Bullet *bullet, Vec2 pos, Vec2 vel) {
+void Bullet_Init(Bullet *bullet, BulletType type, Vec2 pos, Vec2 vel) {
+    bullet->type     = type;
     bullet->position = pos;
     bullet->velocity = vel;
     bullet->health   = BULLET_INIT_HEALTH;
