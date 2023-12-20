@@ -1,7 +1,7 @@
-#include "bullet.h"
-#include <enemy_rail_manager.h>
+#include "enemy_rail_manager.h"
 
-#include <random.h>
+#include "bullet.h"
+#include "random.h"
 
 #include <stdio.h>
 #include <string.h>

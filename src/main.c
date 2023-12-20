@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include <game.h>
-#include <system.h>
+#include "game.h"
+#include "system.h"
 
 #define WINDOW_HEIGHT 1200
 #define WINDOW_WIDTH  1600

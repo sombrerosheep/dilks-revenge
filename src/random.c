@@ -1,4 +1,5 @@
-#include <random.h>
+#include "random.h"
+
 #include <stdlib.h>
 
 unsigned int random_get_eskil(unsigned int index) {

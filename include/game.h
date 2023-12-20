@@ -1,7 +1,7 @@
 #ifndef DREV_GAME_H
 #define DREV_GAME_H
 
-#include <system.h>
+#include "system.h"
 
 typedef struct drev_game Game;
 

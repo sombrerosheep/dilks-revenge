@@ -1,7 +1,7 @@
 #ifndef DREV_BULLET_H
 #define DREV_BULLET_H
 
-#include <vec.h>
+#include "vec.h"
 
 #include <SDL.h>
 

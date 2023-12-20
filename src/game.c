@@ -1,13 +1,12 @@
-#include "SDL_render.h"
-#include "bullet.h"
-#include <game.h>
+#include "game.h"
 
-#include <clock.h>
-#include <enemy.h>
-#include <enemy_rail_manager.h>
-#include <game_input.h>
-#include <player.h>
-#include <random.h>
+#include "bullet.h"
+#include "clock.h"
+#include "enemy.h"
+#include "enemy_rail_manager.h"
+#include "game_input.h"
+#include "player.h"
+#include "random.h"
 
 #include <stdio.h>
 

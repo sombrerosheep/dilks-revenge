@@ -1,9 +1,10 @@
 #ifndef DREV_ENEMY_RAIL_MANAGER_H
 #define DREV_ENEMY_RAIL_MANAGER_H
 
+#include "enemy_rail.h"
+#include "vec.h"
+
 #include <SDL.h>
-#include <enemy_rail.h>
-#include <vec.h>
 
 typedef struct drev_enemy_rail_manager            EnemyRailManager;
 typedef struct drev_rail_manager_placement_config RailManagerPlacementConfig;

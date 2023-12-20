@@ -1,8 +1,9 @@
 #ifndef DREV_SHIELD_H
 #define DREV_SHIELD_H
 
+#include "vec.h"
+
 #include <SDL.h>
-#include <vec.h>
 
 typedef struct shield Shield;
 

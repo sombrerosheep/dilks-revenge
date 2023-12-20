@@ -1,8 +1,8 @@
 #ifndef DREV_ENEMY_H
 #define DREV_ENEMY_H
 
-#include <bullet.h>
-#include <vec.h>
+#include "bullet.h"
+#include "vec.h"
 
 #include <SDL.h>
 

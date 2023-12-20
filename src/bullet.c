@@ -1,5 +1,6 @@
+#include "bullet.h"
+
 #include "vec.h"
-#include <bullet.h>
 
 #define BULLET_HEIGHT      5.f
 #define BULLET_WIDTH       5.f

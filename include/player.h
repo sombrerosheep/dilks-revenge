@@ -1,10 +1,10 @@
 #ifndef DREV_PLAYER_H
 #define DREV_PLAYER_H
 
-#include <bullet.h>
-#include <game_input.h>
-#include <shield.h>
-#include <vec.h>
+#include "bullet.h"
+#include "game_input.h"
+#include "shield.h"
+#include "vec.h"
 
 #include <SDL.h>
 
