@@ -97,6 +97,14 @@ void Player_Draw(const Player *player, SDL_Renderer *renderer) {
     return;
 }
 
+SDL_FRect Player_BoundingBox(Player *player) {
+    SDL_FRect box = (SDL_FRect) {
+        .x = player->position.x, .y = player->position.y, .w = PLAYER_WIDTH, .h = PLAYER_HEIGHT
+    };
+
+    return box;
+}
+
 void Player_Destroy(Player *player) {
     player->position = Vec2_Zero;
     player->velocity = Vec2_Zero;

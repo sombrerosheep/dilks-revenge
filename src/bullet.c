@@ -35,6 +35,15 @@ void Bullet_Draw(const Bullet *bullet, SDL_Renderer *renderer) {
     }
 }
 
+SDL_FRect Bullet_BoundingBox(Bullet *bullet) {
+    SDL_FRect box = (SDL_FRect){.x = bullet->position.x,
+                                .y = bullet->position.y,
+                                .w = BULLET_HEIGHT,
+                                .h = BULLET_HEIGHT};
+
+    return box;
+}
+
 ///////////////////
 // BulletContainer
 

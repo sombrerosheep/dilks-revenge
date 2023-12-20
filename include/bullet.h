@@ -36,6 +36,9 @@ void Bullet_Init(Bullet *bullet, BulletType type, Vec2 pos, Vec2 vel);
 void Bullet_Update(Bullet *bullet, float delta);
 void Bullet_Draw(const Bullet *bullet, SDL_Renderer *renderer);
 
+// todo: inline?
+SDL_FRect Bullet_BoundingBox(Bullet *bullet);
+
 typedef struct drev_bullet_container BulletContainer;
 
 struct drev_bullet_container {

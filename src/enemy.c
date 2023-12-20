@@ -12,13 +12,11 @@
 static void Enemy_SetTexture(Enemy *enemy, SDL_Renderer *renderer) {
     SDL_FRect src_rect = {0.f, 0.f, ENEMY_WIDTH, ENEMY_HEIGHT};
 
-    enemy->texture = SDL_CreateTexture(
-        renderer,
-        SDL_PIXELFORMAT_RGBA8888,
-        SDL_TEXTUREACCESS_TARGET,
-        ENEMY_WIDTH,
-        ENEMY_HEIGHT
-    );
+    enemy->texture = SDL_CreateTexture(renderer,
+                                       SDL_PIXELFORMAT_RGBA8888,
+                                       SDL_TEXTUREACCESS_TARGET,
+                                       ENEMY_WIDTH,
+                                       ENEMY_HEIGHT);
     SDL_SetRenderTarget(renderer, enemy->texture);
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
     SDL_RenderClear(renderer);
@@ -67,21 +65,18 @@ void Enemy_Update(Enemy *enemy, BulletContainer *c, float delta) {
 }
 
 void Enemey_Draw(const Enemy *enemy, SDL_Renderer *renderer) {
-    SDL_FRect dst_rect = {
-        enemy->position.x - ENEMY_WIDTH / 2.f,
-        enemy->position.y - ENEMY_HEIGHT / 2.f,
-        ENEMY_WIDTH,
-        ENEMY_HEIGHT};
+    SDL_FRect dst_rect = {enemy->position.x - ENEMY_WIDTH / 2.f,
+                          enemy->position.y - ENEMY_HEIGHT / 2.f,
+                          ENEMY_WIDTH,
+                          ENEMY_HEIGHT};
 
-    SDL_RenderCopyExF(
-        renderer,
-        enemy->texture,
-        NULL,
-        &dst_rect,
-        enemy->rotation * (180.f / M_PI),
-        NULL,
-        SDL_FLIP_NONE
-    );
+    SDL_RenderCopyExF(renderer,
+                      enemy->texture,
+                      NULL,
+                      &dst_rect,
+                      enemy->rotation * (180.f / M_PI),
+                      NULL,
+                      SDL_FLIP_NONE);
 }
 
 void Enemy_FacePoint(Enemy *enemy, Vec2 point) {
@@ -91,6 +86,15 @@ void Enemy_FacePoint(Enemy *enemy, Vec2 point) {
     enemy->target   = point;
 
     return;
+}
+
+SDL_FRect Enemy_BoundingBox(Enemy *enemy) {
+    SDL_FRect box = (SDL_FRect){.x = enemy->position.x,
+                                .y = enemy->position.y,
+                                .w = ENEMY_HEIGHT,
+                                .h = ENEMY_HEIGHT};
+
+    return box;
 }
 
 void Enemy_Destroy(Enemy *enemy) {

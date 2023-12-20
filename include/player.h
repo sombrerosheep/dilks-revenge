@@ -27,7 +27,7 @@ struct drev_player {
 int  Player_Init(Player *player, Vec2 starting_pos);
 void Player_Update(Player *player, const GameInput *controller, BulletContainer *c, float delta);
 void Player_Draw(const Player *player, SDL_Renderer *renderer);
-
-void Player_Destroy(Player *player);
+SDL_FRect Player_BoundingBox(Player *player);
+void      Player_Destroy(Player *player);
 
 #endif // DREV_PLAYER_H
