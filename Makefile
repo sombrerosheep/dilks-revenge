@@ -5,9 +5,7 @@ TARGET=$(BUILDDIR)/bin/$(BIN_NAME)
 
 CMAKE_FLAGS := ""
 
-CLANG_FMT_FILES := src/**/*.c
 CLANG_FMT_FILES += src/*.c
-CLANG_FMT_FILES += include/**/*.h
 CLANG_FMT_FILES += include/*.h
 
 .PHONY: build init clean debug run test memcheck
