@@ -9,6 +9,7 @@
 #define PLAYER_WIDTH         25.f
 #define PLAYER_AIM_ARM_LEN   35.f
 #define PLAYER_FIRE_COOLDOWN 600
+#define PLAYER_INIT_HEALTH   500.f
 
 static void Player_Fire(Player *player, BulletContainer *c) {
     Vec2 position = (Vec2){player->aim.x * PLAYER_AIM_ARM_LEN + player->position.x,
@@ -22,6 +23,7 @@ int Player_Init(Player *player, Vec2 starting_pos) {
     player->position.y = starting_pos.y - (PLAYER_HEIGHT / 2.f);
     player->velocity   = Vec2_Zero;
     player->last_fire  = 0;
+    player->health     = PLAYER_INIT_HEALTH;
 
     Shield_Init(&player->shield, player->position.x, player->position.y);
 

@@ -8,15 +8,10 @@
 
 #include <SDL.h>
 
-typedef struct drev_player        Player;
-typedef struct drev_player_bullet PlayerBullet;
-
-struct drev_player_bullet {
-    int    in_use;
-    Bullet bullet;
-};
+typedef struct drev_player Player;
 
 struct drev_player {
+    float        health;
     Vec2         position;
     Vec2         velocity;
     Vec2         aim;
