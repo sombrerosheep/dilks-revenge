@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
+#define SHIELD_INIT_HEALTH 200.f
+
 void draw_circle(SDL_Renderer *renderer, float n_cx, float n_cy, float radius) {
     float error = (float)-radius;
     float x     = radius - 0.5f;
@@ -44,8 +46,12 @@ void Shield_Init(Shield *s, float x, float y) {
     s->position      = (Vec2){x, y};
     s->radius        = 125.f;
     s->target_inside = 0;
+    s->health        = SHIELD_INIT_HEALTH;
 }
 
+// todo: does shield recharge? when? after Xs?
+//       is recharge rate based on difficulty?
+//       is shield health based on difficulty?
 // void Shield_Update(Shield *s) {
 //   return;
 // }
@@ -74,8 +80,9 @@ int Shield_EvalTarget(Shield *s, float x, float y, float w, float h) {
     return s->target_inside;
 }
 
+// todo: if health is 0 do not draw shield.
+// todo: shield opacity based on health. Lower health -> more dim shield
 void Shield_Draw(const Shield *s, SDL_Renderer *renderer) {
-
     if (s->target_inside == 1) {
         SDL_SetRenderDrawColor(renderer, 0xAA, 0X10, 0X20, 0XFF);
         draw_circle(renderer, s->position.x, s->position.y, s->radius);

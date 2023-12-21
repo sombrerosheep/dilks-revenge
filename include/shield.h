@@ -9,6 +9,7 @@ typedef struct shield Shield;
 
 struct shield {
     Vec2  position;
+    float health;
     float radius;
     int   target_inside;
 };
