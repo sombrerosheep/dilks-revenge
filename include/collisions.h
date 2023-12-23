@@ -15,7 +15,7 @@ typedef enum {
     Collider_Count
 } Collider;
 
-int get_collision(const SDL_FRect *a, const SDL_FRect *b, SDL_FRect *collision);
+int is_colliding(const SDL_FRect *a, const SDL_FRect *b);
 
 void resolve_collision_bullet_bullet(Bullet *a, Bullet *b);
 void resolve_collision_player_bullet(Player *p, Bullet *b);

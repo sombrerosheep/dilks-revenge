@@ -6,8 +6,9 @@ static float reduce_health(float start, float by) {
     return SDL_max((start - by), 0.f);
 }
 
-int get_collision(const SDL_FRect *a, const SDL_FRect *b, SDL_FRect *collision) {
-    if (SDL_IntersectFRect(a, b, collision) == SDL_TRUE) {
+int is_colliding(const SDL_FRect *a, const SDL_FRect *b) {
+    SDL_FRect collision;
+    if (SDL_IntersectFRect(a, b, &collision) == SDL_TRUE) {
         return 1;
     }
 
@@ -44,7 +45,6 @@ void resolve_collision_enemy_bullet(Enemy *e, Bullet *b) {
 
     e->health = reduce_health(e->health, b->health);
     b->health = 0.f;
-
     return;
 }
 
