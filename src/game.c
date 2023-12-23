@@ -2,6 +2,7 @@
 
 #include "bullet.h"
 #include "clock.h"
+#include "collisions.h"
 #include "enemy.h"
 #include "enemy_rail_manager.h"
 #include "game_input.h"
@@ -26,6 +27,19 @@ static void Game_Update(Game *game, System *sys, Frame delta) {
     EnemyRailManager_Update(game->rail_manager, &game->bullets, delta.sec, sys->renderer);
 
     BulletContainer_Update(&game->bullets, delta.sec);
+
+    // collisions
+    // player to bullets
+    Bullet *colliding_bullet = NULL;
+    if (BulletContainer_GetFirstCollision(&game->bullets,
+                                          Player_BoundingBox(&game->player),
+                                          &colliding_bullet) == 1) {
+        // printf("Resolving player bullet collision\n");
+        resolve_collision_player_bullet(&game->player, colliding_bullet);
+    }
+    // enemies to bullets
+
+    // bullets to bullets
 }
 
 static void Game_Draw(Game *game, System *sys) {
