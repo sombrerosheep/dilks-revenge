@@ -1,6 +1,8 @@
 #include "bullet.h"
 
+#include "collisions.h"
 #include "vec.h"
+#include <SDL_stdinc.h>
 
 #define BULLET_HEIGHT      5.f
 #define BULLET_WIDTH       5.f
@@ -13,26 +15,21 @@ void Bullet_Init(Bullet *bullet, BulletType type, Vec2 pos, Vec2 vel) {
     bullet->position = pos;
     bullet->velocity = vel;
     bullet->health   = BULLET_INIT_HEALTH;
-    bullet->in_use   = 1;
 }
 
 void Bullet_Update(Bullet *bullet, float delta) {
     if (bullet->health > 0.f) {
-        bullet->health -= delta * BULLET_DECAY_RATE;
+        bullet->health -= SDL_max((delta * BULLET_DECAY_RATE), 0.f);
 
         bullet->position.x += bullet->velocity.x * BULLET_SPEED * delta;
         bullet->position.y += bullet->velocity.y * BULLET_SPEED * delta;
-    } else if (bullet->health < 0.f) {
-        *bullet = Bullet_Zero;
     }
 }
 
 void Bullet_Draw(const Bullet *bullet, SDL_Renderer *renderer) {
-    if (bullet->health > 0.f) {
-        SDL_FRect rect = {bullet->position.x, bullet->position.y, BULLET_WIDTH, BULLET_HEIGHT};
-        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-        SDL_RenderFillRectF(renderer, &rect);
-    }
+    SDL_FRect rect = {bullet->position.x, bullet->position.y, BULLET_WIDTH, BULLET_HEIGHT};
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_RenderFillRectF(renderer, &rect);
 }
 
 SDL_FRect Bullet_BoundingBox(Bullet *bullet) {
@@ -49,7 +46,7 @@ SDL_FRect Bullet_BoundingBox(Bullet *bullet) {
 
 int BulletContainer_Init(BulletContainer *c) {
     for (unsigned int i = 0; i < GAME_MAX_BULLETS; i++) {
-        c->bullets[i] = Bullet_Zero;
+        c->bullets[i].in_use = 0;
     }
 
     return 0;
@@ -58,7 +55,12 @@ int BulletContainer_Init(BulletContainer *c) {
 int BulletContainer_Add(BulletContainer *c, BulletType type, Vec2 pos, Vec2 vel) {
     for (unsigned int i = 0; i < GAME_MAX_BULLETS; i++) {
         if (c->bullets[i].in_use == 0) {
-            Bullet_Init(&c->bullets[i], type, pos, vel);
+            if ((pos.x == 0.f && pos.y == 0) || (vel.x == 0.f && vel.y == 0.f)) {
+                printf("initializing bad bullet: %u\n", i);
+            }
+
+            Bullet_Init(&c->bullets[i].bullet, type, pos, vel);
+            c->bullets[i].in_use = 1;
 
             return 0;
         }
@@ -69,16 +71,48 @@ int BulletContainer_Add(BulletContainer *c, BulletType type, Vec2 pos, Vec2 vel)
 
 void BulletContainer_Update(BulletContainer *c, float delta) {
     for (unsigned int i = 0; i < GAME_MAX_BULLETS; i++) {
+        if (c->bullets[i].bullet.health <= 0.f) {
+            c->bullets[i].in_use = 0;
+            continue;
+        }
+
         if (c->bullets[i].in_use == 1) {
-            Bullet_Update(&c->bullets[i], delta);
+            if (c->bullets[i].bullet.position.x == 0.f && c->bullets[i].bullet.position.y == 0.f) {
+                printf("Updating bullet zero: %u\n", i);
+            }
+
+            Bullet_Update(&c->bullets[i].bullet, delta);
         }
     }
+}
+
+int BulletContainer_GetFirstCollision(BulletContainer *c, SDL_FRect rect, Bullet **bullet) {
+    if (bullet == NULL) {
+        return 0;
+    }
+
+    for (unsigned int i = 0; i < GAME_MAX_BULLETS; i++) {
+        ContainerBullet *cb = &c->bullets[i];
+        if (cb->in_use == 1) {
+            SDL_FRect bullet_box = Bullet_BoundingBox(&cb->bullet);
+            if (is_colliding(&bullet_box, &rect) == 1) {
+                *bullet = &cb->bullet;
+                return 1;
+            }
+        }
+    }
+
+    return 0;
 }
 
 void BulletContainer_Draw(BulletContainer *c, SDL_Renderer *r) {
     for (unsigned int i = 0; i < GAME_MAX_BULLETS; i++) {
         if (c->bullets[i].in_use == 1) {
-            Bullet_Draw(&c->bullets[i], r);
+            if (c->bullets[i].bullet.position.x == 0.f || c->bullets[i].bullet.position.y == 0.f) {
+                printf("==> Drawing bullet zero: %u\n", i);
+            }
+
+            Bullet_Draw(&c->bullets[i].bullet, r);
         }
     }
 }
