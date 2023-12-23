@@ -101,6 +101,7 @@ int EnemyRail_Remove_Enemy(EnemyRail *rail, Enemy *enemy) {
         }
     }
 
+    printf("attempted to remove rail enemy but failed\n");
     return -1;
 }
 
@@ -114,29 +115,35 @@ void EnemyRail_SetFocus(EnemyRail *rail, Vec2 point) {
 
 void EnemyRail_Update(EnemyRail *rail, BulletContainer *c, float delta) {
     for (unsigned int i = 0; i < rail->enemies_count; i++) {
-        if (rail->slope.x > 0.f && rail->slope.y == 0.f) {
-            // L->R
-            if (rail->enemies[i].enemy.position.x > rail->end.x) {
-                EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
+        if (rail->enemies[i].in_use == 1) {
+            if (rail->slope.x > 0.f && rail->slope.y == 0.f) {
+                // L->R
+                if (rail->enemies[i].enemy.position.x > rail->end.x) {
+                    EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
+                    continue;
+                }
+            } else if (rail->slope.x < 0.f && rail->slope.y == 0.f) {
+                // R->L
+                if (rail->enemies[i].enemy.position.x < rail->end.x) {
+                    EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
+                    continue;
+                }
+            } else if (rail->slope.x == 0.f && rail->slope.y > 0.f) {
+                // U->D
+                if (rail->enemies[i].enemy.position.y > rail->end.y) {
+                    EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
+                    continue;
+                }
+            } else if (rail->slope.x == 0.f && rail->slope.y < 0.f) {
+                // D->U
+                if (rail->enemies[i].enemy.position.y < rail->end.y) {
+                    EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
+                    continue;
+                }
             }
-        } else if (rail->slope.x < 0.f && rail->slope.y == 0.f) {
-            // R->L
-            if (rail->enemies[i].enemy.position.x < rail->end.x) {
-                EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
-            }
-        } else if (rail->slope.x == 0.f && rail->slope.y > 0.f) {
-            // U->D
-            if (rail->enemies[i].enemy.position.y > rail->end.y) {
-                EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
-            }
-        } else if (rail->slope.x == 0.f && rail->slope.y < 0.f) {
-            // D->U
-            if (rail->enemies[i].enemy.position.y < rail->end.y) {
-                EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
-            }
-        }
 
-        Enemy_Update(&rail->enemies[i].enemy, c, delta);
+            Enemy_Update(&rail->enemies[i].enemy, c, delta);
+        }
     }
 }
 
@@ -145,7 +152,7 @@ void EnemyRail_Draw(const EnemyRail *rail, SDL_Renderer *renderer) {
     SDL_RenderDrawLineF(renderer, rail->start.x, rail->start.y, rail->end.x, rail->end.y);
 
     for (unsigned int i = 0; i < rail->enemies_count; i++) {
-        if (rail->enemies[i].in_use > 0) {
+        if (rail->enemies[i].in_use == 1) {
             Enemey_Draw(&rail->enemies[i].enemy, renderer);
         }
     }
