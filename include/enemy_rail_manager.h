@@ -32,15 +32,8 @@ struct drev_rail_manager_placement_config {
     RailManagerPlacementParams config;
 };
 
-EnemyRailManager *EnemyRailManager_Create(unsigned int num_rails_capacity);
-EnemyRail *
-EnemyRailManager_AddRail(EnemyRailManager *manager, char *rail_name, Vec2 start, Vec2 end);
-EnemyRail *EnemyRailManager_GetRail(EnemyRailManager *manager, char *rail_name);
-int        EnemyRailManager_RemoveRail(EnemyRailManager *manager, char *rail_name);
-
-void EnemyRailManager_SetPlacementConfig(EnemyRailManager          *manager,
-                                         char                      *rail_name,
-                                         RailManagerPlacementConfig config);
+EnemyRailManager *EnemyRailManager_Create();
+int               EnemyRailManager_AddRail(EnemyRailManager *manager, Vec2 start, Vec2 end);
 
 void EnemyRailManager_SetFocus(EnemyRailManager *manager, Vec2 point);
 

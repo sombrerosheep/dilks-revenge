@@ -2,22 +2,6 @@
 
 #include <stdio.h>
 
-typedef struct drev_enemy_rail_enemy RailEnemy;
-
-struct drev_enemy_rail_enemy {
-    int   in_use;
-    Enemy enemy;
-};
-
-#define RAIL_MAX_ENEMIES 16
-
-struct drev_enemy_rail {
-    Vec2      start;
-    Vec2      end;
-    Vec2      slope;
-    RailEnemy enemies[RAIL_MAX_ENEMIES];
-};
-
 static void EnemyRail_InitEnemies(EnemyRail *rail) {
     for (unsigned int i = 0; i < RAIL_MAX_ENEMIES; i++) {
         rail->enemies[i].in_use = 0;
@@ -26,21 +10,14 @@ static void EnemyRail_InitEnemies(EnemyRail *rail) {
     return;
 }
 
-EnemyRail *EnemyRail_Create(Vec2 start, Vec2 end) {
-    EnemyRail *rail = NULL;
-
-    if ((rail = malloc(sizeof(EnemyRail))) == NULL) {
-        printf("ERROR :: Unable to allocate memory for rail\n");
-        return NULL;
-    }
-
+int EnemyRail_Init(EnemyRail *rail, Vec2 start, Vec2 end) {
     rail->start = start;
     rail->end   = end;
     rail->slope = (Vec2){end.x - start.x, end.y - start.y};
 
     EnemyRail_InitEnemies(rail);
 
-    return rail;
+    return 0;
 }
 
 int EnemyRail_Add_Enemy(EnemyRail *rail, SDL_Renderer *renderer) {
