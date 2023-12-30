@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
-typedef struct drev_managed_enemy_rail ManagedEnemyRail;
+
 
 /*
 typedef enum RailPosition {
@@ -19,36 +19,17 @@ typedef enum RailPosition {
 } RailIndex;
 */
 
-#define RAIL_MANAGER_MAX_RAILS 4
-
-struct drev_managed_enemy_rail {
-    RailManagerPlacementConfig placement;
-    EnemyRail                  rail;
-    unsigned int               last_added;
-    int                        in_use;
-};
-
-struct drev_enemy_rail_manager {
-    ManagedEnemyRail rails[RAIL_MANAGER_MAX_RAILS];
-};
-
 void ManagedEnemyRail_Destroy(ManagedEnemyRail *managed_rail) {
     managed_rail->in_use     = 0;
     managed_rail->last_added = 0;
 }
 
-EnemyRailManager *EnemyRailManager_Create() {
-    EnemyRailManager *manager = NULL;
-
-    if ((manager = malloc(sizeof(EnemyRailManager))) == NULL) {
-        return NULL;
-    }
-
+int EnemyRailManager_Init(EnemyRailManager *manager) {
     for (unsigned int i = 0; i < RAIL_MANAGER_MAX_RAILS; i++) {
         manager->rails[i].in_use = 0;
     }
 
-    return manager;
+    return 0;
 }
 
 int EnemyRailManager_AddRail(EnemyRailManager *manager, Vec2 start, Vec2 end) {

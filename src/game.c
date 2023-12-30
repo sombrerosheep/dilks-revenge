@@ -12,10 +12,10 @@
 #include <stdio.h>
 
 struct drev_game {
-    Player            player;
-    BulletContainer   bullets;
-    EnemyRailManager *rail_manager;
-    GameInput         controller;
+    Player           player;
+    BulletContainer  bullets;
+    EnemyRailManager rail_manager;
+    GameInput        controller;
 };
 
 static void Game_Update(Game *game, System *sys, Frame delta) {
@@ -23,8 +23,8 @@ static void Game_Update(Game *game, System *sys, Frame delta) {
 
     Player_Update(&game->player, &game->controller, &game->bullets, delta.sec);
 
-    EnemyRailManager_SetFocus(game->rail_manager, game->player.position);
-    EnemyRailManager_Update(game->rail_manager, &game->bullets, delta.sec, sys->renderer);
+    EnemyRailManager_SetFocus(&game->rail_manager, game->player.position);
+    EnemyRailManager_Update(&game->rail_manager, &game->bullets, delta.sec, sys->renderer);
 
     BulletContainer_Update(&game->bullets, delta.sec);
 
@@ -48,7 +48,7 @@ static void Game_Draw(Game *game, System *sys) {
 
     BulletContainer_Draw(&game->bullets, sys->renderer);
     Player_Draw(&game->player, sys->renderer);
-    EnemyRailManager_Draw(game->rail_manager, sys->renderer);
+    EnemyRailManager_Draw(&game->rail_manager, sys->renderer);
 
     SDL_RenderPresent(sys->renderer);
 }
@@ -75,23 +75,25 @@ Game *Game_Create(int game_width, int game_height) {
     }
 
     // Init Rail Manager
-    if ((g->rail_manager = EnemyRailManager_Create(4)) == NULL) {
+    if (EnemyRailManager_Init(&g->rail_manager) != 0) {
         printf("ERROR :: Unable to initialize enemy rail manager\n");
         Game_Destroy(g);
         return NULL;
     }
 
     { // Init rails
-        EnemyRailManager_AddRail(g->rail_manager, (Vec2){-100.f, 100.f}, (Vec2){900.f, 100.f});
+        EnemyRailManager_AddRail(&g->rail_manager, (Vec2){-100.f, 100.f}, (Vec2){900.f, 100.f});
 
-        EnemyRailManager_AddRail(g->rail_manager, (Vec2){700.f, -100.f}, (Vec2){700.f, 700.f});
+        EnemyRailManager_AddRail(&g->rail_manager, (Vec2){700.f, -100.f}, (Vec2){700.f, 700.f});
 
-        EnemyRailManager_AddRail(g->rail_manager, (Vec2){-100.f, 500.f}, (Vec2){900.f, 500.f});
+        EnemyRailManager_AddRail(&g->rail_manager, (Vec2){-100.f, 500.f}, (Vec2){900.f, 500.f});
 
-        EnemyRailManager_AddRail(g->rail_manager, (Vec2){100.f, -100.f}, (Vec2){100.f, 700.f});
+        EnemyRailManager_AddRail(&g->rail_manager, (Vec2){100.f, -100.f}, (Vec2){100.f, 700.f});
     }
 
-    if (Controller_Init(&g->controller) != 0) {
+    if (Controller_Init(
+
+            &g->controller) != 0) {
         printf("ERROR :: Unable to initialize controller\n");
         Game_Destroy(g);
         return NULL;
@@ -123,9 +125,7 @@ void Game_Run(Game *g, System *sys) {
 }
 
 void Game_Destroy(Game *g) {
-    if (g->rail_manager != NULL) {
-        EnemyRailManager_Destroy(g->rail_manager);
-    }
+    EnemyRailManager_Destroy(&g->rail_manager);
 
     return;
 }
