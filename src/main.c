@@ -10,9 +10,10 @@
 #define GAME_WIDTH    800
 
 SDL_version required_sdl = {.major = 2, .minor = 0, .patch = 22};
+const char *name         = "Dilk's Revenge!";
 
 int main() {
-    printf("start\n");
+    printf("%s\n", name);
 
     System sys;
 

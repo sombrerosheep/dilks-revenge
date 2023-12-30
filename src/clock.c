@@ -3,21 +3,10 @@
 #include <SDL.h>
 #include <stdio.h>
 
-struct drev_clock {
-    unsigned int start;
-};
-
-Clock *Clock_Create() {
-    Clock *clock = NULL;
-
-    if ((clock = malloc(sizeof(Clock))) == NULL) {
-        printf("ERROR :: error allocating memory for clock\n");
-        return NULL;
-    }
-
+int Clock_Init(Clock *clock) {
     clock->start = SDL_GetTicks();
 
-    return clock;
+    return 0;
 }
 
 Frame Clock_Reset(Clock *clock) {

@@ -91,9 +91,7 @@ Game *Game_Create(int game_width, int game_height) {
         EnemyRailManager_AddRail(&g->rail_manager, (Vec2){100.f, -100.f}, (Vec2){100.f, 700.f});
     }
 
-    if (Controller_Init(
-
-            &g->controller) != 0) {
+    if (Controller_Init(&g->controller) != 0) {
         printf("ERROR :: Unable to initialize controller\n");
         Game_Destroy(g);
         return NULL;
@@ -104,8 +102,9 @@ Game *Game_Create(int game_width, int game_height) {
 
 void Game_Run(Game *g, System *sys) {
     SDL_Event event;
-    int       running    = 1;
-    Clock    *game_clock = Clock_Create();
+    int       running = 1;
+    Clock     game_clock;
+    Clock_Init(&game_clock);
 
     while (running) {
         while (SDL_PollEvent(&event)) {
@@ -116,7 +115,7 @@ void Game_Run(Game *g, System *sys) {
         }
 
         // Input & Update
-        Frame frame = Clock_Reset(game_clock);
+        Frame frame = Clock_Reset(&game_clock);
         Game_Update(g, sys, frame);
 
         // Draw

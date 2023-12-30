@@ -9,7 +9,11 @@ struct drev_frame {
     float        sec;
 };
 
-Clock *Clock_Create(void);
+struct drev_clock {
+    unsigned int start;
+};
+
+int Clock_Init(Clock *clock);
 
 Frame Clock_Reset(Clock *clock);
 
