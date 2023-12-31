@@ -55,6 +55,7 @@ void Shield_Init(Shield *s, float x, float y) {
 // todo: does shield recharge? when? after Xs?
 //       is recharge rate based on difficulty?
 //       is shield health based on difficulty?
+//       do you need to destroy enemies to recharge shield?
 void Shield_Update(Shield *s, float delta) {
     if (s->health <= 0.f) {
         s->recharge += delta;

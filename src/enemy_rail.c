@@ -58,34 +58,42 @@ void EnemyRail_SetFocus(EnemyRail *rail, Vec2 point) {
 
 void EnemyRail_Update(EnemyRail *rail, BulletContainer *c, float delta) {
     for (unsigned int i = 0; i < RAIL_MAX_ENEMIES; i++) {
-        if (rail->enemies[i].in_use == 1) {
+        RailEnemy *enemy = &rail->enemies[i];
+
+        if (enemy->enemy.health <= 0.f) {
+            enemy->in_use = 0;
+            continue;
+        }
+
+        if (enemy->in_use == 1) {
+
             if (rail->slope.x > 0.f && rail->slope.y == 0.f) {
                 // L->R
-                if (rail->enemies[i].enemy.position.x > rail->end.x) {
-                    EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
+                if (enemy->enemy.position.x > rail->end.x) {
+                    EnemyRail_Remove_Enemy(rail, &enemy->enemy);
                     continue;
                 }
             } else if (rail->slope.x < 0.f && rail->slope.y == 0.f) {
                 // R->L
-                if (rail->enemies[i].enemy.position.x < rail->end.x) {
-                    EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
+                if (enemy->enemy.position.x < rail->end.x) {
+                    EnemyRail_Remove_Enemy(rail, &enemy->enemy);
                     continue;
                 }
             } else if (rail->slope.x == 0.f && rail->slope.y > 0.f) {
                 // U->D
-                if (rail->enemies[i].enemy.position.y > rail->end.y) {
-                    EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
+                if (enemy->enemy.position.y > rail->end.y) {
+                    EnemyRail_Remove_Enemy(rail, &enemy->enemy);
                     continue;
                 }
             } else if (rail->slope.x == 0.f && rail->slope.y < 0.f) {
                 // D->U
-                if (rail->enemies[i].enemy.position.y < rail->end.y) {
-                    EnemyRail_Remove_Enemy(rail, &rail->enemies[i].enemy);
+                if (enemy->enemy.position.y < rail->end.y) {
+                    EnemyRail_Remove_Enemy(rail, &enemy->enemy);
                     continue;
                 }
             }
 
-            Enemy_Update(&rail->enemies[i].enemy, c, delta);
+            Enemy_Update(&enemy->enemy, c, delta);
         }
     }
 }
