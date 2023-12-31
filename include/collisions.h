@@ -16,6 +16,7 @@ typedef enum {
 } Collider;
 
 int is_colliding(const SDL_FRect *a, const SDL_FRect *b);
+int is_collidingc(const SDL_FRect *a, Vec2 center, float radius);
 
 void resolve_collision_bullet_bullet(Bullet *a, Bullet *b);
 void resolve_collision_player_bullet(Player *p, Bullet *b);

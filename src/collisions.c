@@ -1,5 +1,8 @@
 #include "collisions.h"
 #include "bullet.h"
+#include "vec.h"
+
+#include <SDL.h>
 
 // todo: inline
 static float reduce_health(float start, float by) {
@@ -9,6 +12,17 @@ static float reduce_health(float start, float by) {
 int is_colliding(const SDL_FRect *a, const SDL_FRect *b) {
     SDL_FRect collision;
     if (SDL_IntersectFRect(a, b, &collision) == SDL_TRUE) {
+        return 1;
+    }
+
+    return 0;
+}
+
+int is_collidingc(const SDL_FRect *a, Vec2 center, float radius) {
+    Vec2 diff =
+        (Vec2){.x = center.x - (a->x + (a->w / 2.f)), .y = center.y - (a->y + (a->h / 2.f))};
+
+    if (Vec2_Magnitude(diff) < radius) {
         return 1;
     }
 
