@@ -45,9 +45,7 @@ SDL_FRect Bullet_BoundingBox(Bullet *bullet) {
 // BulletContainer
 
 int BulletContainer_Init(BulletContainer *c) {
-    for (unsigned int i = 0; i < GAME_MAX_BULLETS; i++) {
-        c->bullets[i].in_use = 0;
-    }
+    memset(&c->bullets, 0, sizeof(ContainerBullet) * GAME_MAX_BULLETS);
 
     return 0;
 }

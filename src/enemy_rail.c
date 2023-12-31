@@ -3,9 +3,7 @@
 #include <stdio.h>
 
 static void EnemyRail_InitEnemies(EnemyRail *rail) {
-    for (unsigned int i = 0; i < RAIL_MAX_ENEMIES; i++) {
-        rail->enemies[i].in_use = 0;
-    }
+    memset(&rail->enemies, 0, sizeof(RailEnemy) * RAIL_MAX_ENEMIES);
 
     return;
 }
