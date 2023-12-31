@@ -30,7 +30,7 @@ void Enemey_Draw(const Enemy *enemy, SDL_Renderer *renderer);
 
 void Enemy_FacePoint(Enemy *enemy, Vec2 point);
 
-SDL_FRect Enemy_BoundingBox(Enemy *enemy);
+SDL_FRect Enemy_BoundingBox(const Enemy *enemy);
 
 void Enemy_Destroy(Enemy *enemy);
 

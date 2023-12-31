@@ -1,11 +1,16 @@
 #include "enemy.h"
 
 #include "bullet.h"
+#include "vec.h"
 
+#include <SDL_rect.h>
+#include <SDL_render.h>
 #include <stdio.h>
 
 #define ENEMY_HEIGHT       10.f
+#define ENEMY_HALF_HEIGHT  (ENEMY_HEIGHT / 2.f)
 #define ENEMY_WIDTH        20.f
+#define ENEMY_HALF_WIDTH   (ENEMY_WIDTH / 2.f)
 #define ENEMY_SPEED        150.f
 #define ENEMY_FIRE_RATE_MS 2000
 
@@ -24,7 +29,7 @@ static void Enemy_SetTexture(Enemy *enemy, SDL_Renderer *renderer) {
     SDL_RenderFillRectF(renderer, &src_rect);
 
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
-    SDL_RenderDrawLineF(renderer, ENEMY_WIDTH / 2.f, ENEMY_HEIGHT / 2.f, ENEMY_WIDTH / 2.f, 0.f);
+    SDL_RenderDrawLineF(renderer, ENEMY_HALF_WIDTH, ENEMY_HALF_HEIGHT, ENEMY_HALF_WIDTH, 0.f);
 
     SDL_SetRenderTarget(renderer, NULL);
 }
@@ -65,10 +70,10 @@ void Enemy_Update(Enemy *enemy, BulletContainer *c, float delta) {
 }
 
 void Enemey_Draw(const Enemy *enemy, SDL_Renderer *renderer) {
-    SDL_FRect dst_rect = {enemy->position.x - ENEMY_WIDTH / 2.f,
-                          enemy->position.y - ENEMY_HEIGHT / 2.f,
-                          ENEMY_WIDTH,
-                          ENEMY_HEIGHT};
+    SDL_FRect dst_rect = {.x = enemy->position.x - ENEMY_HALF_WIDTH,
+                          .y = enemy->position.y - ENEMY_HALF_HEIGHT,
+                          .w = ENEMY_WIDTH,
+                          .h = ENEMY_HEIGHT};
 
     SDL_RenderCopyExF(renderer,
                       enemy->texture,
@@ -77,6 +82,10 @@ void Enemey_Draw(const Enemy *enemy, SDL_Renderer *renderer) {
                       enemy->rotation * (180.f / M_PI),
                       NULL,
                       SDL_FLIP_NONE);
+
+    SDL_FRect bb = Enemy_BoundingBox(enemy);
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0x12, 0x12, 0xFF);
+    SDL_RenderDrawRectF(renderer, &bb);
 }
 
 void Enemy_FacePoint(Enemy *enemy, Vec2 point) {
@@ -88,13 +97,52 @@ void Enemy_FacePoint(Enemy *enemy, Vec2 point) {
     return;
 }
 
-SDL_FRect Enemy_BoundingBox(Enemy *enemy) {
-    SDL_FRect box = (SDL_FRect){.x = enemy->position.x,
-                                .y = enemy->position.y,
-                                .w = ENEMY_HEIGHT,
-                                .h = ENEMY_HEIGHT};
+static float get_min(float x, float y, float z, float a) {
+    float min = x;
 
-    return box;
+    min = SDL_min(min, y);
+    min = SDL_min(min, z);
+    min = SDL_min(min, a);
+
+    return min;
+}
+
+static float get_max(float x, float y, float z, float a) {
+    float min = x;
+
+    min = SDL_max(min, y);
+    min = SDL_max(min, z);
+    min = SDL_max(min, a);
+
+    return min;
+}
+
+SDL_FRect Enemy_BoundingBox(const Enemy *enemy) {
+    float x = -ENEMY_HALF_WIDTH;
+    float y = -ENEMY_HALF_HEIGHT;
+
+    Vec2 ul = (Vec2){.x = x, .y = y};
+    Vec2 ur = (Vec2){.x = ENEMY_HALF_WIDTH, .y = y};
+    Vec2 ll = (Vec2){.x = x, .y = ENEMY_HALF_HEIGHT};
+    Vec2 lr = (Vec2){.x = ENEMY_HALF_WIDTH, .y = ENEMY_HALF_HEIGHT};
+
+    Vec2 rul = Vec2_Rotate(ul, enemy->rotation);
+    Vec2 rur = Vec2_Rotate(ur, enemy->rotation);
+    Vec2 rll = Vec2_Rotate(ll, enemy->rotation);
+    Vec2 rlr = Vec2_Rotate(lr, enemy->rotation);
+
+    float min_x, min_y, max_x, max_y;
+    min_x = get_min(rul.x, rur.x, rll.x, rlr.x);
+    min_y = get_min(rul.y, rur.y, rll.y, rlr.y);
+    max_x = get_max(rul.x, rur.x, rll.x, rlr.x);
+    max_y = get_max(rul.y, rur.y, rll.y, rlr.y);
+
+    SDL_FRect bounding_box = (SDL_FRect){.x = min_x + enemy->position.x,
+                                         .y = min_y + enemy->position.y,
+                                         .w = max_x - min_x,
+                                         .h = max_y - min_y};
+
+    return bounding_box;
 }
 
 void Enemy_Destroy(Enemy *enemy) {
