@@ -12,11 +12,12 @@ struct shield {
     float health;
     float radius;
     int   target_inside;
+    float recharge;
 };
 
 void Shield_Init(Shield *s, float x, float y);
-// void Shield_Update(Shield *s);
-int Shield_EvalTarget(Shield *s, float x, float y, float w, float h);
+void Shield_Update(Shield *s, float delta);
+int  Shield_EvalTarget(Shield *s, float x, float y, float w, float h);
 
 void Shield_Draw(const Shield *s, SDL_Renderer *renderer);
 

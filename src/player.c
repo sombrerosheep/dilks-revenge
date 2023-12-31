@@ -71,6 +71,8 @@ void Player_Update(Player *player, const GameInput *controller, BulletContainer 
                       player->position.y,
                       PLAYER_WIDTH,
                       PLAYER_HEIGHT);
+
+    Shield_Update(&player->shield, delta);
 }
 
 void Player_Draw(const Player *player, SDL_Renderer *renderer) {
