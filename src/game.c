@@ -4,6 +4,7 @@
 #include "clock.h"
 #include "collisions.h"
 #include "enemy.h"
+#include "enemy_rail.h"
 #include "enemy_rail_manager.h"
 #include "game_input.h"
 #include "player.h"
@@ -38,6 +39,29 @@ static void Game_Update(Game *game, System *sys, Frame delta) {
         resolve_collision_player_bullet(&game->player, colliding_bullet);
     }
     // enemies to bullets
+    colliding_bullet = NULL;
+    for (unsigned int i = 0; i < RAIL_MANAGER_MAX_RAILS; i++) {
+        ManagedEnemyRail *rail = &game->rail_manager.rails[i];
+
+        if (rail->in_use != 1) {
+            continue;
+        }
+
+        for (unsigned int j = 0; j < RAIL_MAX_ENEMIES; j++) {
+            RailEnemy *enemy = &rail->rail.enemies[j];
+
+            if (enemy->in_use != 1) {
+                continue;
+            }
+
+            if (BulletContainer_GetFirstCollision(&game->bullets,
+                                                  Enemy_BoundingBox(&enemy->enemy),
+                                                  &colliding_bullet) == 1) {
+                // printf("Resolving enemy bullet collision\n");
+                resolve_collision_enemy_bullet(&enemy->enemy, colliding_bullet);
+            }
+        }
+    }
 
     // bullets to bullets
 }
@@ -125,6 +149,8 @@ void Game_Run(Game *g, System *sys) {
 
 void Game_Destroy(Game *g) {
     EnemyRailManager_Destroy(&g->rail_manager);
+
+    free(g);
 
     return;
 }
