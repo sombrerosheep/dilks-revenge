@@ -52,3 +52,11 @@
    obj:/usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
    fun:glXChooseVisual
 }
+
+{
+   libpulse_leak
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libpulse.so.*
+   ...
+}
