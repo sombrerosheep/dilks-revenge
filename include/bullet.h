@@ -62,7 +62,12 @@ void BulletContainer_Update(BulletContainer *c, float delta);
 /// @return int 1 if a collision was found and bullet points to the colliding bullet
 /// @return int 0 if no collisions occured and bullet is NULL
 ///
-int  BulletContainer_GetFirstCollision(BulletContainer *c, SDL_FRect rect, Bullet **bullet);
+int BulletContainer_GetFirstCollision(BulletContainer *c, SDL_FRect rect, Bullet **bullet);
+
+int  BulletContainer_GetFirstCollisionC(BulletContainer *c,
+                                        Vec2             center,
+                                        float            radius,
+                                        Bullet         **bullet);
 void BulletContainer_Draw(BulletContainer *c, SDL_Renderer *r);
 void BulletContainer_Clear(BulletContainer *c);
 

@@ -103,6 +103,28 @@ int BulletContainer_GetFirstCollision(BulletContainer *c, SDL_FRect rect, Bullet
     return 0;
 }
 
+int BulletContainer_GetFirstCollisionC(BulletContainer *c,
+                                       Vec2             center,
+                                       float            radius,
+                                       Bullet         **bullet) {
+    if (bullet == NULL) {
+        return 0;
+    }
+
+    for (unsigned int i = 0; i < GAME_MAX_BULLETS; i++) {
+        ContainerBullet *cb = &c->bullets[i];
+        if (cb->in_use == 1) {
+            SDL_FRect bullet_box = Bullet_BoundingBox(&cb->bullet);
+            if (is_collidingc(&bullet_box, center, radius) == 1) {
+                *bullet = &cb->bullet;
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}
+
 void BulletContainer_Draw(BulletContainer *c, SDL_Renderer *r) {
     for (unsigned int i = 0; i < GAME_MAX_BULLETS; i++) {
         if (c->bullets[i].in_use == 1) {
