@@ -1,5 +1,6 @@
 #include "vec.h"
 
+#include <SDL.h>
 #include <math.h>
 
 float Vec2_Magnitude(Vec2 vec) {
@@ -26,4 +27,15 @@ Vec2 Vec2_Normalize(Vec2 vec) {
     }
 
     return norm;
+}
+
+Vec2 Vec2_Rotate(Vec2 vec, float deg) {
+    Vec2  rot   = Vec2_Zero;
+    float a_sin = SDL_sinf(deg);
+    float a_cos = SDL_cosf(deg);
+
+    rot.x = vec.x * a_cos - vec.y * a_sin;
+    rot.y = vec.y * a_cos + vec.x * a_sin;
+
+    return rot;
 }
