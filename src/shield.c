@@ -1,5 +1,6 @@
 #include "shield.h"
 
+#include <SDL_render.h>
 #include <stdio.h>
 
 #define SHIELD_INIT_HEALTH 200.f
@@ -83,13 +84,15 @@ int Shield_EvalTarget(Shield *s, float x, float y, float w, float h) {
 // todo: if health is 0 do not draw shield.
 // todo: shield opacity based on health. Lower health -> more dim shield
 void Shield_Draw(const Shield *s, SDL_Renderer *renderer) {
-    if (s->target_inside == 1) {
+    if (s->health <= 0.f) {
+        SDL_SetRenderDrawColor(renderer, 0xEE, 0xEE, 0xEE, 0xFF);
+    } else if (s->target_inside == 1) {
         SDL_SetRenderDrawColor(renderer, 0xAA, 0X10, 0X20, 0XFF);
-        draw_circle(renderer, s->position.x, s->position.y, s->radius);
     } else {
         SDL_SetRenderDrawColor(renderer, 0x50, 0X10, 0X20, 0X11);
-        draw_circle(renderer, s->position.x, s->position.y, s->radius);
     }
+
+    draw_circle(renderer, s->position.x, s->position.y, s->radius);
 }
 
 void Shield_Destroy(Shield *s) {

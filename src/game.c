@@ -63,6 +63,18 @@ static void Game_Update(Game *game, System *sys, Frame delta) {
         }
     }
 
+    // shield to bullets
+    colliding_bullet = NULL;
+    if (game->player.shield.health > 0.f) {
+        if (BulletContainer_GetFirstCollisionC(&game->bullets,
+                                               game->player.shield.position,
+                                               game->player.shield.radius,
+                                               &colliding_bullet) == 1) {
+            // printf("Resolving shield bullet collision\n");
+            resolve_collision_shield_bullet(&game->player.shield, colliding_bullet);
+        }
+    }
+
     // bullets to bullets
 }
 
