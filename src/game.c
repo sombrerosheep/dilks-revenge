@@ -19,16 +19,7 @@ struct drev_game {
     GameInput        controller;
 };
 
-static void Game_Update(Game *game, System *sys, Frame delta) {
-    Controller_Update(&game->controller, sys);
-
-    Player_Update(&game->player, &game->controller, &game->bullets, delta.sec);
-
-    EnemyRailManager_SetFocus(&game->rail_manager, game->player.position);
-    EnemyRailManager_Update(&game->rail_manager, &game->bullets, delta.sec, sys->renderer);
-
-    BulletContainer_Update(&game->bullets, delta.sec);
-
+static void Game_Collisions(Game *game) {
     // collisions
     // player to bullets
     Bullet *colliding_bullet = NULL;
@@ -76,6 +67,19 @@ static void Game_Update(Game *game, System *sys, Frame delta) {
     }
 
     // bullets to bullets
+}
+
+static void Game_Update(Game *game, System *sys, Frame delta) {
+    Controller_Update(&game->controller, sys);
+
+    Player_Update(&game->player, &game->controller, &game->bullets, delta.sec);
+
+    EnemyRailManager_SetFocus(&game->rail_manager, game->player.position);
+    EnemyRailManager_Update(&game->rail_manager, &game->bullets, delta.sec, sys->renderer);
+
+    BulletContainer_Update(&game->bullets, delta.sec);
+
+    Game_Collisions(game);
 }
 
 static void Game_Draw(Game *game, System *sys) {

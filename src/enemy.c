@@ -3,15 +3,14 @@
 #include "bullet.h"
 #include "vec.h"
 
-#include <SDL_rect.h>
-#include <SDL_render.h>
+#include <SDL.h>
 #include <stdio.h>
 
 #define ENEMY_HEIGHT       10.f
 #define ENEMY_HALF_HEIGHT  (ENEMY_HEIGHT / 2.f)
 #define ENEMY_WIDTH        20.f
 #define ENEMY_HALF_WIDTH   (ENEMY_WIDTH / 2.f)
-#define ENEMY_SPEED        150.f
+#define ENEMY_SPEED        100.f
 #define ENEMY_FIRE_RATE_MS 2000
 
 static void Enemy_SetTexture(Enemy *enemy, SDL_Renderer *renderer) {

@@ -1,6 +1,5 @@
 #include "shield.h"
 
-#include <SDL_render.h>
 #include <stdio.h>
 
 #define SHIELD_RECHARGE_DELAY_SEC 3.f
