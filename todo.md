@@ -38,10 +38,6 @@
 ## Enemy
 * Types - list of enemy types to deploy?
 
-## Collisions
-* detection
-* resolution
-
 ## Chores
 * window size out of pre-processor
 

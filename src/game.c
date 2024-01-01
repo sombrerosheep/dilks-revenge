@@ -66,6 +66,30 @@ static void Game_Collisions(Game *game) {
         }
     }
 
+    // enemies to player
+    for (unsigned int i = 0; i < RAIL_MANAGER_MAX_RAILS; i++) {
+        ManagedEnemyRail *rail = &game->rail_manager.rails[i];
+
+        if (rail->in_use != 1) {
+            continue;
+        }
+
+        for (unsigned int j = 0; j < RAIL_MAX_ENEMIES; j++) {
+            RailEnemy *enemy = &rail->rail.enemies[j];
+
+            if (enemy->in_use != 1) {
+                continue;
+            }
+
+            SDL_FRect enemy_bb  = Enemy_BoundingBox(&enemy->enemy);
+            SDL_FRect player_bb = Player_BoundingBox(&game->player);
+
+            if (is_colliding(&player_bb, &enemy_bb) == 1) {
+                resolve_collision_player_enemy(&game->player, &enemy->enemy);
+            }
+        }
+    }
+
     // bullets to bullets
     BulletContainer_HandleBulletBulletCollisions(&game->bullets);
 }

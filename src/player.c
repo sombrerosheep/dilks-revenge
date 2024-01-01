@@ -81,7 +81,12 @@ void Player_Draw(const Player *player, SDL_Renderer *renderer) {
                                         PLAYER_WIDTH,
                                         PLAYER_HEIGHT};
 
-    SDL_SetRenderDrawColor(renderer, 0xAA, 0x00, 0xAA, 0xFF);
+    if (player->health <= 0.f) {
+        SDL_SetRenderDrawColor(renderer, 0xDD, 0xDD, 0xDD, 0xFF);
+    } else {
+        SDL_SetRenderDrawColor(renderer, 0xAA, 0x00, 0xAA, 0xFF);
+    }
+
     SDL_RenderFillRectF(renderer, &player_rect);
 
     Shield_Draw(&player->shield, renderer);
