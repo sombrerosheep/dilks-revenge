@@ -2,6 +2,7 @@
 
 #include "collisions.h"
 #include "vec.h"
+#include <SDL_rect.h>
 
 #define BULLET_HEIGHT      5.f
 #define BULLET_WIDTH       5.f
@@ -77,6 +78,20 @@ int BulletContainer_Add(BulletContainer *c, BulletType type, Vec2 pos, Vec2 vel)
     }
 
     return -1;
+}
+
+void BulletContainer_HandleBulletBulletCollisions(BulletContainer *c) {
+    for (unsigned int i = 0; i < GAME_MAX_BULLETS; i++) {
+        for (unsigned int j = i + 1; j < GAME_MAX_BULLETS; j++) {
+            Bullet   *bullet_i = &c->bullets[i].bullet;
+            Bullet   *bullet_j = &c->bullets[j].bullet;
+            SDL_FRect bi       = Bullet_BoundingBox(bullet_i);
+            SDL_FRect bj       = Bullet_BoundingBox(bullet_j);
+            if (is_colliding(&bi, &bj) == 1) {
+                resolve_collision_bullet_bullet(bullet_i, bullet_j);
+            }
+        }
+    }
 }
 
 void BulletContainer_Update(BulletContainer *c, float delta) {

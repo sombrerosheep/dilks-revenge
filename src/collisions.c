@@ -30,13 +30,8 @@ int is_collidingc(const SDL_FRect *a, Vec2 center, float radius) {
 }
 
 void resolve_collision_bullet_bullet(Bullet *a, Bullet *b) {
-    if (a->health > b->health) {
-        a->health = reduce_health(a->health, b->health);
-        b->health = 0.f;
-    } else {
-        b->health -= reduce_health(b->health, a->health);
-        a->health = 0.f;
-    }
+    a->health = 0.f;
+    b->health = 0.f;
 
     return;
 }
@@ -62,6 +57,8 @@ void resolve_collision_enemy_bullet(Enemy *e, Bullet *b) {
     return;
 }
 
+// todo: when shield reactivates, bullets already inside, will
+//       get killed off. Should they?
 void resolve_collision_shield_bullet(Shield *s, Bullet *b) {
     if (b->type == BulletType_Player) {
         return;

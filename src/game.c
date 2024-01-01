@@ -67,6 +67,7 @@ static void Game_Collisions(Game *game) {
     }
 
     // bullets to bullets
+    BulletContainer_HandleBulletBulletCollisions(&game->bullets);
 }
 
 static void Game_Update(Game *game, System *sys, Frame delta) {
