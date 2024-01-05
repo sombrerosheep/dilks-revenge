@@ -149,31 +149,31 @@ Game *Game_Create(int game_width, int game_height) {
     { // Init rails
         // top
         EnemyRailManager_AddRail(&g->rail_manager,
-                                 (Vec2){-100.f, 100.f},
-                                 (Vec2){900.f, 100.f},
-                                 (Vec2){.x = 0.f, -5.f},
-                                 (Vec2){.x = -100.f, 10.f});
+                                 (Vec2){.x = -100.f, 10.f},
+                                 (Vec2){900.f, 10.f},
+                                 (Vec2){.x = 0.f, 5.f},
+                                 (Vec2){-100.f, 100.f});
 
         // right
         EnemyRailManager_AddRail(&g->rail_manager,
-                                 (Vec2){700.f, -100.f},
-                                 (Vec2){700.f, 700.f},
-                                 (Vec2){.x = 5.f, 0.f},
-                                 (Vec2){.x = 790.f, .y = -100.f});
+                                 (Vec2){.x = 790.f, .y = -100.f},
+                                 (Vec2){790.f, 700.f},
+                                 (Vec2){.x = -5.f, 0.f},
+                                 (Vec2){700.f, -100.f});
 
         // bottom
         EnemyRailManager_AddRail(&g->rail_manager,
-                                 (Vec2){-100.f, 500.f},
-                                 (Vec2){900.f, 500.f},
-                                 (Vec2){.x = 0.f, 5.f},
-                                 (Vec2){.x = -100.f, 590.f});
+                                 (Vec2){.x = -100.f, 590.f},
+                                 (Vec2){900.f, 590.f},
+                                 (Vec2){.x = 0.f, -5.f},
+                                 (Vec2){-100.f, 500.f});
 
         // left
         EnemyRailManager_AddRail(&g->rail_manager,
-                                 (Vec2){100.f, -100.f},
-                                 (Vec2){100.f, 700.f},
-                                 (Vec2){.x = -5.f, 0.f},
-                                 (Vec2){.x = 10.f, .y = -100.f});
+                                 (Vec2){.x = 10.f, .y = -100.f},
+                                 (Vec2){10.f, 700.f},
+                                 (Vec2){.x = 5.f, 0.f},
+                                 (Vec2){100.f, -100.f});
     }
 
     if (Controller_Init(&g->controller) != 0) {
