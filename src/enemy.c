@@ -57,9 +57,14 @@ int Enemy_Init(Enemy *enemy, Vec2 position, unsigned int health, SDL_Renderer *r
     return 0;
 }
 
-void Enemy_Update(Enemy *enemy, BulletContainer *c, float delta) {
+void Enemy_Update(Enemy *enemy, BulletContainer *c, float delta, Vec2 *parent_transform) {
     enemy->position.x += enemy->velocity.x * ENEMY_SPEED * delta;
     enemy->position.y += enemy->velocity.y * ENEMY_SPEED * delta;
+
+    if (parent_transform != NULL) {
+        enemy->position.x += parent_transform->x;
+        enemy->position.y += parent_transform->y;
+    }
 
     enemy->last_fired += (unsigned int)(delta * 1000.f);
     if (enemy->last_fired >= ENEMY_FIRE_RATE_MS) {

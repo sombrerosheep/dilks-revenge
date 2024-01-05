@@ -58,11 +58,12 @@ void EnemyRail_SetFocus(EnemyRail *rail, Vec2 point) {
 }
 
 void EnemyRail_Update(EnemyRail *rail, BulletContainer *c, float delta) {
+    Vec2 base_transform = (Vec2){.x = rail->velocity.x * delta, .y = rail->velocity.y * delta};
 
-    rail->start.x += rail->velocity.x * delta;
-    rail->start.y += rail->velocity.y * delta;
-    rail->end.x += rail->velocity.x * delta;
-    rail->end.y += rail->velocity.y * delta;
+    rail->start.x += base_transform.x;
+    rail->start.y += base_transform.y;
+    rail->end.x += base_transform.x;
+    rail->end.y += base_transform.y;
 
     if ((rail->velocity.x > 0.f && rail->start.x > rail->stop.x) ||
         (rail->velocity.x < 0.f && rail->start.x < rail->stop.x)) {
@@ -84,33 +85,36 @@ void EnemyRail_Update(EnemyRail *rail, BulletContainer *c, float delta) {
         }
 
         if (enemy->in_use == 1) {
-            if (rail->slope.x > 0.f && rail->slope.y == 0.f) {
-                // L->R
-                if (enemy->enemy.position.x > rail->end.x) {
-                    EnemyRail_Remove_Enemy(rail, &enemy->enemy);
-                    continue;
+            { // check if off the rail's end
+                // todo: this will be different for rail modes
+                if (rail->slope.x > 0.f && rail->slope.y == 0.f) {
+                    // L->R
+                    if (enemy->enemy.position.x > rail->end.x) {
+                        EnemyRail_Remove_Enemy(rail, &enemy->enemy);
+                        continue;
+                    }
+                } else if (rail->slope.x < 0.f && rail->slope.y == 0.f) {
+                    // R->L
+                    if (enemy->enemy.position.x < rail->end.x) {
+                        EnemyRail_Remove_Enemy(rail, &enemy->enemy);
+                        continue;
+                    }
+                } else if (rail->slope.x == 0.f && rail->slope.y > 0.f) {
+                    // U->D
+                    if (enemy->enemy.position.y > rail->end.y) {
+                        EnemyRail_Remove_Enemy(rail, &enemy->enemy);
+                        continue;
+                    }
+                } else if (rail->slope.x == 0.f && rail->slope.y < 0.f) {
+                    // D->U
+                    if (enemy->enemy.position.y < rail->end.y) {
+                        EnemyRail_Remove_Enemy(rail, &enemy->enemy);
+                        continue;
+                    }
                 }
-            } else if (rail->slope.x < 0.f && rail->slope.y == 0.f) {
-                // R->L
-                if (enemy->enemy.position.x < rail->end.x) {
-                    EnemyRail_Remove_Enemy(rail, &enemy->enemy);
-                    continue;
-                }
-            } else if (rail->slope.x == 0.f && rail->slope.y > 0.f) {
-                // U->D
-                if (enemy->enemy.position.y > rail->end.y) {
-                    EnemyRail_Remove_Enemy(rail, &enemy->enemy);
-                    continue;
-                }
-            } else if (rail->slope.x == 0.f && rail->slope.y < 0.f) {
-                // D->U
-                if (enemy->enemy.position.y < rail->end.y) {
-                    EnemyRail_Remove_Enemy(rail, &enemy->enemy);
-                    continue;
-                }
-            }
 
-            Enemy_Update(&enemy->enemy, c, delta);
+                Enemy_Update(&enemy->enemy, c, delta, &base_transform);
+            }
         }
     }
 }
