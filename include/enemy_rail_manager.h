@@ -47,7 +47,11 @@ struct drev_enemy_rail_manager {
 };
 
 int EnemyRailManager_Init(EnemyRailManager *manager);
-int EnemyRailManager_AddRail(EnemyRailManager *manager, Vec2 start, Vec2 end);
+int EnemyRailManager_AddRail(EnemyRailManager *manager,
+                             Vec2              start,
+                             Vec2              end,
+                             Vec2              velocity,
+                             Vec2              stop);
 
 void EnemyRailManager_SetFocus(EnemyRailManager *manager, Vec2 point);
 

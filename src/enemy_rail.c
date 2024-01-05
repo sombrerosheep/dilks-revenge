@@ -8,10 +8,12 @@ static void EnemyRail_InitEnemies(EnemyRail *rail) {
     return;
 }
 
-int EnemyRail_Init(EnemyRail *rail, Vec2 start, Vec2 end) {
-    rail->start = start;
-    rail->end   = end;
-    rail->slope = (Vec2){end.x - start.x, end.y - start.y};
+int EnemyRail_Init(EnemyRail *rail, Vec2 start, Vec2 end, Vec2 velocity, Vec2 stop) {
+    rail->start    = start;
+    rail->end      = end;
+    rail->slope    = Vec2_Normalize((Vec2){end.x - start.x, end.y - start.y});
+    rail->velocity = velocity;
+    rail->stop     = stop;
 
     EnemyRail_InitEnemies(rail);
 
@@ -25,8 +27,7 @@ int EnemyRail_Add_Enemy(EnemyRail *rail, SDL_Renderer *renderer) {
         }
 
         Enemy_Init(&rail->enemies[i].enemy, rail->start, 100, renderer);
-        Vec2 slope_norm                 = Vec2_Normalize(rail->slope);
-        rail->enemies[i].enemy.velocity = slope_norm;
+        rail->enemies[i].enemy.velocity = rail->slope;
 
         rail->enemies[i].in_use = 1;
 
@@ -57,6 +58,23 @@ void EnemyRail_SetFocus(EnemyRail *rail, Vec2 point) {
 }
 
 void EnemyRail_Update(EnemyRail *rail, BulletContainer *c, float delta) {
+
+    rail->start.x += rail->velocity.x * delta;
+    rail->start.y += rail->velocity.y * delta;
+    rail->end.x += rail->velocity.x * delta;
+    rail->end.y += rail->velocity.y * delta;
+
+    if ((rail->velocity.x > 0.f && rail->start.x > rail->stop.x) ||
+        (rail->velocity.x < 0.f && rail->start.x < rail->stop.x)) {
+        rail->start.x    = rail->stop.x;
+        rail->velocity.x = 0.f;
+    }
+    if ((rail->velocity.y > 0.f && rail->start.y > rail->stop.y) ||
+        (rail->velocity.y < 0.f && rail->start.y < rail->stop.y)) {
+        rail->start.x    = rail->stop.x;
+        rail->velocity.y = 0.f;
+    }
+
     for (unsigned int i = 0; i < RAIL_MAX_ENEMIES; i++) {
         RailEnemy *enemy = &rail->enemies[i];
 
@@ -66,7 +84,6 @@ void EnemyRail_Update(EnemyRail *rail, BulletContainer *c, float delta) {
         }
 
         if (enemy->in_use == 1) {
-
             if (rail->slope.x > 0.f && rail->slope.y == 0.f) {
                 // L->R
                 if (enemy->enemy.position.x > rail->end.x) {

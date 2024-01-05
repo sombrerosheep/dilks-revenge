@@ -30,12 +30,16 @@ int EnemyRailManager_Init(EnemyRailManager *manager) {
     return 0;
 }
 
-int EnemyRailManager_AddRail(EnemyRailManager *manager, Vec2 start, Vec2 end) {
+int EnemyRailManager_AddRail(EnemyRailManager *manager,
+                             Vec2              start,
+                             Vec2              end,
+                             Vec2              velocity,
+                             Vec2              stop) {
     for (unsigned int i = 0; i < RAIL_MANAGER_MAX_RAILS; i++) {
         if (manager->rails[i].in_use == 0) {
             ManagedEnemyRail *managed_rail = &manager->rails[i];
 
-            EnemyRail_Init(&managed_rail->rail, start, end);
+            EnemyRail_Init(&managed_rail->rail, start, end, velocity, stop);
             managed_rail->in_use = 1;
 
             managed_rail->placement.type       = RAIL_MANAGER_PLACEMENT_TYPE_RANDOM;
@@ -85,7 +89,7 @@ void EnemyRailManager_Update(EnemyRailManager *manager,
                     default: {
                         printf("Unsupported placement type: %u\n", managed_rail->placement.type);
                         break;
-                    }
+                    };
                 }
             }
 

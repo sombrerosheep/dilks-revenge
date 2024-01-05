@@ -22,10 +22,12 @@ struct drev_enemy_rail {
     Vec2      start;
     Vec2      end;
     Vec2      slope;
+    Vec2      velocity;
+    Vec2      stop;
     RailEnemy enemies[RAIL_MAX_ENEMIES];
 };
 
-int  EnemyRail_Init(EnemyRail *rail, Vec2 start, Vec2 end);
+int  EnemyRail_Init(EnemyRail *rail, Vec2 start, Vec2 end, Vec2 velocity, Vec2 stop);
 int  EnemyRail_Add_Enemy(EnemyRail *rail, SDL_Renderer *rendere);
 int  EnemyRail_Remove_Enemy(EnemyRail *rail, Enemy *enemy);
 void EnemyRail_SetFocus(EnemyRail *rail, Vec2 point);
