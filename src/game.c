@@ -31,10 +31,10 @@ static void Game_Collisions(Game *game) {
     }
     // enemies to bullets
     colliding_bullet = NULL;
-    for (unsigned int i = 0; i < RAIL_MANAGER_MAX_RAILS; i++) {
+    for (unsigned int i = 0; i < RailPosition_Count; i++) {
         ManagedEnemyRail *rail = &game->rail_manager.rails[i];
 
-        if (rail->in_use != 1) {
+        if (rail->state == RailState_Idle) {
             continue;
         }
 
@@ -67,10 +67,10 @@ static void Game_Collisions(Game *game) {
     }
 
     // enemies to player
-    for (unsigned int i = 0; i < RAIL_MANAGER_MAX_RAILS; i++) {
+    for (unsigned int i = 0; i < RailPosition_Count; i++) {
         ManagedEnemyRail *rail = &game->rail_manager.rails[i];
 
-        if (rail->in_use != 1) {
+        if (rail->state == RailState_Idle) {
             continue;
         }
 
@@ -99,8 +99,12 @@ static void Game_Update(Game *game, System *sys, Frame delta) {
 
     Player_Update(&game->player, &game->controller, &game->bullets, delta.sec);
 
-    EnemyRailManager_SetFocus(&game->rail_manager, game->player.position);
-    EnemyRailManager_Update(&game->rail_manager, &game->bullets, delta.sec, sys->renderer);
+    // EnemyRailManager_Update(&game->rail_manager, &game->bullets, delta.sec, sys->renderer);
+    EnemyRailManager_Update(&game->rail_manager,
+                            &game->bullets,
+                            game->player.position,
+                            delta.sec,
+                            sys->renderer);
 
     BulletContainer_Update(&game->bullets, delta.sec);
 
@@ -146,35 +150,8 @@ Game *Game_Create(int game_width, int game_height) {
         return NULL;
     }
 
-    { // Init rails
-        // top
-        EnemyRailManager_AddRail(&g->rail_manager,
-                                 (Vec2){.x = -100.f, 10.f},
-                                 (Vec2){900.f, 10.f},
-                                 (Vec2){.x = 0.f, 5.f},
-                                 (Vec2){-100.f, 100.f});
-
-        // right
-        EnemyRailManager_AddRail(&g->rail_manager,
-                                 (Vec2){.x = 790.f, .y = -100.f},
-                                 (Vec2){790.f, 700.f},
-                                 (Vec2){.x = -5.f, 0.f},
-                                 (Vec2){700.f, -100.f});
-
-        // bottom
-        EnemyRailManager_AddRail(&g->rail_manager,
-                                 (Vec2){.x = -100.f, 590.f},
-                                 (Vec2){900.f, 590.f},
-                                 (Vec2){.x = 0.f, -5.f},
-                                 (Vec2){-100.f, 500.f});
-
-        // left
-        EnemyRailManager_AddRail(&g->rail_manager,
-                                 (Vec2){.x = 10.f, .y = -100.f},
-                                 (Vec2){10.f, 700.f},
-                                 (Vec2){.x = 5.f, 0.f},
-                                 (Vec2){100.f, -100.f});
-    }
+    // Rails
+    EnemyRailManager_StartRail(&g->rail_manager, RailPosition_Top);
 
     if (Controller_Init(&g->controller) != 0) {
         printf("ERROR :: Unable to initialize controller\n");

@@ -1,0 +1,9 @@
+#ifndef DREV_GLOBALS_H
+#define DREV_GLOBALS_H
+
+#define WINDOW_HEIGHT 1200
+#define WINDOW_WIDTH  1600
+#define GAME_HEIGHT   600
+#define GAME_WIDTH    800
+
+#endif // DREV_GLOBALS_H

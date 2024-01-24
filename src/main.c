@@ -2,12 +2,8 @@
 #include <stdio.h>
 
 #include "game.h"
+#include "globals.h"
 #include "system.h"
-
-#define WINDOW_HEIGHT 1200
-#define WINDOW_WIDTH  1600
-#define GAME_HEIGHT   600
-#define GAME_WIDTH    800
 
 SDL_version required_sdl = {.major = 2, .minor = 0, .patch = 22};
 const char *name         = "Dilk's Revenge!";

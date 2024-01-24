@@ -57,7 +57,7 @@ file(GLOB game_source
 )
 add_executable(game ${game_source})
 
-set_target_properties(game PROPERTIES C_STANDARD 99 OUTPUT_NAME "dilks-revenge")
+set_target_properties(game PROPERTIES C_STANDARD 11 OUTPUT_NAME "dilks-revenge")
 target_link_libraries(game ${SDL2_LIBRARIES} m)
 target_include_directories(
   game PUBLIC
