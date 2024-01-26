@@ -99,10 +99,16 @@ int EnemyRailManager_Init(EnemyRailManager *manager) {
         manager->rails[i].state = RailState_Idle;
     }
 
+    manager->active_rails = 0;
+
     return 0;
 }
 
 int EnemyRailManager_StartRail(EnemyRailManager *manager, RailPosition pos, RailConfig cfg) {
+    if (manager->rails[pos].state != RailState_Idle) {
+        return -1;
+    }
+
     manager->rails[pos].state = RailState_Running;
 
     manager->rails[pos].config = cfg;
@@ -112,6 +118,8 @@ int EnemyRailManager_StartRail(EnemyRailManager *manager, RailPosition pos, Rail
                    end_positions[pos],
                    velocities[pos],
                    stop_positions[pos]);
+
+    manager->active_rails++;
 
     return 0;
 }
@@ -178,6 +186,7 @@ void EnemyRailManager_Update(EnemyRailManager *manager,
             case RailState_Dieing:
                 if (managed_rail->rail.alive_enemies == 0) {
                     managed_rail->state = RailState_Idle;
+                    manager->active_rails--;
                 }
 
                 EnemyRail_SetFocus(&managed_rail->rail, focus);

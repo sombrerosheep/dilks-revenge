@@ -95,11 +95,26 @@ static void Game_Collisions(Game *game) {
 }
 
 static void Game_Update(Game *game, System *sys, Frame delta) {
+    if (game->rail_manager.active_rails < 2) {
+        int rate        = random_get_between(800, 1500);
+        int num_enemies = random_get_between(3, 10);
+
+        int        rail = random_get_between(0, RailPosition_Count - 1);
+        RailConfig cfg  = RailConfig_NewStatic(num_enemies, rate);
+
+        while (EnemyRailManager_StartRail(&game->rail_manager, rail, cfg) != 0) {
+            rail++;
+
+            if (rail >= RailPosition_Count) {
+                rail = 0;
+            }
+        }
+    }
+
     Controller_Update(&game->controller, sys);
 
     Player_Update(&game->player, &game->controller, &game->bullets, delta.sec);
 
-    // EnemyRailManager_Update(&game->rail_manager, &game->bullets, delta.sec, sys->renderer);
     EnemyRailManager_Update(&game->rail_manager,
                             &game->bullets,
                             game->player.position,
@@ -149,10 +164,6 @@ Game *Game_Create(int game_width, int game_height) {
         Game_Destroy(g);
         return NULL;
     }
-
-    // Rails
-    RailConfig cfg = RailConfig_NewStatic(5, 1500);
-    EnemyRailManager_StartRail(&g->rail_manager, RailPosition_Top, cfg);
 
     if (Controller_Init(&g->controller) != 0) {
         printf("ERROR :: Unable to initialize controller\n");

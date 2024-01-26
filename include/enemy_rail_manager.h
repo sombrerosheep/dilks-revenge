@@ -73,6 +73,7 @@ struct drev_managed_enemy_rail {
 
 struct drev_enemy_rail_manager {
     ManagedEnemyRail rails[RailPosition_Count];
+    unsigned int     active_rails;
 };
 
 int EnemyRailManager_Init(EnemyRailManager *manager);
