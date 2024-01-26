@@ -54,13 +54,16 @@ struct drev_random_rail_config {
 struct drev_rail_config {
     enum RailConfigType Type;
 
-    float num_enemies;
+    unsigned int num_enemies;
 
     union {
         StaticRailConfig static_rc;
         RandomRailConfig random_rc;
     };
 };
+
+RailConfig RailConfig_NewStatic(unsigned int num_enemies, unsigned int rate_ms);
+RailConfig RailConfig_NewRandom(unsigned int num_enemies, unsigned int min, unsigned int max);
 
 struct drev_managed_enemy_rail {
     RailConfig config;
@@ -74,7 +77,7 @@ struct drev_enemy_rail_manager {
 
 int EnemyRailManager_Init(EnemyRailManager *manager);
 
-int EnemyRailManager_StartRail(EnemyRailManager *manager, RailPosition pos);
+int EnemyRailManager_StartRail(EnemyRailManager *manager, RailPosition pos, RailConfig cfg);
 int EnemyRailManager_KillRail(EnemyRailManager *manager, RailPosition pos);
 
 void EnemyRailManager_Update(EnemyRailManager *manager,

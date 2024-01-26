@@ -9,11 +9,12 @@ static void EnemyRail_InitEnemies(EnemyRail *rail) {
 }
 
 int EnemyRail_Init(EnemyRail *rail, Vec2 start, Vec2 end, Vec2 velocity, Vec2 stop) {
-    rail->start    = start;
-    rail->end      = end;
-    rail->slope    = Vec2_Normalize((Vec2){end.x - start.x, end.y - start.y});
-    rail->velocity = velocity;
-    rail->stop     = stop;
+    rail->start         = start;
+    rail->end           = end;
+    rail->slope         = Vec2_Normalize((Vec2){end.x - start.x, end.y - start.y});
+    rail->velocity      = velocity;
+    rail->stop          = stop;
+    rail->alive_enemies = 0;
 
     EnemyRail_InitEnemies(rail);
 
@@ -30,6 +31,7 @@ int EnemyRail_Add_Enemy(EnemyRail *rail, SDL_Renderer *renderer) {
         rail->enemies[i].enemy.velocity = rail->slope;
 
         rail->enemies[i].in_use = 1;
+        rail->alive_enemies++;
 
         return 0;
     }
@@ -41,6 +43,11 @@ int EnemyRail_Remove_Enemy(EnemyRail *rail, Enemy *enemy) {
     for (unsigned int i = 0; i < RAIL_MAX_ENEMIES; i++) {
         if (rail->enemies[i].in_use == 1 && &rail->enemies[i].enemy == enemy) {
             rail->enemies[i].in_use = 0;
+
+            if (rail->alive_enemies > 0) {
+                rail->alive_enemies--;
+            }
+
             return 0;
         }
     }

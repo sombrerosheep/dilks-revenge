@@ -8,6 +8,29 @@
 #include <stdio.h>
 #include <string.h>
 
+RailConfig RailConfig_NewStatic(unsigned int num_enemies, unsigned int rate_ms) {
+    RailConfig rc;
+
+    rc.Type              = RailConfigType_Static;
+    rc.num_enemies       = num_enemies;
+    rc.static_rc.next    = 0;
+    rc.static_rc.rate_ms = rate_ms;
+
+    return rc;
+}
+
+RailConfig RailConfig_NewRandom(unsigned int num_enemies, unsigned int min, unsigned int max) {
+    RailConfig rc;
+
+    rc.Type               = RailConfigType_Static;
+    rc.num_enemies        = num_enemies;
+    rc.random_rc.next     = 0;
+    rc.random_rc.rand_min = min;
+    rc.random_rc.rand_max = max;
+
+    return rc;
+}
+
 /*
  - consistent start/end position? Yes?
  - rate/speed from start to end? Consistent? Stops at end until enemies are 0?
@@ -79,12 +102,10 @@ int EnemyRailManager_Init(EnemyRailManager *manager) {
     return 0;
 }
 
-int EnemyRailManager_StartRail(EnemyRailManager *manager, RailPosition pos) {
+int EnemyRailManager_StartRail(EnemyRailManager *manager, RailPosition pos, RailConfig cfg) {
     manager->rails[pos].state = RailState_Running;
 
-    manager->rails[pos].config.Type              = RailConfigType_Static;
-    manager->rails[pos].config.static_rc.next    = 0;
-    manager->rails[pos].config.static_rc.rate_ms = 1500;
+    manager->rails[pos].config = cfg;
 
     EnemyRail_Init(&manager->rails[pos].rail,
                    start_positions[pos],
@@ -117,13 +138,17 @@ static void EnemyRailManager_UpdateRunningRail(ManagedEnemyRail *rail,
         case RailConfigType_Static: {
             rail->config.static_rc.next -= (unsigned int)(delta * 1000.f);
 
-            if (rail->config.static_rc.next <= 0) {
+            if (rail->config.num_enemies > 0 && rail->config.static_rc.next <= 0) {
                 EnemyRail_Add_Enemy(&rail->rail, renderer);
+                rail->config.num_enemies--;
+
+                if (rail->config.num_enemies <= 0) {
+                    rail->state = RailState_Dieing;
+                }
 
                 rail->config.static_rc.next = rail->config.static_rc.rate_ms;
             }
 
-            EnemyRail_SetFocus(&rail->rail, focus);
             break;
         }
         case RailConfigType_Random:
@@ -133,6 +158,7 @@ static void EnemyRailManager_UpdateRunningRail(ManagedEnemyRail *rail,
         }
     }
 
+    EnemyRail_SetFocus(&rail->rail, focus);
     EnemyRail_Update(&rail->rail, c, delta);
 }
 
@@ -149,8 +175,15 @@ void EnemyRailManager_Update(EnemyRailManager *manager,
                 EnemyRailManager_UpdateRunningRail(managed_rail, c, focus, delta, renderer);
                 break;
             }
-            case RailState_Starting:
             case RailState_Dieing:
+                if (managed_rail->rail.alive_enemies == 0) {
+                    managed_rail->state = RailState_Idle;
+                }
+
+                EnemyRail_SetFocus(&managed_rail->rail, focus);
+                EnemyRail_Update(&managed_rail->rail, c, delta);
+                break;
+            case RailState_Starting:
             case RailState_Idle:
             default: {
                 // skipping

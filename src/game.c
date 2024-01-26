@@ -151,7 +151,8 @@ Game *Game_Create(int game_width, int game_height) {
     }
 
     // Rails
-    EnemyRailManager_StartRail(&g->rail_manager, RailPosition_Top);
+    RailConfig cfg = RailConfig_NewStatic(5, 1500);
+    EnemyRailManager_StartRail(&g->rail_manager, RailPosition_Top, cfg);
 
     if (Controller_Init(&g->controller) != 0) {
         printf("ERROR :: Unable to initialize controller\n");
