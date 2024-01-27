@@ -86,8 +86,9 @@ void EnemyRail_Update(EnemyRail *rail, BulletContainer *c, float delta) {
     for (unsigned int i = 0; i < RAIL_MAX_ENEMIES; i++) {
         RailEnemy *enemy = &rail->enemies[i];
 
-        if (enemy->enemy.health <= 0.f) {
+        if (enemy->in_use == 1 && enemy->enemy.health <= 0.f) {
             enemy->in_use = 0;
+            rail->alive_enemies--;
             continue;
         }
 

@@ -132,7 +132,6 @@ static void EnemyRailManager_UpdateRunningRail(ManagedEnemyRail *rail,
                                                Vec2              focus,
                                                float             delta,
                                                SDL_Renderer     *renderer) {
-
     switch (rail->config.Type) {
         case RailConfigType_Static: {
             rail->config.static_rc.next -= (unsigned int)(delta * 1000.f);
