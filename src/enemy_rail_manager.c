@@ -3,6 +3,7 @@
 #include "bullet.h"
 #include "enemy.h"
 #include "enemy_rail.h"
+#include "globals.h"
 #include "random.h"
 
 #include <stdio.h>
@@ -22,7 +23,7 @@ RailConfig RailConfig_NewStatic(unsigned int num_enemies, unsigned int rate_ms) 
 RailConfig RailConfig_NewRandom(unsigned int num_enemies, unsigned int min, unsigned int max) {
     RailConfig rc;
 
-    rc.Type               = RailConfigType_Static;
+    rc.Type               = RailConfigType_Random;
     rc.num_enemies        = num_enemies;
     rc.random_rc.next     = 0;
     rc.random_rc.rand_min = min;
@@ -38,39 +39,28 @@ RailConfig RailConfig_NewRandom(unsigned int num_enemies, unsigned int min, unsi
     - enemy speed based on difficulty
  - do enemies die at the end or "bounce back"?
  - is each level scripted or randomized?
+    - can we get good randomness with only 4 sides?
  */
 
 // int killRail(RailPosition pos) {
 // }
 
-// after this all compiles..if something doesn't work right,
-// its probably these numbers below...
 #define rail_buffer      10.f
 #define offscreen_buffer 100.f
-
-/*
-Vec2 start_positions[RailPosition_Count] = {
-    {.x = -offscreen_buffer, .y = offscreen_buffer},
-    {.x = -offscreen_buffer, .y = GAME_HEIGHT - rail_buffer},
-    {.x = rail_buffer, .y = -offscreen_buffer},
-    {.x = GAME_WIDTH - rail_buffer, .y = -offscreen_buffer}};
-Vec2 end_positions[RailPosition_Count] = {
-    {.x = GAME_WIDTH + offscreen_buffer, .y = rail_buffer},
-    {.x = GAME_WIDTH + offscreen_buffer, .y = GAME_HEIGHT - rail_buffer},
-    {.x = rail_buffer, .y = GAME_HEIGHT + offscreen_buffer},
-    {.x = GAME_WIDTH - rail_buffer, .y = GAME_HEIGHT + offscreen_buffer}};
-Vec2 stop_positions[RailPosition_Count] = {
-    {.x = -offscreen_buffer, .y = offscreen_buffer},
-    {.x = -offscreen_buffer, .y = GAME_HEIGHT - offscreen_buffer},
-    {.x = offscreen_buffer, .y = -offscreen_buffer},
-    {.x = GAME_WIDTH - offscreen_buffer, .y = -offscreen_buffer}};
-*/
+#define top_left_x       (0.f)
+#define top_left_y       (0.f)
+#define top_right_x      ((float)GAME_WIDTH)
+#define top_right_y      (0.f)
+#define bottom_left_x    (0.f)
+#define bottom_left_y    ((float)GAME_HEIGHT)
+#define bottom_right_x   ((float)GAME_WIDTH)
+#define bottom_right_y   ((float)GAME_HEIGHT)
 
 const Vec2 start_positions[RailPosition_Count] = {
-    {-100.f, 10.f},
-    {-100.f, 590.f},
-    {10.f, -100.f},
-    {790.f, -100.f},
+    {.x = -100.f, .y = 10.f},
+    {.x = -100.f, .y = 590.f},
+    {.x = 10.f, .y = -100.f},
+    {.x = 790.f, .y = -100.f},
 };
 const Vec2 end_positions[RailPosition_Count] = {
     {900.f, 10.f},
@@ -78,11 +68,12 @@ const Vec2 end_positions[RailPosition_Count] = {
     {10.f, 700.f},
     {790.f, 700.f},
 };
-const Vec2 stop_positions[RailPosition_Count] = {{-100.f, 100.f},
-                                                 {-100.f, 500.f},
-                                                 {100.f, -100.f},
-                                                 {700.f, -100.f}};
-
+const Vec2 stop_positions[RailPosition_Count] = {
+    {-100.f, 100.f},
+    {-100.f, 500.f},
+    {100.f, -100.f},
+    {700.f, -100.f},
+};
 const Vec2 velocities[RailPosition_Count] = {
     {.x = 0.f, 5.f},
     {.x = 0.f, -5.f},
@@ -152,6 +143,7 @@ static void EnemyRailManager_UpdateRunningRail(ManagedEnemyRail *rail,
 
                 if (rail->config.num_enemies <= 0) {
                     rail->state = RailState_Dieing;
+                    break;
                 }
 
                 rail->config.static_rc.next = rail->config.static_rc.rate_ms;
@@ -159,7 +151,25 @@ static void EnemyRailManager_UpdateRunningRail(ManagedEnemyRail *rail,
 
             break;
         }
-        case RailConfigType_Random:
+        case RailConfigType_Random: {
+            rail->config.random_rc.next -= (unsigned int)(delta * 1000.f);
+
+            if (rail->config.num_enemies > 0 && rail->config.random_rc.next <= 0) {
+                EnemyRail_Add_Enemy(&rail->rail, renderer);
+                rail->config.num_enemies--;
+
+                if (rail->config.num_enemies <= 0) {
+                    rail->state = RailState_Dieing;
+                    break;
+                }
+
+                unsigned int next =
+                    (unsigned int)random_get_between(rail->config.random_rc.rand_min,
+                                                     rail->config.random_rc.rand_max);
+                rail->config.random_rc.next = next;
+            }
+            break;
+        }
         default: {
             printf("RailConfigType not implemented: %d\n", rail->config.Type);
             break;

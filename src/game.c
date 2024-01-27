@@ -96,11 +96,25 @@ static void Game_Collisions(Game *game) {
 
 static void Game_Update(Game *game, System *sys, Frame delta) {
     if (game->rail_manager.active_rails < 2) {
-        int rate        = random_get_between(800, 1500);
-        int num_enemies = random_get_between(3, 10);
+        int            num_enemies = random_get_between(3, 10);
+        int            rail        = random_get_between(0, RailPosition_Count - 1);
+        RailConfigType type        = random_get_between(0, RailConfigType_Count - 1);
+        RailConfig     cfg;
 
-        int        rail = random_get_between(0, RailPosition_Count - 1);
-        RailConfig cfg  = RailConfig_NewStatic(num_enemies, rate);
+        switch (type) {
+            case RailConfigType_Random: {
+                unsigned int min = (unsigned int)random_get_between(200, 400);
+                unsigned int max = (unsigned int)random_get_between(1500, 2000);
+                cfg              = RailConfig_NewRandom(num_enemies, min, max);
+                break;
+            }
+            case RailConfigType_Static:
+            default: {
+                int rate = random_get_between(800, 1500);
+                cfg      = RailConfig_NewStatic(num_enemies, rate);
+                break;
+            }
+        }
 
         while (EnemyRailManager_StartRail(&game->rail_manager, rail, cfg) != 0) {
             rail++;
