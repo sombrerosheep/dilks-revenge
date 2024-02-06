@@ -10,6 +10,7 @@
 
 typedef struct drev_enemy_rail_manager EnemyRailManager;
 typedef struct drev_managed_enemy_rail ManagedEnemyRail;
+
 typedef struct drev_static_rail_config StaticRailConfig;
 typedef struct drev_random_rail_config RandomRailConfig;
 typedef struct drev_rail_config        RailConfig;

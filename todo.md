@@ -1,27 +1,17 @@
-## rail controller
-* Config
-  * Should this be set per rail or across all rails? (or both?)
-    * some of the options below only make sense if at the manager level not the rail level
-  * Placement strategy
-    * Random - each rail gets an enemy at random times
-    * Random_Spread - random rail gets enemy at random timing
-    * static - add enemy at set interval
-    * static_spread - add enemy to random rail at set interval
-  * Population control
-    * Min - each rail has min number of enemies
-    * Min_Spread - min num of active enemies across all rails
-
 ### more rail thoughts
-* rails move towards the player?
-* add patters:
-  * drop-down, reverse direction, increase speed (space invaders style)
-  * sine-wave/circles l->r
-  * repeat options
-    * bonus enemies (like space invaders) that just do a fly by once
+- add patters:
+  - drop-down, reverse direction, increase speed (space invaders style)
+  - sine-wave/circles l->r
+  - repeat options
+    - bonus enemies (like space invaders) that just do a fly by once
 
-## rail names
-- are these necessary anymore?
-- if the manager is handling them why would we ever need to retrieve one and by name?
+- consistent start/end position? Yes?
+- rate/speed from start to end? Consistent? Stops at end until enemies are 0?
+  - rail speed based on difficulty
+  - enemy speed based on difficulty
+- do enemies die at the end or "bounce back"?
+- is each level scripted or randomized?
+  - can we get good randomness with only 4 sides?
 
 ## why play?
 - is there score?
@@ -39,7 +29,7 @@
 * Types - list of enemy types to deploy?
 
 ## Chores
-* window size out of pre-processor
+- window size out of pre-processor
 
 ## particles
 - for all the collisions
@@ -58,19 +48,15 @@
 
 ## space background
 - parallaxing?
-- parallaxing to where the enemies are?
-
-## resolve valgrind detected leaks
+- parallaxing to where the enemies are...
 
 ## bullets fade as their health drops
 - can't use a linear fade.
 - need to still see the bullets until the very end
 - final fade after health = 0?
 
-# what this is
-
 ## Original plan
-* enemies come from a specific direction in waves.
-* some waves could be multiple directions as difficulty increase
+- enemies come from a specific direction in waves.
+- some waves could be multiple directions as difficulty increase
 
 

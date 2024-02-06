@@ -32,19 +32,6 @@ RailConfig RailConfig_NewRandom(unsigned int num_enemies, unsigned int min, unsi
     return rc;
 }
 
-/*
- - consistent start/end position? Yes?
- - rate/speed from start to end? Consistent? Stops at end until enemies are 0?
-    - rail speed based on difficulty
-    - enemy speed based on difficulty
- - do enemies die at the end or "bounce back"?
- - is each level scripted or randomized?
-    - can we get good randomness with only 4 sides?
- */
-
-// int killRail(RailPosition pos) {
-// }
-
 #define rail_buffer      10.f
 #define offscreen_buffer 100.f
 #define top_left_x       (0.f)
@@ -56,30 +43,41 @@ RailConfig RailConfig_NewRandom(unsigned int num_enemies, unsigned int min, unsi
 #define bottom_right_x   ((float)GAME_WIDTH)
 #define bottom_right_y   ((float)GAME_HEIGHT)
 
-const Vec2 start_positions[RailPosition_Count] = {
-    {.x = -100.f, .y = 10.f},
-    {.x = -100.f, .y = 590.f},
-    {.x = 10.f, .y = -100.f},
-    {.x = 790.f, .y = -100.f},
+struct rail_definition {
+    Vec2 start;
+    Vec2 end;
+    Vec2 stop;
+    Vec2 velocity;
 };
-const Vec2 end_positions[RailPosition_Count] = {
-    {900.f, 10.f},
-    {900.f, 590.f},
-    {10.f, 700.f},
-    {790.f, 700.f},
-};
-const Vec2 stop_positions[RailPosition_Count] = {
-    {-100.f, 100.f},
-    {-100.f, 500.f},
-    {100.f, -100.f},
-    {700.f, -100.f},
-};
-const Vec2 velocities[RailPosition_Count] = {
-    {.x = 0.f, 5.f},
-    {.x = 0.f, -5.f},
-    {.x = 5.f, 0.f},
-    {.x = -5.f, 0.f},
-};
+
+struct rail_definition rail_defs[RailPosition_Count] = { //
+    [RailPosition_Top] =
+        {
+            .start    = {.x = -100.f, .y = 10.f},
+            .end      = {.x = 900.f, .y = 10.f},
+            .stop     = {.x = -100.f, .y = 100.f},
+            .velocity = {.x = 0.f, .y = 5.f},
+        },
+    [RailPosition_Bottom] =
+        {
+            .start    = {.x = -100.f, .y = 590.f},
+            .end      = {900.f, 590.f},
+            .stop     = {-100.f, 500.f},
+            .velocity = {.x = 0.f, -5.f},
+        },
+    [RailPosition_Left] =
+        {
+            .start    = {.x = 10.f, .y = -100.f},
+            .end      = {10.f, 700.f},
+            .stop     = {100.f, -100.f},
+            .velocity = {.x = 5.f, 0.f},
+        },
+    [RailPosition_Right] = {
+        .start    = {.x = 790.f, .y = -100.f},
+        .end      = {790.f, 700.f},
+        .stop     = {700.f, -100.f},
+        .velocity = {.x = -5.f, 0.f},
+    }};
 
 void ManagedEnemyRail_Destroy(ManagedEnemyRail *managed_rail) {
     managed_rail->state = RailState_Idle;
@@ -104,11 +102,9 @@ int EnemyRailManager_StartRail(EnemyRailManager *manager, RailPosition pos, Rail
 
     manager->rails[pos].config = cfg;
 
-    EnemyRail_Init(&manager->rails[pos].rail,
-                   start_positions[pos],
-                   end_positions[pos],
-                   velocities[pos],
-                   stop_positions[pos]);
+    struct rail_definition def = rail_defs[pos];
+
+    EnemyRail_Init(&manager->rails[pos].rail, def.start, def.end, def.velocity, def.stop);
 
     manager->active_rails++;
 
