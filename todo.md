@@ -21,6 +21,7 @@
 
 ## fonts I
 - [ ] load and use font
+  - store as a single texture atlas
 
 ## resources I
 - [ ] resource manager
@@ -34,6 +35,11 @@
   - font atlas
   - sprites
 - [ ] loaded into resource manager
+
+## assets II
+- [ ] asset packer utility
+  - game loads the pack.
+  - utilty bundles the package
 
 ## waves I
 - [ ] select a waves direction (up/down/left/righ)
