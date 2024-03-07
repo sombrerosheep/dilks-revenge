@@ -1,5 +1,5 @@
 ## core I
-- [ ] game clock
+- [x] game clock
   - need ms [uint] per frame
   - need s [float] per frame
 
@@ -205,3 +205,15 @@
 	-  furthest level achieved and date achieved
 - [ ] chapter select 
 	-  start of any level, granted the previous was completed
+
+# Thoughts and Ideas
+
+## Ships/Upgrades
+- do you get a ship upgrade ever?
+- do you pick different ships?
+- do ships have stats?
+- do you get a new ship offer at each planet?
+- do you get a new ship offer at certain planet?
+- do you get a new upgrade/weapon at each planet?
+- do you get a new upgrade/weapon at each planet?
+- 
