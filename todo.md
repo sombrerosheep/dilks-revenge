@@ -4,7 +4,7 @@
   - need s [float] per frame
 
 ## core II
-- [ ] scale
+- [x] scale
   - size of ship and enemies and other entities by "meters"
   - all speeds by m/sec
 
