@@ -79,7 +79,7 @@
   - slight "tilt"
 
 ## player I
-- [ ] movement
+- [x] movement
 - [ ] small drift after moving?
 - [ ] player aim with mouse
 - [ ] player constrained by camera

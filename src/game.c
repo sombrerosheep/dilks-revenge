@@ -2,6 +2,7 @@
 
 #include "clock.h"
 #include "game_input.h"
+#include "player.h"
 #include "random.h"
 
 #include <stdio.h>
@@ -10,17 +11,19 @@
 
 struct drev_game {
     GameInput controller;
+    Player    player;
 };
 
 static void Game_Update(Game *game, System *sys, Frame delta) {
-    UNUSED(delta);
     Controller_Update(&game->controller, sys);
+    Player_Update(&game->player, game->controller, delta.sec);
 }
 
 static void Game_Draw(Game *game, System *sys) {
-    UNUSED(game);
     SDL_SetRenderDrawColor(sys->renderer, 0x33, 0x33, 0x33, 0xFF);
     SDL_RenderClear(sys->renderer);
+
+    Player_Draw(&game->player, sys->renderer);
 
     SDL_RenderPresent(sys->renderer);
 }
@@ -41,6 +44,8 @@ Game *Game_Create(int game_width, int game_height) {
         Game_Destroy(g);
         return NULL;
     }
+
+    Player_Init(&g->player);
 
     return g;
 }
