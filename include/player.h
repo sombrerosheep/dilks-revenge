@@ -12,6 +12,7 @@ struct drev_player {
     Vec2 position;
     Vec2 velocity;
     Vec2 size;
+    Vec2 aim;
 };
 
 int  Player_Init(Player *p);

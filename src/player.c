@@ -3,7 +3,7 @@
 #include "globals.h"
 #include "vec.h"
 
-#define PlayerMeterPerSecond      150.f
+#define PlayerMeterPerSecond      125.f
 #define PlayerDecayMeterPerSecond ((PlayerMeterPerSecond) / .5f)
 
 #define min(x, y) ((x) < (y) ? (x) : (y))
@@ -32,14 +32,14 @@ static float clamp(float value, float upper, float lower) {
 }
 
 int Player_Init(Player *p) {
-    p->position.x = 200.f;
-    p->position.y = 200.f;
+    p->position = Vec2_Newf(200.f);
 
-    p->velocity.x = 0.f;
-    p->velocity.y = 0.f;
+    p->velocity = Vec2_Zero;
 
     p->size.x = 10.f;
     p->size.y = 10.f;
+
+    p->aim = Vec2_Zero;
 
     return 0;
 }
@@ -77,15 +77,30 @@ void Player_Update(Player *p, GameInput controller, float delta) {
 
     p->position.x += p->velocity.x * delta;
     p->position.y += p->velocity.y * delta;
+
+    p->aim = (Vec2){(float)controller.mouse_x - p->position.x,
+                    (float)controller.mouse_y - p->position.y};
+    p->aim = Vec2_Normalize(p->aim);
 }
 
 void Player_Draw(Player *p, SDL_Renderer *renderer) {
+#define AIM_RADIUS 75.f
     SDL_SetRenderDrawColor(renderer, 0xAA, 0x11, 0x11, 0xFF);
+    float w_pixels = p->size.x * PIXELS_PER_METER;
+    float h_pixels = p->size.y * PIXELS_PER_METER;
+
     SDL_FRect rect = {//
                       .x = p->position.x,
                       .y = p->position.y,
-                      .w = p->size.x * PIXELS_PER_METER,
-                      .h = p->size.y * PIXELS_PER_METER};
+                      .w = w_pixels,
+                      .h = h_pixels};
+
+    SDL_RenderFillRectF(renderer, &rect);
+
+    rect.x = p->aim.x * AIM_RADIUS + rect.x + (w_pixels / 2.f);
+    rect.y = p->aim.y * AIM_RADIUS + rect.y + (h_pixels / 2.f);
+    rect.w = 10.f;
+    rect.h = 10.f;
 
     SDL_RenderFillRectF(renderer, &rect);
 }

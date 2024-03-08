@@ -81,7 +81,7 @@
 ## player I
 - [x] movement
 - [x] small drift after moving?
-- [ ] player aim with mouse
+- [x] player aim with mouse
 - [ ] player constrained by camera
 
 ## player II
