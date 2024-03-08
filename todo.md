@@ -80,7 +80,7 @@
 
 ## player I
 - [x] movement
-- [ ] small drift after moving?
+- [x] small drift after moving?
 - [ ] player aim with mouse
 - [ ] player constrained by camera
 
@@ -88,6 +88,9 @@
 - [ ] player has health
 - [ ] player shoot with LMB 
 - [ ] player shoots bullets 
+
+## player III
+- [ ] refine movement; make the drift feel less slippery
 
 ## enemies I (light)
 - [ ] fires small bullets every 1000-1200ms 

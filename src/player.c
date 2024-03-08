@@ -3,7 +3,33 @@
 #include "globals.h"
 #include "vec.h"
 
-#define PlayerMeterPerSecond 150.f
+#define PlayerMeterPerSecond      150.f
+#define PlayerDecayMeterPerSecond ((PlayerMeterPerSecond) / .5f)
+
+#define min(x, y) ((x) < (y) ? (x) : (y))
+#define max(x, y) ((x) > (y) ? (x) : (y))
+
+static float move_to_target(float value, float target, float rate) {
+    if (value > target) {
+        return max(value - rate, target);
+    } else {
+        return min(value + rate, target);
+    }
+}
+
+static float clamp(float value, float upper, float lower) {
+    float result = value;
+
+    if (result > upper) {
+        result = upper;
+    }
+
+    if (result < lower) {
+        result = lower;
+    }
+
+    return result;
+}
 
 int Player_Init(Player *p) {
     p->position.x = 200.f;
@@ -19,30 +45,38 @@ int Player_Init(Player *p) {
 }
 
 void Player_Update(Player *p, GameInput controller, float delta) {
-    p->velocity.x = 0.f;
-    p->velocity.y = 0.f;
+    float speed = PlayerMeterPerSecond * PIXELS_PER_METER;
+    float decay = PlayerDecayMeterPerSecond * PIXELS_PER_METER;
+
+    p->velocity.x = move_to_target(p->velocity.x, 0.f, decay * delta);
+    p->velocity.y = move_to_target(p->velocity.y, 0.f, decay * delta);
 
     if (controller.down) {
-        p->velocity.y = 1.f;
+        p->velocity.y += speed;
     }
 
     if (controller.up) {
-        p->velocity.y = -1.f;
+        p->velocity.y -= speed;
     }
 
     if (controller.left) {
-        p->velocity.x = -1.f;
+        p->velocity.x -= speed;
     }
 
     if (controller.right) {
-        p->velocity.x = 1.f;
+        p->velocity.x += speed;
     }
 
-    p->velocity = Vec2_Normalize(p->velocity);
+    p->velocity.x = clamp(p->velocity.x, speed, -speed);
+    p->velocity.y = clamp(p->velocity.y, speed, -speed);
 
-    float speed = PlayerMeterPerSecond * PIXELS_PER_METER;
-    p->position.x += p->velocity.x * speed * delta;
-    p->position.y += p->velocity.y * speed * delta;
+    float v_mag = Vec2_Magnitude(p->velocity);
+    p->velocity = Vec2_Normalize(p->velocity);
+    p->velocity.x *= v_mag;
+    p->velocity.y *= v_mag;
+
+    p->position.x += p->velocity.x * delta;
+    p->position.y += p->velocity.y * delta;
 }
 
 void Player_Draw(Player *p, SDL_Renderer *renderer) {
