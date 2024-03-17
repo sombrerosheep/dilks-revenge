@@ -33,7 +33,7 @@ static float clamp(float value, float upper, float lower) {
 }
 
 int Player_Init(Player *p) {
-    p->position = Vec2_Newf(200.f);
+    p->position = Vec2_Newf(0.f);
 
     p->velocity = Vec2_Zero;
 

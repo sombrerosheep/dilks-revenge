@@ -17,8 +17,8 @@ struct drev_game {
     Player    player;
 };
 
-static void Game_Update(Game *game, System *sys, Frame delta) {
-    Controller_Update(&game->controller, sys);
+static void Game_Update(Game *game, Frame delta) {
+    Controller_Update(&game->controller, game->system);
     Player_Update(&game->player, &game->camera, game->controller, delta.sec);
 
     // Camera_SetCenter(&game->camera, game->player.position);
@@ -73,7 +73,7 @@ void Game_Run(Game *g) {
 
         // Input & Update
         Frame frame = Clock_Reset(&game_clock);
-        Game_Update(g, g->system, frame);
+        Game_Update(g, frame);
 
         // Draw
         Game_Draw(g, g->system);
