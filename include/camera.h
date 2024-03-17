@@ -1,0 +1,24 @@
+#ifndef DREV_CAMERA_H
+#define DREV_CAMERA_H
+
+#include "vec.h"
+
+#include <SDL.h>
+
+typedef struct drev_camera Camera;
+
+struct drev_camera {
+    Vec2          position;
+    Vec2          half_size;
+    SDL_Renderer *renderer;
+};
+
+int Camera_Init(Camera *camera, SDL_Renderer *renderer, Vec2 size);
+
+void Camera_SetCenter(Camera *camera, Vec2 center);
+Vec2 Camera_WorldToScreen(Camera *cam, Vec2 pos);
+Vec2 Camera_ScreenToWorld(Camera *cam, Vec2 pos);
+
+void Camera_Destroy(Camera *camera);
+
+#endif // DREV_CAMERA_H
