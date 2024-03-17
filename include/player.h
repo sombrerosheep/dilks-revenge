@@ -1,6 +1,7 @@
 #ifndef DREV_PLAYER_H
 #define DREV_PLAYER_H
 
+#include "camera.h"
 #include "game_input.h"
 #include "vec.h"
 
@@ -17,6 +18,6 @@ struct drev_player {
 
 int  Player_Init(Player *p);
 void Player_Update(Player *p, GameInput controller, float delta);
-void Player_Draw(Player *p, SDL_Renderer *renderer);
+void Player_Draw(Player *p, Camera camera);
 
 #endif // DREV_PLAYER_H

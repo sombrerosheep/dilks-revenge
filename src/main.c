@@ -8,7 +8,7 @@
 SDL_version required_sdl = {.major = 2, .minor = 0, .patch = 22};
 const char *name         = "Dilk's Revenge!";
 
-int main() {
+int main(void) {
     printf("%s\n", name);
 
     System sys;
@@ -26,9 +26,9 @@ int main() {
     }
 
     System_Init(&sys, "Dilks Revenge", WINDOW_WIDTH, WINDOW_HEIGHT, GAME_WIDTH, GAME_HEIGHT);
-    Game *dr_game = Game_Create(GAME_WIDTH, GAME_HEIGHT);
+    Game *dr_game = Game_Create(&sys, GAME_WIDTH, GAME_HEIGHT);
 
-    Game_Run(dr_game, &sys);
+    Game_Run(dr_game);
 
     Game_Destroy(dr_game);
     System_Destroy(&sys);

@@ -1,5 +1,6 @@
 #include "player.h"
 
+#include "camera.h"
 #include "globals.h"
 #include "vec.h"
 
@@ -83,24 +84,27 @@ void Player_Update(Player *p, GameInput controller, float delta) {
     p->aim = Vec2_Normalize(p->aim);
 }
 
-void Player_Draw(Player *p, SDL_Renderer *renderer) {
+void Player_Draw(Player *p, Camera camera) {
 #define AIM_RADIUS 75.f
-    SDL_SetRenderDrawColor(renderer, 0xAA, 0x11, 0x11, 0xFF);
+    SDL_SetRenderDrawColor(camera.renderer, 0xAA, 0x11, 0x11, 0xFF);
     float w_pixels = p->size.x * PIXELS_PER_METER;
     float h_pixels = p->size.y * PIXELS_PER_METER;
 
+    Vec2 screen     = Camera_WorldToScreen(&camera, p->position);
+    Vec2 screen_aim = Camera_WorldToScreen(&camera, p->aim);
+
     SDL_FRect rect = {//
-                      .x = p->position.x,
-                      .y = p->position.y,
+                      .x = screen.x,
+                      .y = screen.y,
                       .w = w_pixels,
                       .h = h_pixels};
 
-    SDL_RenderFillRectF(renderer, &rect);
+    SDL_RenderFillRectF(camera.renderer, &rect);
 
-    rect.x = p->aim.x * AIM_RADIUS + rect.x + (w_pixels / 2.f);
-    rect.y = p->aim.y * AIM_RADIUS + rect.y + (h_pixels / 2.f);
+    rect.x = screen_aim.x * AIM_RADIUS + rect.x + (w_pixels / 2.f);
+    rect.y = screen_aim.y * AIM_RADIUS + rect.y + (h_pixels / 2.f);
     rect.w = 10.f;
     rect.h = 10.f;
 
-    SDL_RenderFillRectF(renderer, &rect);
+    SDL_RenderFillRectF(camera.renderer, &rect);
 }
