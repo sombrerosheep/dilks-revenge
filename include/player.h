@@ -17,7 +17,7 @@ struct drev_player {
 };
 
 int  Player_Init(Player *p);
-void Player_Update(Player *p, GameInput controller, float delta);
+void Player_Update(Player *p, Camera *cam, GameInput controller, float delta);
 void Player_Draw(Player *p, Camera camera);
 
 #endif // DREV_PLAYER_H

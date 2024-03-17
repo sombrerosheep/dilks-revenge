@@ -19,9 +19,9 @@ struct drev_game {
 
 static void Game_Update(Game *game, System *sys, Frame delta) {
     Controller_Update(&game->controller, sys);
-    Player_Update(&game->player, game->controller, delta.sec);
+    Player_Update(&game->player, &game->camera, game->controller, delta.sec);
 
-    Camera_SetCenter(&game->camera, game->player.position);
+    // Camera_SetCenter(&game->camera, game->player.position);
 }
 
 static void Game_Draw(Game *game, System *sys) {
@@ -52,6 +52,7 @@ Game *Game_Create(System *sys, int game_width, int game_height) {
 
     Player_Init(&g->player);
     Camera_Init(&g->camera, sys->renderer, (Vec2){game_width, game_height});
+    Camera_SetCenter(&g->camera, Vec2_Zero);
 
     return g;
 }

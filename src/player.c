@@ -45,7 +45,7 @@ int Player_Init(Player *p) {
     return 0;
 }
 
-void Player_Update(Player *p, GameInput controller, float delta) {
+void Player_Update(Player *p, Camera *cam, GameInput controller, float delta) {
     float speed = PlayerMeterPerSecond * PIXELS_PER_METER;
     float decay = PlayerDecayMeterPerSecond * PIXELS_PER_METER;
 
@@ -79,8 +79,12 @@ void Player_Update(Player *p, GameInput controller, float delta) {
     p->position.x += p->velocity.x * delta;
     p->position.y += p->velocity.y * delta;
 
-    p->aim = (Vec2){(float)controller.mouse_x - p->position.x,
-                    (float)controller.mouse_y - p->position.y};
+    Vec2 mouse_world = Camera_ScreenToWorldF(cam, controller.mouse_x, controller.mouse_y);
+
+    p->aim = (Vec2){
+        mouse_world.x - p->position.x,
+        mouse_world.y - p->position.y,
+    };
     p->aim = Vec2_Normalize(p->aim);
 }
 
@@ -90,19 +94,25 @@ void Player_Draw(Player *p, Camera camera) {
     float w_pixels = p->size.x * PIXELS_PER_METER;
     float h_pixels = p->size.y * PIXELS_PER_METER;
 
-    Vec2 screen     = Camera_WorldToScreen(&camera, p->position);
-    Vec2 screen_aim = Camera_WorldToScreen(&camera, p->aim);
+    Vec2 aim_point = (Vec2){
+        .x = (p->aim.x * AIM_RADIUS) + p->position.x + (w_pixels / 2.f),
+        .y = (p->aim.y * AIM_RADIUS) + p->position.y + (h_pixels / 2.f),
+    };
 
-    SDL_FRect rect = {//
-                      .x = screen.x,
-                      .y = screen.y,
-                      .w = w_pixels,
-                      .h = h_pixels};
+    Vec2 screen     = Camera_WorldToScreen(&camera, p->position);
+    Vec2 screen_aim = Camera_WorldToScreen(&camera, aim_point);
+
+    SDL_FRect rect = {
+        .x = screen.x,
+        .y = screen.y,
+        .w = w_pixels,
+        .h = h_pixels,
+    };
 
     SDL_RenderFillRectF(camera.renderer, &rect);
 
-    rect.x = screen_aim.x * AIM_RADIUS + rect.x + (w_pixels / 2.f);
-    rect.y = screen_aim.y * AIM_RADIUS + rect.y + (h_pixels / 2.f);
+    rect.x = screen_aim.x;
+    rect.y = screen_aim.y;
     rect.w = 10.f;
     rect.h = 10.f;
 
