@@ -17,7 +17,9 @@ int Camera_Init(Camera *camera, SDL_Renderer *renderer, Vec2 size);
 
 void Camera_SetCenter(Camera *camera, Vec2 center);
 Vec2 Camera_WorldToScreen(Camera *cam, Vec2 pos);
+Vec2 Camera_WorldToScreenF(Camera *cam, float x, float y);
 Vec2 Camera_ScreenToWorld(Camera *cam, Vec2 pos);
+Vec2 Camera_ScreenToWorldF(Camera *cam, float x, float y);
 
 void Camera_Destroy(Camera *camera);
 

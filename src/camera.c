@@ -16,17 +16,31 @@ void Camera_SetCenter(Camera *camera, Vec2 center) {
 }
 
 Vec2 Camera_WorldToScreen(Camera *cam, Vec2 pos) {
-    Vec2 screen = pos;
-    screen.x -= cam->position.x;
-    screen.y -= cam->position.y;
+    Vec2 screen = Camera_WorldToScreenF(cam, pos.x, pos.y);
+
+    return screen;
+}
+
+Vec2 Camera_WorldToScreenF(Camera *cam, float x, float y) {
+    Vec2 screen = (Vec2){
+        .x = x - cam->position.x,
+        .y = y - cam->position.y,
+    };
 
     return screen;
 }
 
 Vec2 Camera_ScreenToWorld(Camera *cam, Vec2 pos) {
-    Vec2 world = pos;
-    world.x += cam->position.x;
-    world.y += cam->position.y;
+    Vec2 world = Camera_ScreenToWorldF(cam, pos.x, pos.y);
+
+    return world;
+}
+
+Vec2 Camera_ScreenToWorldF(Camera *cam, float x, float y) {
+    Vec2 world = (Vec2){
+        .x = x + cam->position.x,
+        .y = y + cam->position.y,
+    };
 
     return world;
 }
