@@ -8,12 +8,11 @@
 typedef struct drev_camera Camera;
 
 struct drev_camera {
-    Vec2          position;
-    Vec2          half_size;
-    SDL_Renderer *renderer;
+    Vec2 position;
+    Vec2 half_size;
 };
 
-int Camera_Init(Camera *camera, SDL_Renderer *renderer, Vec2 size);
+int Camera_Init(Camera *camera, Vec2 size);
 
 void Camera_SetCenter(Camera *camera, Vec2 center);
 Vec2 Camera_WorldToScreen(Camera *cam, Vec2 pos);

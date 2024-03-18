@@ -1,8 +1,8 @@
 #include "camera.h"
 #include "vec.h"
+#include <SDL_rect.h>
 
-int Camera_Init(Camera *camera, SDL_Renderer *renderer, Vec2 size) {
-    camera->renderer    = renderer;
+int Camera_Init(Camera *camera, Vec2 size) {
     camera->half_size.x = size.x / 2.f;
     camera->half_size.y = size.y / 2.f;
     camera->position    = Vec2_Zero;
@@ -46,7 +46,6 @@ Vec2 Camera_ScreenToWorldF(Camera *cam, float x, float y) {
 }
 
 void Camera_Destroy(Camera *camera) {
-    camera->renderer  = NULL;
     camera->position  = Vec2_Zero;
     camera->half_size = Vec2_Zero;
 }

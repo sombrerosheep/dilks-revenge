@@ -45,7 +45,7 @@ int Player_Init(Player *p) {
     return 0;
 }
 
-void Player_Update(Player *p, Camera *cam, GameInput controller, float delta) {
+void Player_Update(Player *p, Camera camera, GameInput controller, float delta) {
     float speed = PlayerMeterPerSecond * PIXELS_PER_METER;
     float decay = PlayerDecayMeterPerSecond * PIXELS_PER_METER;
 
@@ -79,18 +79,20 @@ void Player_Update(Player *p, Camera *cam, GameInput controller, float delta) {
     p->position.x += p->velocity.x * delta;
     p->position.y += p->velocity.y * delta;
 
-    Vec2 mouse_world = Camera_ScreenToWorldF(cam, controller.mouse_x, controller.mouse_y);
+    Vec2 mouse_world = Camera_ScreenToWorldF(&camera, controller.mouse_x, controller.mouse_y);
 
     p->aim = (Vec2){
         mouse_world.x - p->position.x,
         mouse_world.y - p->position.y,
     };
     p->aim = Vec2_Normalize(p->aim);
+
+    // Constrain player
 }
 
-void Player_Draw(Player *p, Camera camera) {
+void Player_Draw(Player *p, Camera camera, SDL_Renderer *renderer) {
 #define AIM_RADIUS 75.f
-    SDL_SetRenderDrawColor(camera.renderer, 0xAA, 0x11, 0x11, 0xFF);
+    SDL_SetRenderDrawColor(renderer, 0xAA, 0x11, 0x11, 0xFF);
     float w_pixels = p->size.x * PIXELS_PER_METER;
     float h_pixels = p->size.y * PIXELS_PER_METER;
 
@@ -109,12 +111,12 @@ void Player_Draw(Player *p, Camera camera) {
         .h = h_pixels,
     };
 
-    SDL_RenderFillRectF(camera.renderer, &rect);
+    SDL_RenderFillRectF(renderer, &rect);
 
     rect.x = screen_aim.x;
     rect.y = screen_aim.y;
     rect.w = 10.f;
     rect.h = 10.f;
 
-    SDL_RenderFillRectF(camera.renderer, &rect);
+    SDL_RenderFillRectF(renderer, &rect);
 }

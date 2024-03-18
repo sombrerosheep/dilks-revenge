@@ -19,18 +19,18 @@ struct drev_game {
 
 static void Game_Update(Game *game, Frame delta) {
     Controller_Update(&game->controller, game->system);
-    Player_Update(&game->player, &game->camera, game->controller, delta.sec);
+    Player_Update(&game->player, game->camera, game->controller, delta.sec);
 
     // Camera_SetCenter(&game->camera, game->player.position);
 }
 
-static void Game_Draw(Game *game, System *sys) {
-    SDL_SetRenderDrawColor(sys->renderer, 0x33, 0x33, 0x33, 0xFF);
-    SDL_RenderClear(sys->renderer);
+static void Game_Draw(Game *game) {
+    SDL_SetRenderDrawColor(game->system->renderer, 0x33, 0x33, 0x33, 0xFF);
+    SDL_RenderClear(game->system->renderer);
 
-    Player_Draw(&game->player, game->camera);
+    Player_Draw(&game->player, game->camera, game->system->renderer);
 
-    SDL_RenderPresent(sys->renderer);
+    SDL_RenderPresent(game->system->renderer);
 }
 
 Game *Game_Create(System *sys, int game_width, int game_height) {
@@ -51,7 +51,7 @@ Game *Game_Create(System *sys, int game_width, int game_height) {
     g->system = sys;
 
     Player_Init(&g->player);
-    Camera_Init(&g->camera, sys->renderer, (Vec2){game_width, game_height});
+    Camera_Init(&g->camera, (Vec2){game_width, game_height});
     Camera_SetCenter(&g->camera, Vec2_Zero);
 
     return g;
@@ -76,7 +76,7 @@ void Game_Run(Game *g) {
         Game_Update(g, frame);
 
         // Draw
-        Game_Draw(g, g->system);
+        Game_Draw(g);
     }
 }
 
