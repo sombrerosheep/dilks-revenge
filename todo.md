@@ -82,7 +82,7 @@
 - [x] movement
 - [x] small drift after moving?
 - [x] player aim with mouse
-- [ ] player constrained by camera
+- [x] player constrained by camera
 
 ## player II
 - [ ] player has health

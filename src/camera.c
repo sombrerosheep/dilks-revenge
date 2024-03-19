@@ -45,6 +45,17 @@ Vec2 Camera_ScreenToWorldF(Camera *cam, float x, float y) {
     return world;
 }
 
+SDL_FRect Camera_GetBounds(Camera *cam) {
+    SDL_FRect rect = (SDL_FRect){
+        .x = cam->position.x,
+        .y = cam->position.y,
+        .w = cam->half_size.x * 2.f,
+        .h = cam->half_size.y * 2.f,
+    };
+
+    return rect;
+}
+
 void Camera_Destroy(Camera *camera) {
     camera->position  = Vec2_Zero;
     camera->half_size = Vec2_Zero;

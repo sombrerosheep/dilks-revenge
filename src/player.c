@@ -88,6 +88,23 @@ void Player_Update(Player *p, Camera camera, GameInput controller, float delta) 
     p->aim = Vec2_Normalize(p->aim);
 
     // Constrain player
+    // todo: player is using top-left origin. What will other entities use?
+    // todo: does px/m have any influence here? When checking right/bottom
+    //       bounds do I need the pixel values?
+    //       If the origin is changed, will I need the pixel values?
+    SDL_FRect cam_bounds = Camera_GetBounds(&camera);
+    float     w_pixels   = p->size.x * PIXELS_PER_METER;
+    float     h_pixels   = p->size.y * PIXELS_PER_METER;
+    if (p->position.x < cam_bounds.x) {
+        p->position.x = cam_bounds.x;
+    } else if (p->position.x + w_pixels > cam_bounds.x + cam_bounds.w) {
+        p->position.x = cam_bounds.x + cam_bounds.w - w_pixels;
+    }
+    if (p->position.y < cam_bounds.y) {
+        p->position.y = cam_bounds.y;
+    } else if (p->position.y + h_pixels > cam_bounds.y + cam_bounds.h) {
+        p->position.y = cam_bounds.y + cam_bounds.h - h_pixels;
+    }
 }
 
 void Player_Draw(Player *p, Camera camera, SDL_Renderer *renderer) {
