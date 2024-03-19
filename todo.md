@@ -63,7 +63,7 @@
 - [ ] every 10th wave is a boss
 
 ## camera I
-- [ ] implement camera 
+- [x] implement camera 
 - [ ] camera movement commands 
   - [ ] to center
   - [ ] to left

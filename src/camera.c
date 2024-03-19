@@ -2,12 +2,55 @@
 #include "vec.h"
 #include <SDL_rect.h>
 
+#define FOCUS_OFFSET 200.f
+
 int Camera_Init(Camera *camera, Vec2 size) {
     camera->half_size.x = size.x / 2.f;
     camera->half_size.y = size.y / 2.f;
     camera->position    = Vec2_Zero;
 
     return 0;
+}
+
+void Camera_SetFocus(Camera *camera, CameraFocus focus) {
+    camera->focus = focus;
+
+    switch (camera->focus) {
+        case CameraFocusTop: {
+            Vec2 center = Vec2_Zero;
+            center.y -= FOCUS_OFFSET;
+
+            Camera_SetCenter(camera, center);
+            break;
+        }
+        case CameraFocusBottom: {
+            Vec2 center = Vec2_Zero;
+            center.y += FOCUS_OFFSET;
+
+            Camera_SetCenter(camera, center);
+            break;
+        }
+        case CameraFocusLeft: {
+            Vec2 center = Vec2_Zero;
+            center.x -= FOCUS_OFFSET;
+
+            Camera_SetCenter(camera, center);
+            break;
+        }
+        case CameraFocusRight: {
+            Vec2 center = Vec2_Zero;
+            center.x += FOCUS_OFFSET;
+
+            Camera_SetCenter(camera, center);
+            break;
+        }
+        case CameraFocusCenter: {
+            Vec2 center = Vec2_Zero;
+
+            Camera_SetCenter(camera, center);
+            break;
+        }
+    }
 }
 
 void Camera_SetCenter(Camera *camera, Vec2 center) {

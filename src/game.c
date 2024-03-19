@@ -6,6 +6,9 @@
 #include "player.h"
 #include "random.h"
 
+#include <SDL_events.h>
+#include <SDL_keyboard.h>
+#include <SDL_keycode.h>
 #include <stdio.h>
 
 #define UNUSED(v) (void)(v)
@@ -20,8 +23,6 @@ struct drev_game {
 static void Game_Update(Game *game, Frame delta) {
     Controller_Update(&game->controller, game->system);
     Player_Update(&game->player, game->camera, game->controller, delta.sec);
-
-    // Camera_SetCenter(&game->camera, game->player.position);
 }
 
 static void Game_Draw(Game *game) {
@@ -68,6 +69,28 @@ void Game_Run(Game *g) {
             if (event.type == SDL_QUIT ||
                 (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
                 running = 0;
+            }
+
+            if (event.type == SDL_KEYDOWN) {
+                // todo: when camera is at a non-center focus and player is at the extent,
+                //       when camera is moved back center, player is not drawn on the new
+                //       extent until input has changed
+                CameraFocus new_focus = CameraFocusCenter;
+                if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_UP)) {
+                    new_focus = CameraFocusTop;
+                } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_DOWN)) {
+                    new_focus = CameraFocusBottom;
+                } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_LEFT)) {
+                    new_focus = CameraFocusLeft;
+                } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_RIGHT)) {
+                    new_focus = CameraFocusRight;
+                }
+
+                if (g->camera.focus == new_focus) {
+                    Camera_SetFocus(&g->camera, CameraFocusCenter);
+                } else {
+                    Camera_SetFocus(&g->camera, new_focus);
+                }
             }
         }
 
