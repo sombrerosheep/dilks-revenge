@@ -1,61 +1,48 @@
 #include "camera.h"
+
+#include "util.h"
 #include "vec.h"
-#include <SDL_rect.h>
 
 #define FOCUS_OFFSET 200.f
 
 int Camera_Init(Camera *camera, Vec2 size) {
     camera->half_size.x = size.x / 2.f;
     camera->half_size.y = size.y / 2.f;
-    camera->position    = Vec2_Zero;
+
+    Camera_SetCenter(camera, Vec2_Zero);
+    camera->position = camera->target_position;
 
     return 0;
 }
 
+void Camera_Update(Camera *camera, float delta) {
+    const float speed  = 250.f;
+    camera->position.x = ease(camera->position.x, camera->target_position.x, delta * speed);
+    camera->position.y = ease(camera->position.y, camera->target_position.y, delta * speed);
+}
+
 void Camera_SetFocus(Camera *camera, CameraFocus focus) {
+    Vec2 center   = Vec2_Zero;
     camera->focus = focus;
 
-    switch (camera->focus) {
-        case CameraFocusTop: {
-            Vec2 center = Vec2_Zero;
-            center.y -= FOCUS_OFFSET;
+    if (camera->focus == CameraFocusTop) {
+        center.y -= FOCUS_OFFSET;
+    } else if (camera->focus == CameraFocusBottom) {
+        center.y += FOCUS_OFFSET;
 
-            Camera_SetCenter(camera, center);
-            break;
-        }
-        case CameraFocusBottom: {
-            Vec2 center = Vec2_Zero;
-            center.y += FOCUS_OFFSET;
+    } else if (camera->focus == CameraFocusLeft) {
+        center.x -= FOCUS_OFFSET;
 
-            Camera_SetCenter(camera, center);
-            break;
-        }
-        case CameraFocusLeft: {
-            Vec2 center = Vec2_Zero;
-            center.x -= FOCUS_OFFSET;
-
-            Camera_SetCenter(camera, center);
-            break;
-        }
-        case CameraFocusRight: {
-            Vec2 center = Vec2_Zero;
-            center.x += FOCUS_OFFSET;
-
-            Camera_SetCenter(camera, center);
-            break;
-        }
-        case CameraFocusCenter: {
-            Vec2 center = Vec2_Zero;
-
-            Camera_SetCenter(camera, center);
-            break;
-        }
+    } else if (camera->focus == CameraFocusRight) {
+        center.x += FOCUS_OFFSET;
     }
+
+    Camera_SetCenter(camera, center);
 }
 
 void Camera_SetCenter(Camera *camera, Vec2 center) {
-    camera->position.x = center.x - camera->half_size.x;
-    camera->position.y = center.y - camera->half_size.y;
+    camera->target_position.x = center.x - camera->half_size.x;
+    camera->target_position.y = center.y - camera->half_size.y;
 }
 
 Vec2 Camera_WorldToScreen(Camera *cam, Vec2 pos) {

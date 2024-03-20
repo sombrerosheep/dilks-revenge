@@ -64,12 +64,12 @@
 
 ## camera I
 - [x] implement camera 
-- [ ] camera movement commands 
-  - [ ] to center
-  - [ ] to left
-  - [ ] to right
-  - [ ] to top
-  - [ ]  to bottom
+- [x] camera movement commands 
+  - [x] to center
+  - [x] to left
+  - [x] to right
+  - [x] to top
+  - [x]  to bottom
 
 ## camera II
 - [ ] lerp camera when moving to wave direction

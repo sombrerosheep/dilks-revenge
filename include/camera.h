@@ -18,12 +18,14 @@ typedef enum {
 
 struct drev_camera {
     Vec2        position;
+    Vec2        target_position;
     Vec2        half_size;
     CameraFocus focus;
+    CameraFocus next_focus;
 };
 
-int Camera_Init(Camera *camera, Vec2 size);
-
+int  Camera_Init(Camera *camera, Vec2 size);
+void Camera_Update(Camera *camera, float delta);
 void Camera_SetFocus(Camera *camera, CameraFocus focus);
 void Camera_SetCenter(Camera *camera, Vec2 center);
 Vec2 Camera_WorldToScreen(Camera *cam, Vec2 pos);

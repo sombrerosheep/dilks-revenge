@@ -11,8 +11,6 @@
 #include <SDL_keycode.h>
 #include <stdio.h>
 
-#define UNUSED(v) (void)(v)
-
 struct drev_game {
     System   *system;
     Camera    camera;
@@ -23,6 +21,7 @@ struct drev_game {
 static void Game_Update(Game *game, Frame delta) {
     Controller_Update(&game->controller, game->system);
     Player_Update(&game->player, game->camera, game->controller, delta.sec);
+    Camera_Update(&game->camera, delta.sec);
 }
 
 static void Game_Draw(Game *game) {
