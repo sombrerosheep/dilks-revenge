@@ -2,35 +2,11 @@
 
 #include "camera.h"
 #include "globals.h"
+#include "util.h"
 #include "vec.h"
 
 #define PlayerMeterPerSecond      125.f
 #define PlayerDecayMeterPerSecond ((PlayerMeterPerSecond) / .5f)
-
-#define min(x, y) ((x) < (y) ? (x) : (y))
-#define max(x, y) ((x) > (y) ? (x) : (y))
-
-static float move_to_target(float value, float target, float rate) {
-    if (value > target) {
-        return max(value - rate, target);
-    } else {
-        return min(value + rate, target);
-    }
-}
-
-static float clamp(float value, float upper, float lower) {
-    float result = value;
-
-    if (result > upper) {
-        result = upper;
-    }
-
-    if (result < lower) {
-        result = lower;
-    }
-
-    return result;
-}
 
 int Player_Init(Player *p) {
     p->position = Vec2_Newf(0.f);
@@ -49,8 +25,8 @@ void Player_Update(Player *p, Camera camera, GameInput controller, float delta) 
     float speed = PlayerMeterPerSecond * PIXELS_PER_METER;
     float decay = PlayerDecayMeterPerSecond * PIXELS_PER_METER;
 
-    p->velocity.x = move_to_target(p->velocity.x, 0.f, decay * delta);
-    p->velocity.y = move_to_target(p->velocity.y, 0.f, decay * delta);
+    p->velocity.x = ease(p->velocity.x, 0.f, decay * delta);
+    p->velocity.y = ease(p->velocity.y, 0.f, decay * delta);
 
     if (controller.down) {
         p->velocity.y += speed;

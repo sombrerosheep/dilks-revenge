@@ -10,4 +10,9 @@
 #define METERS_PER_UNIT  1.f
 #define PIXELS_PER_METER ((METERS_PER_UNIT) * (PIXELS_PER_UNIT))
 
+#define UNUSED(v) (void)(v)
+
+#define min(x, y) ((x) < (y) ? (x) : (y))
+#define max(x, y) ((x) > (y) ? (x) : (y))
+
 #endif // DREV_GLOBALS_H
