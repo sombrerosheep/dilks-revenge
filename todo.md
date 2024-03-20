@@ -69,7 +69,7 @@
   - [x] to left
   - [x] to right
   - [x] to top
-  - [x]  to bottom
+  - [x] to bottom
 
 ## camera II
 - [ ] lerp camera when moving to wave direction
