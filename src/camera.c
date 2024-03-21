@@ -1,5 +1,6 @@
 #include "camera.h"
 
+#include "globals.h"
 #include "util.h"
 #include "vec.h"
 
@@ -84,6 +85,34 @@ SDL_FRect Camera_GetBounds(Camera *cam) {
     };
 
     return rect;
+}
+
+void Camera_Draw(Camera *camera, SDL_Renderer *renderer) {
+    UNUSED(camera);
+    UNUSED(renderer);
+
+    // todo: hardcoded bounding box
+    // draw center bounds
+    SDL_FRect rect = {
+        .x = 0.f,
+        .y = 0.f,
+        .w = camera->half_size.x * 2.f,
+        .h = camera->half_size.y * 2.f,
+    };
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0x0, 0x0, 0xFF);
+    SDL_RenderDrawRectF(renderer, &rect);
+
+    // draw current bounds
+    Vec2 current_pos = Camera_ScreenToWorldF( //
+        camera,
+        0.f + camera->half_size.x,
+        0.f + camera->half_size.y);
+
+    rect.x = current_pos.x;
+    rect.y = current_pos.y;
+
+    SDL_SetRenderDrawColor(renderer, 0x0, 0xFF, 0x0, 0xFF);
+    SDL_RenderDrawRectF(renderer, &rect);
 }
 
 void Camera_Destroy(Camera *camera) {

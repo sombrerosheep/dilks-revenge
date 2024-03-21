@@ -34,7 +34,7 @@ Vec2 Camera_ScreenToWorld(Camera *cam, Vec2 pos);
 Vec2 Camera_ScreenToWorldF(Camera *cam, float x, float y);
 
 SDL_FRect Camera_GetBounds(Camera *cam);
-
-void Camera_Destroy(Camera *camera);
+void      Camera_Draw(Camera *camera, SDL_Renderer *renderer);
+void      Camera_Destroy(Camera *camera);
 
 #endif // DREV_CAMERA_H

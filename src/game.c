@@ -30,6 +30,8 @@ static void Game_Draw(Game *game) {
 
     Player_Draw(&game->player, game->camera, game->system->renderer);
 
+    Camera_Draw(&game->camera, game->system->renderer);
+
     SDL_RenderPresent(game->system->renderer);
 }
 
