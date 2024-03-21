@@ -71,24 +71,31 @@ void Game_Run(Game *g) {
             }
 
             if (event.type == SDL_KEYDOWN) {
-                // todo: when camera is at a non-center focus and player is at the extent,
-                //       when camera is moved back center, player is not drawn on the new
-                //       extent until input has changed
-                CameraFocus new_focus = CameraFocusCenter;
-                if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_UP)) {
-                    new_focus = CameraFocusTop;
-                } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_DOWN)) {
-                    new_focus = CameraFocusBottom;
-                } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_LEFT)) {
-                    new_focus = CameraFocusLeft;
-                } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_RIGHT)) {
-                    new_focus = CameraFocusRight;
-                }
+                if ( //
+                    event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_UP) ||
+                    event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_DOWN) ||
+                    event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_LEFT) ||
+                    event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_RIGHT) //
+                ) {
+                    // todo: when camera is at a non-center focus and player is at the extent,
+                    //       when camera is moved back center, player is not drawn on the new
+                    //       extent until input has changed
+                    CameraFocus new_focus = CameraFocusCenter;
+                    if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_UP)) {
+                        new_focus = CameraFocusTop;
+                    } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_DOWN)) {
+                        new_focus = CameraFocusBottom;
+                    } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_LEFT)) {
+                        new_focus = CameraFocusLeft;
+                    } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_RIGHT)) {
+                        new_focus = CameraFocusRight;
+                    }
 
-                if (g->camera.focus == new_focus) {
-                    Camera_SetFocus(&g->camera, CameraFocusCenter);
-                } else {
-                    Camera_SetFocus(&g->camera, new_focus);
+                    if (g->camera.focus == new_focus) {
+                        Camera_SetFocus(&g->camera, CameraFocusCenter);
+                    } else {
+                        Camera_SetFocus(&g->camera, new_focus);
+                    }
                 }
             }
         }
