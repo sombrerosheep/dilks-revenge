@@ -18,6 +18,11 @@ set(game_include_dir "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 set(PROCESSOR_ARCH "x64")
 
+OPTION(DREV_DRAW_BB "All Debug options on" OFF)
+if (DREV_DRAW_BB)
+  add_compile_definitions(DREV_DRAW_BB)
+endif(DREV_DRAW_BB)
+
 # Dependencies
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
@@ -37,6 +42,9 @@ message(STATUS "  Include Dir:          ${game_include_dir}")
 message(STATUS "")
 message(STATUS "Dependencies:")
 message(STATUS "  SDL_SOURCE_DIR:       ${SDL2_INCLUDE_DIRS}")
+message(STATUS "")
+message(STATUS "Flags:")
+message(STATUS "  DREV_DRAW_BB:         ${DREV_DRAW_BB}")
 message(STATUS "")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

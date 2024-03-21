@@ -3,7 +3,7 @@ WORKDIR=$(shell pwd)
 BIN_NAME=dilks-revenge
 TARGET=$(BUILDDIR)/bin/$(BIN_NAME)
 
-CMAKE_FLAGS := ""
+CMAKE_FLAGS := "-DDREV_DRAW_BB=ON"
 
 CLANG_FMT_FILES += src/*.c
 CLANG_FMT_FILES += include/*.h

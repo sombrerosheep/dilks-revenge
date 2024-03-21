@@ -91,6 +91,7 @@ void Camera_Draw(Camera *camera, SDL_Renderer *renderer) {
     UNUSED(camera);
     UNUSED(renderer);
 
+#if DREV_DRAW_BB
     // todo: hardcoded bounding box
     // draw center bounds
     SDL_FRect rect = {
@@ -113,6 +114,7 @@ void Camera_Draw(Camera *camera, SDL_Renderer *renderer) {
 
     SDL_SetRenderDrawColor(renderer, 0x0, 0xFF, 0x0, 0xFF);
     SDL_RenderDrawRectF(renderer, &rect);
+#endif
 }
 
 void Camera_Destroy(Camera *camera) {
