@@ -85,7 +85,7 @@
 - [x] player constrained by camera
 
 ## player II
-- [ ] player has health
+- [x] player has health
 - [x] player shoot with LMB 
 - [x] player shoots bullets 
 

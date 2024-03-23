@@ -26,6 +26,7 @@ struct drev_player {
     Vec2             aim;
     PlayerProjectile projectiles[PlayerBulletMax];
     float            fire_cooldown;
+    float            health;
 };
 
 int  Player_Init(Player *p);

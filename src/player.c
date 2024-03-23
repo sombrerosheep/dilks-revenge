@@ -6,13 +6,14 @@
 #include "util.h"
 #include "vec.h"
 
+#define PLAYER_INIT_HEALTH        100.f
 #define AIM_RADIUS                75.f
 #define PlayerMeterPerSecond      125.f
 #define PlayerDecayMeterPerSecond ((PlayerMeterPerSecond) / .5f)
 
 int Player_Init(Player *p) {
+    p->health   = PLAYER_INIT_HEALTH;
     p->position = Vec2_Newf(0.f);
-
     p->velocity = Vec2_Zero;
 
     p->size.x = 10.f;
