@@ -3,17 +3,29 @@
 
 #include "camera.h"
 #include "game_input.h"
+#include "projectile.h"
 #include "vec.h"
 
 #include <SDL.h>
 
 typedef struct drev_player Player;
 
+typedef struct player_projectile PlayerProjectile;
+
+#define PlayerBulletMax 10
+
+struct player_projectile {
+    int        int_use;
+    Projectile p;
+};
+
 struct drev_player {
-    Vec2 position;
-    Vec2 velocity;
-    Vec2 size;
-    Vec2 aim;
+    Vec2             position;
+    Vec2             velocity;
+    Vec2             size;
+    Vec2             aim;
+    PlayerProjectile projectiles[PlayerBulletMax];
+    float            fire_cooldown;
 };
 
 int  Player_Init(Player *p);

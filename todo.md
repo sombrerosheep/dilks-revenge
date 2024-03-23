@@ -86,8 +86,8 @@
 
 ## player II
 - [ ] player has health
-- [ ] player shoot with LMB 
-- [ ] player shoots bullets 
+- [x] player shoot with LMB 
+- [x] player shoots bullets 
 
 ## player III
 - [ ] refine movement; make the drift feel less slippery

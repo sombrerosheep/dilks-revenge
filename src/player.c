@@ -2,9 +2,11 @@
 
 #include "camera.h"
 #include "globals.h"
+#include "projectile.h"
 #include "util.h"
 #include "vec.h"
 
+#define AIM_RADIUS                75.f
 #define PlayerMeterPerSecond      125.f
 #define PlayerDecayMeterPerSecond ((PlayerMeterPerSecond) / .5f)
 
@@ -18,13 +20,31 @@ int Player_Init(Player *p) {
 
     p->aim = Vec2_Zero;
 
+    p->fire_cooldown = 0.f;
+
+    memset(p->projectiles, 0, sizeof(p->projectiles));
+
     return 0;
+}
+
+int Player_Shoot(Player *p, Vec2 pos, Vec2 vel) {
+    for (unsigned int i = 0; i < PlayerBulletMax; i++) {
+        if (p->projectiles[i].int_use == 0) {
+            p->projectiles[i].int_use = 1;
+            Projectile_Init(&p->projectiles[i].p, ProjectileType_Player, pos, vel, 450.f);
+
+            return 0;
+        }
+    }
+
+    return -1;
 }
 
 void Player_Update(Player *p, Camera camera, GameInput controller, float delta) {
     float speed = PlayerMeterPerSecond * PIXELS_PER_METER;
     float decay = PlayerDecayMeterPerSecond * PIXELS_PER_METER;
 
+    // get velocity
     p->velocity.x = ease(p->velocity.x, 0.f, decay * delta);
     p->velocity.y = ease(p->velocity.y, 0.f, decay * delta);
 
@@ -47,6 +67,7 @@ void Player_Update(Player *p, Camera camera, GameInput controller, float delta) 
     p->velocity.x = clamp(p->velocity.x, speed, -speed);
     p->velocity.y = clamp(p->velocity.y, speed, -speed);
 
+    // move player
     float v_mag = Vec2_Magnitude(p->velocity);
     p->velocity = Vec2_Normalize(p->velocity);
     p->velocity.x *= v_mag;
@@ -63,10 +84,21 @@ void Player_Update(Player *p, Camera camera, GameInput controller, float delta) 
     };
     p->aim = Vec2_Normalize(p->aim);
 
+    // Shooting
+    p->fire_cooldown += delta;
+
+    if (p->fire_cooldown > 1.5f) {
+        if (controller.mouse_left || controller.space) {
+            Vec2 aim_point = (Vec2){
+                .x = (p->aim.x * AIM_RADIUS) + p->position.x,
+                .y = (p->aim.y * AIM_RADIUS) + p->position.y,
+            };
+            Player_Shoot(p, aim_point, p->aim);
+            p->fire_cooldown = 0.f;
+        }
+    }
+
     // Constrain player
-    // todo: does px/m have any influence here? When checking right/bottom
-    //       bounds do I need the pixel values?
-    //       If the origin is changed, will I need the pixel values?
     SDL_FRect cam_bounds    = Camera_GetBounds(&camera);
     float     w_pixels      = p->size.x * PIXELS_PER_METER;
     float     half_w_pixels = w_pixels / 2.f;
@@ -83,10 +115,22 @@ void Player_Update(Player *p, Camera camera, GameInput controller, float delta) 
     } else if (p->position.y + half_h_pixels > cam_bounds.y + cam_bounds.h) {
         p->position.y = cam_bounds.y + cam_bounds.h - half_h_pixels;
     }
+
+    // Update projectiles
+    for (unsigned int i = 0; i < PlayerBulletMax; i++) {
+        if (p->projectiles[i].int_use == 1) {
+            Projectile_Update(&p->projectiles[i].p, delta);
+        }
+    }
 }
 
 void Player_Draw(Player *p, Camera camera, SDL_Renderer *renderer) {
-#define AIM_RADIUS 75.f
+    for (unsigned int i = 0; i < PlayerBulletMax; i++) {
+        if (p->projectiles[i].int_use == 1) {
+            Projectile_Draw(&p->projectiles[i].p, camera, renderer);
+        }
+    }
+
     SDL_SetRenderDrawColor(renderer, 0xAA, 0x11, 0x11, 0xFF);
     float w_pixels      = p->size.x * PIXELS_PER_METER;
     float half_w_pixels = w_pixels / 2.f;
