@@ -3,34 +3,41 @@
 #include "camera.h"
 #include "clock.h"
 #include "game_input.h"
+#include "globals.h"
 #include "player.h"
 #include "random.h"
+#include "resources.h"
 
 #include <SDL_events.h>
 #include <SDL_keyboard.h>
 #include <SDL_keycode.h>
 #include <stdio.h>
 
+ResourceManager GameResources;
+
 struct drev_game {
     System   *system;
-    Camera    camera;
     GameInput controller;
     Player    player;
 };
 
 static void Game_Update(Game *game, Frame delta) {
+    Camera *main_camera = ResourceManager_GetMainCamera(&GameResources);
+
     Controller_Update(&game->controller, game->system);
-    Player_Update(&game->player, game->camera, game->controller, delta.sec);
-    Camera_Update(&game->camera, delta.sec);
+    Player_Update(&game->player, game->controller, delta.sec);
+    Camera_Update(main_camera, delta.sec);
 }
 
 static void Game_Draw(Game *game) {
+    Camera *main_camera = ResourceManager_GetMainCamera(&GameResources);
+
     SDL_SetRenderDrawColor(game->system->renderer, 0x33, 0x33, 0x33, 0xFF);
     SDL_RenderClear(game->system->renderer);
 
-    Player_Draw(&game->player, game->camera, game->system->renderer);
+    Player_Draw(&game->player, game->system->renderer);
 
-    Camera_Draw(&game->camera, game->system->renderer);
+    Camera_Draw(main_camera, game->system->renderer);
 
     SDL_RenderPresent(game->system->renderer);
 }
@@ -53,8 +60,13 @@ Game *Game_Create(System *sys, int game_width, int game_height) {
     g->system = sys;
 
     Player_Init(&g->player);
-    Camera_Init(&g->camera, (Vec2){game_width, game_height});
-    Camera_SetCenter(&g->camera, Vec2_Zero);
+
+    Camera main_camera;
+    Camera_Init(&main_camera, (Vec2){game_width, game_height});
+    Camera_SetCenter(&main_camera, Vec2_Zero);
+
+    ResourceManager_Init(&GameResources);
+    ResourceManager_SetMainCamera(&GameResources, main_camera);
 
     return g;
 }
@@ -82,7 +94,8 @@ void Game_Run(Game *g) {
                     // todo: when camera is at a non-center focus and player is at the extent,
                     //       when camera is moved back center, player is not drawn on the new
                     //       extent until input has changed
-                    CameraFocus new_focus = CameraFocusCenter;
+                    Camera     *main_camera = ResourceManager_GetMainCamera(&GameResources);
+                    CameraFocus new_focus   = CameraFocusCenter;
                     if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_UP)) {
                         new_focus = CameraFocusTop;
                     } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_DOWN)) {
@@ -93,10 +106,10 @@ void Game_Run(Game *g) {
                         new_focus = CameraFocusRight;
                     }
 
-                    if (g->camera.focus == new_focus) {
-                        Camera_SetFocus(&g->camera, CameraFocusCenter);
+                    if (main_camera->focus == new_focus) {
+                        Camera_SetFocus(main_camera, CameraFocusCenter);
                     } else {
-                        Camera_SetFocus(&g->camera, new_focus);
+                        Camera_SetFocus(main_camera, new_focus);
                     }
                 }
             }

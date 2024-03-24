@@ -1,6 +1,8 @@
 #ifndef DREV_GLOBALS_H
 #define DREV_GLOBALS_H
 
+#include "resources.h"
+
 // Game Settings
 
 #define WINDOW_HEIGHT 1080
@@ -19,5 +21,9 @@
 // Maths
 
 #define max(x, y) ((x) > (y) ? (x) : (y))
+
+// Game globals
+
+extern ResourceManager GameResources;
 
 #endif // DREV_GLOBALS_H

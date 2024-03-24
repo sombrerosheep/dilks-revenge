@@ -1,6 +1,7 @@
 #include "projectile.h"
 
 #include "globals.h"
+#include "resources.h"
 #include "vec.h"
 
 #define Projectile_Zero                                                            \
@@ -27,8 +28,9 @@ void Projectile_Update(Projectile *p, float delta) {
     p->position.y += p->velocity.y * p->speed_m_sec * delta;
 }
 
-void Projectile_Draw(Projectile *p, Camera camera, SDL_Renderer *renderer) {
-    Vec2      screen_pos = Camera_WorldToScreen(&camera, p->position);
+void Projectile_Draw(Projectile *p, SDL_Renderer *renderer) {
+    Camera   *camera     = ResourceManager_GetMainCamera(&GameResources);
+    Vec2      screen_pos = Camera_WorldToScreen(camera, p->position);
     SDL_FRect rect       = (SDL_FRect){
               .x = screen_pos.x,
               .y = screen_pos.y,

@@ -24,10 +24,22 @@
   - store as a single texture atlas
 
 ## resources I
-- [ ] resource manager
-  - fonts
-  - images
-  - sounds
+- [x] resource manager
+  - global singleton for entities to access as needed
+  - keeps the entity interface clean to abstract later
+- [x] integrate camera
+
+## resources II
+- [ ] integrate input/controller
+
+## resources III
+- [ ] integrate fonts
+
+## resources IV
+- [ ] integrate images
+
+## resources V
+- [ ] integrate sounds
 
 ## assets I
 - [ ] asset packer

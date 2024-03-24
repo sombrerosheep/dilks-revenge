@@ -3,6 +3,7 @@
 #include "camera.h"
 #include "globals.h"
 #include "projectile.h"
+#include "resources.h"
 #include "util.h"
 #include "vec.h"
 
@@ -41,9 +42,10 @@ int Player_Shoot(Player *p, Vec2 pos, Vec2 vel) {
     return -1;
 }
 
-void Player_Update(Player *p, Camera camera, GameInput controller, float delta) {
-    float speed = PlayerMeterPerSecond * PIXELS_PER_METER;
-    float decay = PlayerDecayMeterPerSecond * PIXELS_PER_METER;
+void Player_Update(Player *p, GameInput controller, float delta) {
+    Camera *camera = ResourceManager_GetMainCamera(&GameResources);
+    float   speed  = PlayerMeterPerSecond * PIXELS_PER_METER;
+    float   decay  = PlayerDecayMeterPerSecond * PIXELS_PER_METER;
 
     // get velocity
     p->velocity.x = ease(p->velocity.x, 0.f, decay * delta);
@@ -77,7 +79,7 @@ void Player_Update(Player *p, Camera camera, GameInput controller, float delta) 
     p->position.x += p->velocity.x * delta;
     p->position.y += p->velocity.y * delta;
 
-    Vec2 mouse_world = Camera_ScreenToWorldF(&camera, controller.mouse_x, controller.mouse_y);
+    Vec2 mouse_world = Camera_ScreenToWorldF(camera, controller.mouse_x, controller.mouse_y);
 
     p->aim = (Vec2){
         mouse_world.x - p->position.x,
@@ -100,7 +102,7 @@ void Player_Update(Player *p, Camera camera, GameInput controller, float delta) 
     }
 
     // Constrain player
-    SDL_FRect cam_bounds    = Camera_GetBounds(&camera);
+    SDL_FRect cam_bounds    = Camera_GetBounds(camera);
     float     w_pixels      = p->size.x * PIXELS_PER_METER;
     float     half_w_pixels = w_pixels / 2.f;
     float     h_pixels      = p->size.y * PIXELS_PER_METER;
@@ -125,10 +127,11 @@ void Player_Update(Player *p, Camera camera, GameInput controller, float delta) 
     }
 }
 
-void Player_Draw(Player *p, Camera camera, SDL_Renderer *renderer) {
+void Player_Draw(Player *p, SDL_Renderer *renderer) {
+    Camera *camera = ResourceManager_GetMainCamera(&GameResources);
     for (unsigned int i = 0; i < PlayerBulletMax; i++) {
         if (p->projectiles[i].int_use == 1) {
-            Projectile_Draw(&p->projectiles[i].p, camera, renderer);
+            Projectile_Draw(&p->projectiles[i].p, renderer);
         }
     }
 
@@ -143,8 +146,8 @@ void Player_Draw(Player *p, Camera camera, SDL_Renderer *renderer) {
         .y = (p->aim.y * AIM_RADIUS) + p->position.y,
     };
 
-    Vec2 screen     = Camera_WorldToScreen(&camera, p->position);
-    Vec2 screen_aim = Camera_WorldToScreen(&camera, aim_point);
+    Vec2 screen     = Camera_WorldToScreen(camera, p->position);
+    Vec2 screen_aim = Camera_WorldToScreen(camera, aim_point);
 
     SDL_FRect rect = {
         .x = screen.x - half_w_pixels,

@@ -28,6 +28,6 @@ void Projectile_Init(Projectile    *p,
                      Vec2           velocity,
                      float          speed_m_sec);
 void Projectile_Update(Projectile *p, float delta);
-void Projectile_Draw(Projectile *p, Camera camera, SDL_Renderer *renderer);
+void Projectile_Draw(Projectile *p, SDL_Renderer *renderer);
 
 #endif // DREV_PROJECTILE_H
