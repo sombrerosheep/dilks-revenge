@@ -33,7 +33,7 @@
 - [x] integrate camera
 
 ## resources II
-- [ ] integrate input/controller
+- [x] integrate input/controller
 
 ## resources III
 - [ ] integrate fonts
@@ -87,7 +87,7 @@
   - [x] to bottom
 
 ## camera II
-- [ ] lerp camera when moving to wave direction
+- [x] lerp camera when moving to wave direction
 - [ ] small buffer outside of camera
   - will move with player but still constrained
 - [ ] slightly move camera when moving
