@@ -1,6 +1,7 @@
 #include "player.h"
 
 #include "camera.h"
+#include "game_input.h"
 #include "globals.h"
 #include "projectile.h"
 #include "resources.h"
@@ -42,28 +43,29 @@ int Player_Shoot(Player *p, Vec2 pos, Vec2 vel) {
     return -1;
 }
 
-void Player_Update(Player *p, GameInput controller, float delta) {
-    Camera *camera = ResourceManager_GetMainCamera(&GameResources);
-    float   speed  = PlayerMeterPerSecond * PIXELS_PER_METER;
-    float   decay  = PlayerDecayMeterPerSecond * PIXELS_PER_METER;
+void Player_Update(Player *p, float delta) {
+    Camera          *camera     = ResourceManager_GetMainCamera(&GameResources);
+    const GameInput *controller = ResourceManager_GetController(&GameResources);
+    float            speed      = PlayerMeterPerSecond * PIXELS_PER_METER;
+    float            decay      = PlayerDecayMeterPerSecond * PIXELS_PER_METER;
 
     // get velocity
     p->velocity.x = ease(p->velocity.x, 0.f, decay * delta);
     p->velocity.y = ease(p->velocity.y, 0.f, decay * delta);
 
-    if (controller.down) {
+    if (controller->down) {
         p->velocity.y += speed;
     }
 
-    if (controller.up) {
+    if (controller->up) {
         p->velocity.y -= speed;
     }
 
-    if (controller.left) {
+    if (controller->left) {
         p->velocity.x -= speed;
     }
 
-    if (controller.right) {
+    if (controller->right) {
         p->velocity.x += speed;
     }
 
@@ -79,7 +81,7 @@ void Player_Update(Player *p, GameInput controller, float delta) {
     p->position.x += p->velocity.x * delta;
     p->position.y += p->velocity.y * delta;
 
-    Vec2 mouse_world = Camera_ScreenToWorldF(camera, controller.mouse_x, controller.mouse_y);
+    Vec2 mouse_world = Camera_ScreenToWorldF(camera, controller->mouse_x, controller->mouse_y);
 
     p->aim = (Vec2){
         mouse_world.x - p->position.x,
@@ -91,7 +93,7 @@ void Player_Update(Player *p, GameInput controller, float delta) {
     p->fire_cooldown += delta;
 
     if (p->fire_cooldown > 1.5f) {
-        if (controller.mouse_left || controller.space) {
+        if (controller->mouse_left || controller->space) {
             Vec2 aim_point = (Vec2){
                 .x = (p->aim.x * AIM_RADIUS) + p->position.x,
                 .y = (p->aim.y * AIM_RADIUS) + p->position.y,

@@ -3,6 +3,7 @@
 #include "camera.h"
 #include "clock.h"
 #include "game_input.h"
+#include "game_state.h"
 #include "globals.h"
 #include "player.h"
 #include "random.h"
@@ -17,27 +18,22 @@ ResourceManager GameResources;
 
 struct drev_game {
     System   *system;
-    GameInput controller;
-    Player    player;
+    GameState state;
 };
 
 static void Game_Update(Game *game, Frame delta) {
-    Camera *main_camera = ResourceManager_GetMainCamera(&GameResources);
-
-    Controller_Update(&game->controller, game->system);
-    Player_Update(&game->player, game->controller, delta.sec);
-    Camera_Update(main_camera, delta.sec);
+    Controller_Update(&game->state.controller, game->system);
+    Player_Update(&game->state.player, delta.sec);
+    Camera_Update(&game->state.main_camera, delta.sec);
 }
 
 static void Game_Draw(Game *game) {
-    Camera *main_camera = ResourceManager_GetMainCamera(&GameResources);
-
     SDL_SetRenderDrawColor(game->system->renderer, 0x33, 0x33, 0x33, 0xFF);
     SDL_RenderClear(game->system->renderer);
 
-    Player_Draw(&game->player, game->system->renderer);
+    Player_Draw(&game->state.player, game->system->renderer);
 
-    Camera_Draw(main_camera, game->system->renderer);
+    Camera_Draw(&game->state.main_camera, game->system->renderer);
 
     SDL_RenderPresent(game->system->renderer);
 }
@@ -51,7 +47,7 @@ Game *Game_Create(System *sys, int game_width, int game_height) {
         return NULL;
     }
 
-    if (Controller_Init(&g->controller) != 0) {
+    if (Controller_Init(&g->state.controller) != 0) {
         printf("ERROR :: Unable to initialize controller\n");
         Game_Destroy(g);
         return NULL;
@@ -59,14 +55,12 @@ Game *Game_Create(System *sys, int game_width, int game_height) {
 
     g->system = sys;
 
-    Player_Init(&g->player);
+    Player_Init(&g->state.player);
 
-    Camera main_camera;
-    Camera_Init(&main_camera, (Vec2){game_width, game_height});
-    Camera_SetCenter(&main_camera, Vec2_Zero);
+    Camera_Init(&g->state.main_camera, (Vec2){game_width, game_height});
+    Camera_SetCenter(&g->state.main_camera, Vec2_Zero);
 
-    ResourceManager_Init(&GameResources);
-    ResourceManager_SetMainCamera(&GameResources, main_camera);
+    ResourceManager_Init(&GameResources, &g->state.main_camera, &g->state.controller);
 
     return g;
 }
@@ -91,11 +85,7 @@ void Game_Run(Game *g) {
                     event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_LEFT) ||
                     event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_RIGHT) //
                 ) {
-                    // todo: when camera is at a non-center focus and player is at the extent,
-                    //       when camera is moved back center, player is not drawn on the new
-                    //       extent until input has changed
-                    Camera     *main_camera = ResourceManager_GetMainCamera(&GameResources);
-                    CameraFocus new_focus   = CameraFocusCenter;
+                    CameraFocus new_focus = CameraFocusCenter;
                     if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_UP)) {
                         new_focus = CameraFocusTop;
                     } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_DOWN)) {
@@ -106,10 +96,10 @@ void Game_Run(Game *g) {
                         new_focus = CameraFocusRight;
                     }
 
-                    if (main_camera->focus == new_focus) {
-                        Camera_SetFocus(main_camera, CameraFocusCenter);
+                    if (g->state.main_camera.focus == new_focus) {
+                        Camera_SetFocus(&g->state.main_camera, CameraFocusCenter);
                     } else {
-                        Camera_SetFocus(main_camera, new_focus);
+                        Camera_SetFocus(&g->state.main_camera, new_focus);
                     }
                 }
             }

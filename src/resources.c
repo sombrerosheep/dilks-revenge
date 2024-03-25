@@ -2,16 +2,17 @@
 
 #include "globals.h"
 
-void ResourceManager_Init(ResourceManager *manager) {
-    UNUSED(manager);
+void ResourceManager_Init(ResourceManager *resources, Camera *camera, GameInput *controller) {
+    resources->game_camera = camera;
+    resources->controller  = controller;
 }
 
 Camera *ResourceManager_GetMainCamera(ResourceManager *manager) {
-    return &manager->game_camera;
+    return manager->game_camera;
 }
 
-void ResourceManager_SetMainCamera(ResourceManager *manager, Camera camera) {
-    manager->game_camera = camera;
+const GameInput *ResourceManager_GetController(ResourceManager *manager) {
+    return manager->controller;
 }
 
 void ResourceManager_Destroy(ResourceManager *manager) {

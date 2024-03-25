@@ -1,3 +1,6 @@
+## misc
+- [ ] const pointer parameters and when necessary
+
 ## core I
 - [x] game clock
   - need ms [uint] per frame
@@ -9,7 +12,7 @@
   - all speeds by m/sec
 
 ## core III
-- [ ] game memory
+- [x] game memory
   - layout
   - only one up-front allocation
 
