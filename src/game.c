@@ -9,9 +9,6 @@
 #include "random.h"
 #include "resources.h"
 
-#include <SDL_events.h>
-#include <SDL_keyboard.h>
-#include <SDL_keycode.h>
 #include <stdio.h>
 
 ResourceManager GameResources;
