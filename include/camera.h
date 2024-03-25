@@ -28,13 +28,13 @@ int  Camera_Init(Camera *camera, Vec2 size);
 void Camera_Update(Camera *camera, float delta);
 void Camera_SetFocus(Camera *camera, CameraFocus focus);
 void Camera_SetCenter(Camera *camera, Vec2 center);
-Vec2 Camera_WorldToScreen(Camera *cam, Vec2 pos);
-Vec2 Camera_WorldToScreenF(Camera *cam, float x, float y);
-Vec2 Camera_ScreenToWorld(Camera *cam, Vec2 pos);
-Vec2 Camera_ScreenToWorldF(Camera *cam, float x, float y);
+Vec2 Camera_WorldToScreen(const Camera *cam, Vec2 pos);
+Vec2 Camera_WorldToScreenF(const Camera *cam, float x, float y);
+Vec2 Camera_ScreenToWorld(const Camera *cam, Vec2 pos);
+Vec2 Camera_ScreenToWorldF(const Camera *cam, float x, float y);
 
-SDL_FRect Camera_GetBounds(Camera *cam);
-void      Camera_Draw(Camera *camera, SDL_Renderer *renderer);
+SDL_FRect Camera_GetBounds(const Camera *cam);
+void      Camera_Draw(const Camera *camera, SDL_Renderer *renderer);
 void      Camera_Destroy(Camera *camera);
 
 #endif // DREV_CAMERA_H

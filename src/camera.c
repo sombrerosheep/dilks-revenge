@@ -46,13 +46,13 @@ void Camera_SetCenter(Camera *camera, Vec2 center) {
     camera->target_position.y = center.y - camera->half_size.y;
 }
 
-Vec2 Camera_WorldToScreen(Camera *cam, Vec2 pos) {
+Vec2 Camera_WorldToScreen(const Camera *cam, Vec2 pos) {
     Vec2 screen = Camera_WorldToScreenF(cam, pos.x, pos.y);
 
     return screen;
 }
 
-Vec2 Camera_WorldToScreenF(Camera *cam, float x, float y) {
+Vec2 Camera_WorldToScreenF(const Camera *cam, float x, float y) {
     Vec2 screen = (Vec2){
         .x = x - cam->position.x,
         .y = y - cam->position.y,
@@ -61,13 +61,13 @@ Vec2 Camera_WorldToScreenF(Camera *cam, float x, float y) {
     return screen;
 }
 
-Vec2 Camera_ScreenToWorld(Camera *cam, Vec2 pos) {
+Vec2 Camera_ScreenToWorld(const Camera *cam, Vec2 pos) {
     Vec2 world = Camera_ScreenToWorldF(cam, pos.x, pos.y);
 
     return world;
 }
 
-Vec2 Camera_ScreenToWorldF(Camera *cam, float x, float y) {
+Vec2 Camera_ScreenToWorldF(const Camera *cam, float x, float y) {
     Vec2 world = (Vec2){
         .x = x + cam->position.x,
         .y = y + cam->position.y,
@@ -76,7 +76,7 @@ Vec2 Camera_ScreenToWorldF(Camera *cam, float x, float y) {
     return world;
 }
 
-SDL_FRect Camera_GetBounds(Camera *cam) {
+SDL_FRect Camera_GetBounds(const Camera *cam) {
     SDL_FRect rect = (SDL_FRect){
         .x = cam->position.x,
         .y = cam->position.y,
@@ -87,7 +87,7 @@ SDL_FRect Camera_GetBounds(Camera *cam) {
     return rect;
 }
 
-void Camera_Draw(Camera *camera, SDL_Renderer *renderer) {
+void Camera_Draw(const Camera *camera, SDL_Renderer *renderer) {
     UNUSED(camera);
     UNUSED(renderer);
 

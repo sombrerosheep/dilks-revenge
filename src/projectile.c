@@ -28,7 +28,7 @@ void Projectile_Update(Projectile *p, float delta) {
     p->position.y += p->velocity.y * p->speed_m_sec * delta;
 }
 
-void Projectile_Draw(Projectile *p, SDL_Renderer *renderer) {
+void Projectile_Draw(const Projectile *p, SDL_Renderer *renderer) {
     Camera   *camera     = ResourceManager_GetMainCamera(&GameResources);
     Vec2      screen_pos = Camera_WorldToScreen(camera, p->position);
     SDL_FRect rect       = (SDL_FRect){

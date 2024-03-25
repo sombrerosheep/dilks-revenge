@@ -129,7 +129,7 @@ void Player_Update(Player *p, float delta) {
     }
 }
 
-void Player_Draw(Player *p, SDL_Renderer *renderer) {
+void Player_Draw(const Player *p, SDL_Renderer *renderer) {
     Camera *camera = ResourceManager_GetMainCamera(&GameResources);
     for (unsigned int i = 0; i < PlayerBulletMax; i++) {
         if (p->projectiles[i].int_use == 1) {

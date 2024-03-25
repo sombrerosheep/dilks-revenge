@@ -1,5 +1,5 @@
 ## misc
-- [ ] const pointer parameters and when necessary
+- [x] const pointer parameters and when necessary
 
 ## core I
 - [x] game clock
