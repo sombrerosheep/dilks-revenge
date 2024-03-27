@@ -6,6 +6,7 @@
 #include "game_state.h"
 #include "globals.h"
 #include "player.h"
+#include "projectile.h"
 #include "random.h"
 #include "resources.h"
 
@@ -20,6 +21,9 @@ struct drev_game {
 
 static void Game_Update(Game *game, Frame delta) {
     Controller_Update(&game->state.controller, game->system);
+
+    GameContainer_Update(Projectile, &game->state.projectiles, delta.sec);
+
     Player_Update(&game->state.player, delta.sec);
     Camera_Update(&game->state.main_camera, delta.sec);
 }
@@ -27,6 +31,8 @@ static void Game_Update(Game *game, Frame delta) {
 static void Game_Draw(Game *game) {
     SDL_SetRenderDrawColor(game->system->renderer, 0x33, 0x33, 0x33, 0xFF);
     SDL_RenderClear(game->system->renderer);
+
+    GameContainer_Draw(Projectile, &game->state.projectiles, game->system->renderer);
 
     Player_Draw(&game->state.player, game->system->renderer);
 
@@ -57,7 +63,12 @@ Game *Game_Create(System *sys, int game_width, int game_height) {
     Camera_Init(&g->state.main_camera, (Vec2){game_width, game_height});
     Camera_SetCenter(&g->state.main_camera, Vec2_Zero);
 
-    ResourceManager_Init(&GameResources, &g->state.main_camera, &g->state.controller);
+    GameContainer_Init(Projectile, &g->state.projectiles);
+
+    ResourceManager_Init(&GameResources,
+                         &g->state.main_camera,
+                         &g->state.controller,
+                         &g->state.projectiles);
 
     return g;
 }

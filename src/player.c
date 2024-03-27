@@ -1,6 +1,7 @@
 #include "player.h"
 
 #include "camera.h"
+#include "containers.h"
 #include "game_input.h"
 #include "globals.h"
 #include "projectile.h"
@@ -25,22 +26,17 @@ int Player_Init(Player *p) {
 
     p->fire_cooldown = 0.f;
 
-    memset(p->projectiles, 0, sizeof(p->projectiles));
-
     return 0;
 }
 
-int Player_Shoot(Player *p, Vec2 pos, Vec2 vel) {
-    for (unsigned int i = 0; i < PlayerBulletMax; i++) {
-        if (p->projectiles[i].int_use == 0) {
-            p->projectiles[i].int_use = 1;
-            Projectile_Init(&p->projectiles[i].p, ProjectileType_Player, pos, vel, 450.f);
+static int Player_Shoot(Vec2 pos, Vec2 vel) {
+    Projectile               pro;
+    ProjectileGameContainer *pgcon = ResourceManager_GetProjectileContainer(&GameResources);
 
-            return 0;
-        }
-    }
+    Projectile_Init(&pro, ProjectileType_Player, pos, vel, 450.f);
+    GameContainer_Insert(Projectile, pgcon, pro);
 
-    return -1;
+    return 0;
 }
 
 void Player_Update(Player *p, float delta) {
@@ -98,7 +94,7 @@ void Player_Update(Player *p, float delta) {
                 .x = (p->aim.x * AIM_RADIUS) + p->position.x,
                 .y = (p->aim.y * AIM_RADIUS) + p->position.y,
             };
-            Player_Shoot(p, aim_point, p->aim);
+            Player_Shoot(aim_point, p->aim);
             p->fire_cooldown = 0.f;
         }
     }
@@ -120,22 +116,10 @@ void Player_Update(Player *p, float delta) {
     } else if (p->position.y + half_h_pixels > cam_bounds.y + cam_bounds.h) {
         p->position.y = cam_bounds.y + cam_bounds.h - half_h_pixels;
     }
-
-    // Update projectiles
-    for (unsigned int i = 0; i < PlayerBulletMax; i++) {
-        if (p->projectiles[i].int_use == 1) {
-            Projectile_Update(&p->projectiles[i].p, delta);
-        }
-    }
 }
 
 void Player_Draw(const Player *p, SDL_Renderer *renderer) {
     Camera *camera = ResourceManager_GetMainCamera(&GameResources);
-    for (unsigned int i = 0; i < PlayerBulletMax; i++) {
-        if (p->projectiles[i].int_use == 1) {
-            Projectile_Draw(&p->projectiles[i].p, renderer);
-        }
-    }
 
     SDL_SetRenderDrawColor(renderer, 0xAA, 0x11, 0x11, 0xFF);
     float w_pixels      = p->size.x * PIXELS_PER_METER;

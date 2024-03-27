@@ -20,13 +20,12 @@ struct player_projectile {
 };
 
 struct drev_player {
-    Vec2             position;
-    Vec2             velocity;
-    Vec2             size;
-    Vec2             aim;
-    PlayerProjectile projectiles[PlayerBulletMax];
-    float            fire_cooldown;
-    float            health;
+    Vec2  position;
+    Vec2  velocity;
+    Vec2  size;
+    Vec2  aim;
+    float fire_cooldown;
+    float health;
 };
 
 int  Player_Init(Player *p);
