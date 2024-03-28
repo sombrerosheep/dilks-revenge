@@ -1,4 +1,5 @@
 #include "entities.h"
+#include "player.h"
 
 static EntityManager GameEntities;
 
@@ -6,12 +7,13 @@ static EntityManager GameEntities;
     (c)->size = 0;         \
     memset((c)->items, 0, sizeof((c)->items))
 
-void EntityManager_Init(ProjectileContainer *projectiles) {
+void EntityManager_Init(ProjectileContainer *projectiles, Player *player) {
     clean_container(projectiles);
     projectiles->capacity = MaxProjectiles;
 
     GameEntities = (EntityManager){
         .projectiles = projectiles,
+        .player      = player,
     };
 
     return;
@@ -43,6 +45,7 @@ static void EntityManager_UpdateProjectiles(float delta) {
 
 void EntityManager_Update(float delta) {
     EntityManager_UpdateProjectiles(delta);
+    Player_Update(GameEntities.player, delta);
 }
 
 static void EntityManager_DrawProjectiles(SDL_Renderer *renderer) {
@@ -57,4 +60,5 @@ static void EntityManager_DrawProjectiles(SDL_Renderer *renderer) {
 
 void EntityManager_Draw(SDL_Renderer *renderer) {
     EntityManager_DrawProjectiles(renderer);
+    Player_Draw(GameEntities.player, renderer);
 }

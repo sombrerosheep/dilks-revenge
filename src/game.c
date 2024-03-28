@@ -19,7 +19,6 @@ struct drev_game {
 
 static void Game_Update(Game *game, Frame delta) {
     Controller_Update(&game->state.controller, game->system);
-    Player_Update(&game->state.player, delta.sec);
     Camera_Update(&game->state.main_camera, delta.sec);
 
     EntityManager_Update(delta.sec);
@@ -28,8 +27,6 @@ static void Game_Update(Game *game, Frame delta) {
 static void Game_Draw(Game *game) {
     SDL_SetRenderDrawColor(game->system->renderer, 0x33, 0x33, 0x33, 0xFF);
     SDL_RenderClear(game->system->renderer);
-
-    Player_Draw(&game->state.player, game->system->renderer);
 
     Camera_Draw(&game->state.main_camera, game->system->renderer);
 
@@ -62,7 +59,7 @@ Game *Game_Create(System *sys, int game_width, int game_height) {
 
     ResourceManager_Init(&g->state.main_camera, &g->state.controller);
 
-    EntityManager_Init(&g->state.projectiles);
+    EntityManager_Init(&g->state.projectiles, &g->state.player);
 
     return g;
 }

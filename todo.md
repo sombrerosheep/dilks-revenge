@@ -29,7 +29,7 @@
 ## entities I
 - [x] entity manager
 - [x] projectiles as entities
-- [ ] player as entity
+- [x] player as entity
 
 ## resources I
 - [x] resource manager

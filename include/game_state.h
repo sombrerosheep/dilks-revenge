@@ -12,9 +12,9 @@ struct drev_game_state {
     // Resources
     Camera    main_camera;
     GameInput controller;
-    Player    player;
 
     // Entities
+    Player              player;
     ProjectileContainer projectiles;
 };
 

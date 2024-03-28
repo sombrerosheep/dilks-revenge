@@ -1,6 +1,7 @@
 #ifndef DREV_ENTITIES_H
 #define DREV_ENTITIES_H
 
+#include "player.h"
 #include "projectile.h"
 #include "util.h"
 
@@ -13,9 +14,10 @@ typedef struct drev_entity_manager EntityManager;
 
 struct drev_entity_manager {
     ProjectileContainer *projectiles;
+    Player              *player;
 };
 
-void EntityManager_Init(ProjectileContainer *projectiles);
+void EntityManager_Init(ProjectileContainer *projectiles, Player *player);
 
 int  EntityManager_AddProjectile(Projectile p);
 void EntityManager_Update(float delta);
