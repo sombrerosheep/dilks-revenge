@@ -12,8 +12,6 @@
 
 #include <stdio.h>
 
-ResourceManager GameResources;
-
 struct drev_game {
     System   *system;
     GameState state;
@@ -62,7 +60,7 @@ Game *Game_Create(System *sys, int game_width, int game_height) {
     Camera_Init(&g->state.main_camera, (Vec2){game_width, game_height});
     Camera_SetCenter(&g->state.main_camera, Vec2_Zero);
 
-    ResourceManager_Init(&GameResources, &g->state.main_camera, &g->state.controller);
+    ResourceManager_Init(&g->state.main_camera, &g->state.controller);
 
     EntityManager_Init(&g->state.projectiles);
 

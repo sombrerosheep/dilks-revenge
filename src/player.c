@@ -36,8 +36,8 @@ void Player_Shoot(Vec2 pos, Vec2 vel) {
 }
 
 void Player_Update(Player *p, float delta) {
-    Camera          *camera     = ResourceManager_GetMainCamera(&GameResources);
-    const GameInput *controller = ResourceManager_GetController(&GameResources);
+    Camera          *camera     = ResourceManager_GetMainCamera();
+    const GameInput *controller = ResourceManager_GetController();
     float            speed      = PlayerMeterPerSecond * PIXELS_PER_METER;
     float            decay      = PlayerDecayMeterPerSecond * PIXELS_PER_METER;
 
@@ -115,7 +115,7 @@ void Player_Update(Player *p, float delta) {
 }
 
 void Player_Draw(const Player *p, SDL_Renderer *renderer) {
-    Camera *camera = ResourceManager_GetMainCamera(&GameResources);
+    Camera *camera = ResourceManager_GetMainCamera();
 
     SDL_SetRenderDrawColor(renderer, 0xAA, 0x11, 0x11, 0xFF);
     float w_pixels      = p->size.x * PIXELS_PER_METER;

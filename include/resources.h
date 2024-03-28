@@ -13,11 +13,11 @@ struct drev_resources {
     GameInput *controller;
 };
 
-void ResourceManager_Init(ResourceManager *manager, Camera *camera, GameInput *controller);
+void ResourceManager_Init(Camera *camera, GameInput *controller);
 
-Camera          *ResourceManager_GetMainCamera(ResourceManager *manager);
-const GameInput *ResourceManager_GetController(ResourceManager *manager);
+Camera          *ResourceManager_GetMainCamera(void);
+const GameInput *ResourceManager_GetController(void);
 
-void ResourceManager_Destroy(ResourceManager *resources);
+void ResourceManager_Destroy(void);
 
 #endif // DREV_RESOURCES_H

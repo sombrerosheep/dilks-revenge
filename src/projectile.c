@@ -23,7 +23,7 @@ void Projectile_Update(Projectile *p, float delta) {
 }
 
 void Projectile_Draw(const Projectile *p, SDL_Renderer *renderer) {
-    Camera   *camera     = ResourceManager_GetMainCamera(&GameResources);
+    Camera   *camera     = ResourceManager_GetMainCamera();
     Vec2      screen_pos = Camera_WorldToScreen(camera, p->position);
     SDL_FRect rect       = (SDL_FRect){
               .x = screen_pos.x,

@@ -22,8 +22,4 @@
 
 #define max(x, y) ((x) > (y) ? (x) : (y))
 
-// Game globals
-
-extern ResourceManager GameResources;
-
 #endif // DREV_GLOBALS_H
