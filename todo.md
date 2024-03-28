@@ -26,6 +26,11 @@
 - [ ] load and use font
   - store as a single texture atlas
 
+## entities I
+- [x] entity manager
+- [ ] projectiles as entities
+- [ ] player as entity
+
 ## resources I
 - [x] resource manager
   - global singleton for entities to access as needed
