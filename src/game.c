@@ -2,6 +2,7 @@
 
 #include "camera.h"
 #include "clock.h"
+#include "entities.h"
 #include "game_input.h"
 #include "game_state.h"
 #include "globals.h"
@@ -22,6 +23,8 @@ static void Game_Update(Game *game, Frame delta) {
     Controller_Update(&game->state.controller, game->system);
     Player_Update(&game->state.player, delta.sec);
     Camera_Update(&game->state.main_camera, delta.sec);
+
+    EntityManager_Update(delta.sec);
 }
 
 static void Game_Draw(Game *game) {
@@ -31,6 +34,8 @@ static void Game_Draw(Game *game) {
     Player_Draw(&game->state.player, game->system->renderer);
 
     Camera_Draw(&game->state.main_camera, game->system->renderer);
+
+    EntityManager_Draw(game->system->renderer);
 
     SDL_RenderPresent(game->system->renderer);
 }
@@ -58,6 +63,8 @@ Game *Game_Create(System *sys, int game_width, int game_height) {
     Camera_SetCenter(&g->state.main_camera, Vec2_Zero);
 
     ResourceManager_Init(&GameResources, &g->state.main_camera, &g->state.controller);
+
+    EntityManager_Init(&g->state.projectiles);
 
     return g;
 }

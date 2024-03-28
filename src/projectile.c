@@ -4,12 +4,6 @@
 #include "resources.h"
 #include "vec.h"
 
-#define Projectile_Zero                                                            \
-    (Projectile) {                                                                 \
-        .position = Vec2_Zero, .size = Vec2_Newf(5.f), .velocity = Vec2_Newf(0.f), \
-        .type = ProjectileType_Player,                                             \
-    }
-
 void Projectile_Init(Projectile    *p,
                      ProjectileType type,
                      Vec2           position,
