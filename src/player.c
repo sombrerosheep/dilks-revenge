@@ -11,6 +11,7 @@
 
 #define PLAYER_INIT_HEALTH        100.f
 #define AIM_RADIUS                75.f
+#define PLAYER_PROJECTILE_SPEED   450.f
 #define PlayerMeterPerSecond      125.f
 #define PlayerDecayMeterPerSecond ((PlayerMeterPerSecond) / .5f)
 
@@ -31,7 +32,7 @@ int Player_Init(Player *p) {
 
 void Player_Shoot(Vec2 pos, Vec2 vel) {
     Projectile p;
-    Projectile_Init(&p, ProjectileType_Player, pos, vel, 450.f);
+    Projectile_Init(&p, ProjectileType_Player, pos, vel, PLAYER_PROJECTILE_SPEED);
     EntityManager_AddProjectile(p);
 }
 

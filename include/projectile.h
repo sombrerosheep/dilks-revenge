@@ -10,6 +10,7 @@ typedef struct drev_projectile Projectile;
 
 typedef enum {
     ProjectileType_Player = 0,
+    ProjectileType_Enemy,
 
     ProjectileType_Count
 } ProjectileType;
