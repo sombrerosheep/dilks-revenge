@@ -58,22 +58,22 @@ static struct wave_grid make_wave_grid(Wave w) {
         case CameraFocusTop:
             grid.start   = (Vec2){.x = -(grid.width / 2.f), .y = -(cam_box.h / 2.f - 10.f)};
             grid.row_dir = Vec2_Right;
-            grid.col_dir = Vec2_Down; // opposite for debugging
+            grid.col_dir = Vec2_Up;
             break;
         case CameraFocusBottom:
             grid.start   = (Vec2){.x = (grid.width / 2.f), .y = (cam_box.h / 2.f) - 60.f};
             grid.row_dir = Vec2_Right;
-            grid.col_dir = Vec2_Up; // opposite for debugging
+            grid.col_dir = Vec2_Down;
             break;
         case CameraFocusLeft:
             grid.start   = (Vec2){.x = -(cam_box.w / 2.f) + 10.f, .y = (grid.width / 2.f)};
             grid.row_dir = Vec2_Up;
-            grid.col_dir = Vec2_Right; // opposite for debugging
+            grid.col_dir = Vec2_Left;
             break;
         case CameraFocusRight:
             grid.start   = (Vec2){.x = (cam_box.w / 2.f) - 60.f, .y = (grid.width / 2.f)};
             grid.row_dir = Vec2_Up;
-            grid.col_dir = Vec2_Left; // opposite for debugging
+            grid.col_dir = Vec2_Right;
             break;
         default:
             grid.start = Vec2_Zero;
@@ -84,7 +84,7 @@ static struct wave_grid make_wave_grid(Wave w) {
 
 Wave Wave_New(CameraFocus direction) {
     Wave w = {
-        .state          = WaveStateIdle,
+        .state          = WaveStateInit,
         .wave_direction = direction,
         .num_rows       = 2,
     };
@@ -166,6 +166,7 @@ void Wave_Start(Wave *wave) {
     }
 
     Camera *camera = ResourceManager_GetMainCamera();
+    printf("Wave_Start: Setting camera forucs\n");
     Camera_SetFocus(camera, wave->wave_direction);
     wave->state = WaveStateRunning;
 }
