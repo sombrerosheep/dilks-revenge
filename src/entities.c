@@ -4,6 +4,7 @@
 #include "projectile.h"
 #include "resources.h"
 #include "smallship.h"
+#include <SDL_rect.h>
 
 static EntityManager GameEntities;
 
@@ -67,10 +68,15 @@ Vec2 EntityManager_GetPlayerPosition(void) {
     return GameEntities.player->position;
 }
 
-static void EntityManager_UpdateProjectiles(float delta) {
+static void EntityManager_UpdateProjectiles(SDL_FRect bounds, float delta) {
     for (unsigned int i = 0; i < GameEntities.projectiles->capacity; i++) {
         if (GameEntities.projectiles->items[i].in_use == 1) {
-            Projectile_Update(&GameEntities.projectiles->items[i].data, delta);
+            SDL_FRect bb = Projectile_GetBounds(&GameEntities.projectiles->items[i].data);
+            if (SDL_HasIntersectionF(&bb, &bounds) == SDL_FALSE) {
+                GameEntities.projectiles->items[i].in_use = 0;
+            } else {
+                Projectile_Update(&GameEntities.projectiles->items[i].data, delta);
+            }
         }
     }
 
@@ -88,7 +94,10 @@ static void EntityManager_UpdateSmallShips(float delta) {
 }
 
 void EntityManager_Update(float delta) {
-    EntityManager_UpdateProjectiles(delta);
+    Camera   *camera = ResourceManager_GetMainCamera();
+    SDL_FRect bounds = Camera_GetBounds(camera);
+
+    EntityManager_UpdateProjectiles(bounds, delta);
     EntityManager_UpdateSmallShips(delta);
     Player_Update(GameEntities.player, delta);
 }

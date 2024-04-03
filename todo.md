@@ -64,8 +64,8 @@
   - utilty bundles the package
 
 ## waves I
-- [ ] select a waves direction (up/down/left/righ)
-- [ ] get group of enemies (Sequenced or seeded?)
+- [x] select a waves direction (up/down/left/righ)
+- [x] get group of enemies (Sequenced or seeded?)
 - [ ] enter as a group (offscreen) stopping at a specific place on-screen
 - [ ] wave done when all enemies are dead
 - [ ] player moved to 0,0 then camera pans, then wave starts

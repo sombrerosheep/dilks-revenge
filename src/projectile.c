@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "resources.h"
 #include "vec.h"
+#include <SDL_rect.h>
 
 void Projectile_Init(Projectile    *p,
                      ProjectileType type,
@@ -15,6 +16,17 @@ void Projectile_Init(Projectile    *p,
     p->velocity    = velocity;
     p->speed_m_sec = speed_m_sec;
     p->size        = Vec2_Newf(1.);
+}
+
+SDL_FRect Projectile_GetBounds(Projectile *p) {
+    SDL_FRect rect = {
+        .x = p->position.x,
+        .y = p->position.y,
+        .w = p->size.x,
+        .h = p->size.y,
+    };
+
+    return rect;
 }
 
 void Projectile_Update(Projectile *p, float delta) {

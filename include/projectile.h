@@ -25,12 +25,13 @@ struct drev_projectile {
 
 // todo: factor in m/s with speeds
 //       velocity should be normalized
-void Projectile_Init(Projectile    *p,
-                     ProjectileType type,
-                     Vec2           position,
-                     Vec2           velocity,
-                     float          speed_m_sec);
-void Projectile_Update(Projectile *p, float delta);
-void Projectile_Draw(const Projectile *p, SDL_Renderer *renderer);
+void      Projectile_Init(Projectile    *p,
+                          ProjectileType type,
+                          Vec2           position,
+                          Vec2           velocity,
+                          float          speed_m_sec);
+SDL_FRect Projectile_GetBounds(Projectile *p);
+void      Projectile_Update(Projectile *p, float delta);
+void      Projectile_Draw(const Projectile *p, SDL_Renderer *renderer);
 
 #endif // DREV_PROJECTILE_H
