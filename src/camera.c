@@ -114,6 +114,29 @@ void Camera_Draw(const Camera *camera, SDL_Renderer *renderer) {
 
     SDL_SetRenderDrawColor(renderer, 0x0, 0xFF, 0x0, 0xFF);
     SDL_RenderDrawRectF(renderer, &rect);
+
+    // draw center crosshair
+    const float extra = 500.f;
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0x0, 0x0, 0xFF);
+    Vec2 vert_start = (Vec2){
+        .x = camera->half_size.x,
+        .y = -extra,
+    };
+    Vec2 vert_end = (Vec2){
+        .x = camera->half_size.x,
+        .y = camera->half_size.y * 2.f + extra,
+    };
+    Vec2 hor_start = (Vec2){
+        .x = -extra,
+        .y = camera->half_size.y,
+    };
+    Vec2 hor_end = (Vec2){
+        .x = camera->half_size.x * 2.f + extra,
+        .y = camera->half_size.y,
+    };
+
+    SDL_RenderDrawLineF(renderer, vert_start.x, vert_start.y, vert_end.x, vert_end.y);
+    SDL_RenderDrawLineF(renderer, hor_start.x, hor_start.y, hor_end.x, hor_end.y);
 #endif
 }
 

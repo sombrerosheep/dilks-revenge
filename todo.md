@@ -1,5 +1,7 @@
 ## misc
 - [x] const pointer parameters and when necessary
+- [ ] implement GetBounds for all entities
+- [ ] implement DREV_DRAW_BB for all entities
 
 ## core I
 - [x] game clock

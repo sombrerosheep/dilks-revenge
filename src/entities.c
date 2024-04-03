@@ -1,5 +1,9 @@
 #include "entities.h"
+#include "camera.h"
 #include "player.h"
+#include "projectile.h"
+#include "resources.h"
+#include "smallship.h"
 
 static EntityManager GameEntities;
 
@@ -7,13 +11,20 @@ static EntityManager GameEntities;
     (c)->size = 0;         \
     memset((c)->items, 0, sizeof((c)->items))
 
-void EntityManager_Init(ProjectileContainer *projectiles, Player *player) {
+void EntityManager_Init(ProjectileContainer *projectiles,
+                        SmallShipContainer  *smallShips,
+                        Player              *player //
+) {
     clean_container(projectiles);
     projectiles->capacity = MaxProjectiles;
+
+    clean_container(smallShips);
+    smallShips->capacity = MaxSmallShips;
 
     GameEntities = (EntityManager){
         .projectiles = projectiles,
         .player      = player,
+        .smallShips  = smallShips,
     };
 
     return;
@@ -33,6 +44,29 @@ int EntityManager_AddProjectile(Projectile p) {
     return -1;
 }
 
+int EntityManager_InsertSmallShip(SmallShip ship) {
+    for (unsigned int i = 0; i < GameEntities.smallShips->capacity; i++) {
+        if (GameEntities.smallShips->items[i].in_use == 0) {
+            GameEntities.smallShips->items[i].data   = ship;
+            GameEntities.smallShips->items[i].in_use = 1;
+
+            return 0;
+        }
+    }
+
+    return -1;
+}
+
+int EntityManager_ClearSmallShips(void) {
+    clean_container(GameEntities.smallShips);
+
+    return 0;
+}
+
+Vec2 EntityManager_GetPlayerPosition(void) {
+    return GameEntities.player->position;
+}
+
 static void EntityManager_UpdateProjectiles(float delta) {
     for (unsigned int i = 0; i < GameEntities.projectiles->capacity; i++) {
         if (GameEntities.projectiles->items[i].in_use == 1) {
@@ -43,8 +77,19 @@ static void EntityManager_UpdateProjectiles(float delta) {
     return;
 }
 
+static void EntityManager_UpdateSmallShips(float delta) {
+    for (unsigned int i = 0; i < GameEntities.smallShips->capacity; i++) {
+        if (GameEntities.smallShips->items[i].in_use == 1) {
+            SmallShip_Update(&GameEntities.smallShips->items[i].data, delta);
+        }
+    }
+
+    return;
+}
+
 void EntityManager_Update(float delta) {
     EntityManager_UpdateProjectiles(delta);
+    EntityManager_UpdateSmallShips(delta);
     Player_Update(GameEntities.player, delta);
 }
 
@@ -58,7 +103,18 @@ static void EntityManager_DrawProjectiles(SDL_Renderer *renderer) {
     return;
 }
 
+static void EntityManager_DrawSmallShips(SDL_Renderer *renderer) {
+    for (unsigned int i = 0; i < GameEntities.smallShips->capacity; i++) {
+        if (GameEntities.smallShips->items[i].in_use == 1) {
+            SmallShip_Draw(&GameEntities.smallShips->items[i].data, renderer);
+        }
+    }
+
+    return;
+}
+
 void EntityManager_Draw(SDL_Renderer *renderer) {
     EntityManager_DrawProjectiles(renderer);
+    EntityManager_DrawSmallShips(renderer);
     Player_Draw(GameEntities.player, renderer);
 }

@@ -9,6 +9,7 @@
 #include "player.h"
 #include "random.h"
 #include "resources.h"
+#include "wave.h"
 
 #include <stdio.h>
 
@@ -20,6 +21,8 @@ struct drev_game {
 static void Game_Update(Game *game, Frame delta) {
     Controller_Update(&game->state.controller, game->system);
     Camera_Update(&game->state.main_camera, delta.sec);
+
+    Wave_Update(&game->state.current_wave);
 
     EntityManager_Update(delta.sec);
 }
@@ -33,6 +36,19 @@ static void Game_Draw(Game *game) {
     EntityManager_Draw(game->system->renderer);
 
     SDL_RenderPresent(game->system->renderer);
+}
+
+static void Game_InitState(Game *game, int width, int height) {
+    Player_Init(&game->state.player);
+
+    Camera_Init(&game->state.main_camera, (Vec2){width, height});
+    Camera_SetCenter(&game->state.main_camera, Vec2_Zero);
+
+    ResourceManager_Init(&game->state.main_camera, &game->state.controller);
+
+    EntityManager_Init(&game->state.projectiles, &game->state.smallShips, &game->state.player);
+
+    game->state.current_wave.state = WaveStateIdle;
 }
 
 Game *Game_Create(System *sys, int game_width, int game_height) {
@@ -52,14 +68,7 @@ Game *Game_Create(System *sys, int game_width, int game_height) {
 
     g->system = sys;
 
-    Player_Init(&g->state.player);
-
-    Camera_Init(&g->state.main_camera, (Vec2){game_width, game_height});
-    Camera_SetCenter(&g->state.main_camera, Vec2_Zero);
-
-    ResourceManager_Init(&g->state.main_camera, &g->state.controller);
-
-    EntityManager_Init(&g->state.projectiles, &g->state.player);
+    Game_InitState(g, game_width, game_height);
 
     return g;
 }
@@ -82,24 +91,26 @@ void Game_Run(Game *g) {
                     event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_UP) ||
                     event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_DOWN) ||
                     event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_LEFT) ||
-                    event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_RIGHT) //
+                    event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_RIGHT) ||
+                    event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_c) //
                 ) {
-                    CameraFocus new_focus = CameraFocusCenter;
                     if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_UP)) {
-                        new_focus = CameraFocusTop;
+                        Wave_Clean(&g->state.current_wave);
+                        g->state.current_wave = Wave_New(CameraFocusTop);
                     } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_DOWN)) {
-                        new_focus = CameraFocusBottom;
+                        Wave_Clean(&g->state.current_wave);
+                        g->state.current_wave = Wave_New(CameraFocusBottom);
                     } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_LEFT)) {
-                        new_focus = CameraFocusLeft;
+                        Wave_Clean(&g->state.current_wave);
+                        g->state.current_wave = Wave_New(CameraFocusLeft);
                     } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_RIGHT)) {
-                        new_focus = CameraFocusRight;
+                        Wave_Clean(&g->state.current_wave);
+                        g->state.current_wave = Wave_New(CameraFocusRight);
+                    } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_c)) {
+                        Wave_Clean(&g->state.current_wave);
                     }
 
-                    if (g->state.main_camera.focus == new_focus) {
-                        Camera_SetFocus(&g->state.main_camera, CameraFocusCenter);
-                    } else {
-                        Camera_SetFocus(&g->state.main_camera, new_focus);
-                    }
+                    Wave_Start(&g->state.current_wave);
                 }
             }
         }
