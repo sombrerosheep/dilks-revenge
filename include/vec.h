@@ -23,5 +23,6 @@ struct drev_vec2 {
 float Vec2_Magnitude(Vec2 vec);
 Vec2  Vec2_Normalize(Vec2 vec);
 Vec2  Vec2_Rotate(Vec2 vec, float deg);
+int   Vec2_Equal(Vec2 a, Vec2 b);
 
 #endif // DREV_VEC_H

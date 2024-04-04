@@ -39,3 +39,11 @@ Vec2 Vec2_Rotate(Vec2 vec, float deg) {
 
     return rot;
 }
+
+int Vec2_Equal(Vec2 a, Vec2 b) {
+    if (a.x == b.x && a.y == b.y) {
+        return 1;
+    }
+
+    return 0;
+}

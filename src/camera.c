@@ -30,10 +30,8 @@ void Camera_SetFocus(Camera *camera, CameraFocus focus) {
         center.y -= FOCUS_OFFSET;
     } else if (camera->focus == CameraFocusBottom) {
         center.y += FOCUS_OFFSET;
-
     } else if (camera->focus == CameraFocusLeft) {
         center.x -= FOCUS_OFFSET;
-
     } else if (camera->focus == CameraFocusRight) {
         center.x += FOCUS_OFFSET;
     }

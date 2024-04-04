@@ -16,6 +16,8 @@ typedef enum {
     WaveStateCount
 } WaveState;
 
+extern const char *WaveStateLabels[WaveStateCount];
+
 struct drev_wave {
     WaveState    state;
     CameraFocus  wave_direction;

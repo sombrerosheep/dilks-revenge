@@ -7,6 +7,7 @@
 #include "random.h"
 #include "resources.h"
 #include "vec.h"
+#include <SDL_stdinc.h>
 
 #define FIRE_RATE_MIN    1.f
 #define FIRE_RATE_MAX    1.2f
@@ -37,6 +38,10 @@ SmallShip SmallShip_Create(Vec2 position, Vec2 velocity, float rotation) {
     return ship;
 }
 
+void SmallShip_MoveTo(SmallShip *ship, Vec2 new_position) {
+    ship->target_position = new_position;
+}
+
 static void SmallShip_Shoot(Vec2 pos, Vec2 vel) {
     Projectile p;
     Projectile_Init(&p, ProjectileType_Enemy, pos, vel, ENEMY_PROJECTILE_SPEED);
@@ -44,18 +49,31 @@ static void SmallShip_Shoot(Vec2 pos, Vec2 vel) {
 }
 
 void SmallShip_Update(SmallShip *ship, float delta) {
-    ship->fire_cooldown -= delta;
 
-    if (ship->fire_cooldown < 0.f) {
-        Vec2 playerPos = EntityManager_GetPlayerPosition();
-        Vec2 aim       = {
-                  .x = playerPos.x - ship->position.x,
-                  .y = playerPos.y - ship->position.y,
-        };
-        aim = Vec2_Normalize(aim);
+    if (Vec2_Equal(ship->position, ship->target_position) == 0) {
+        const float speed = 185.f;
+        ship->position.x  = ease(ship->position.x, ship->target_position.x, delta * speed);
+        ship->position.y  = ease(ship->position.y, ship->target_position.y, delta * speed);
 
-        SmallShip_Shoot(ship->position, aim);
-        ship->fire_cooldown = random_getf_between(FIRE_RATE_MIN, FIRE_RATE_MAX);
+        const float close_enough = 0.01f;
+        if (SDL_fabsf(ship->position.x - ship->target_position.x) < close_enough &&
+            SDL_fabsf(ship->position.y - ship->target_position.y) < close_enough) {
+            ship->position = ship->target_position;
+        }
+    } else {
+        ship->fire_cooldown -= delta;
+        // only shoot when its not moving?
+        if (ship->fire_cooldown < 0.f) {
+            Vec2 playerPos = EntityManager_GetPlayerPosition();
+            Vec2 aim       = {
+                      .x = playerPos.x - ship->position.x,
+                      .y = playerPos.y - ship->position.y,
+            };
+            aim = Vec2_Normalize(aim);
+
+            SmallShip_Shoot(ship->position, aim);
+            ship->fire_cooldown = random_getf_between(FIRE_RATE_MIN, FIRE_RATE_MAX);
+        }
     }
 
     ship->position.x += ship->velocity.x * SmallShipSpeed * delta;

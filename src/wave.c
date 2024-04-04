@@ -11,6 +11,13 @@
 #define DEG_TO_RAD(a) ((a) * (DREV_PI / 180.f))
 #define RAD_TO_DEG(a) ((a) * (180.f / DREV_PI))
 
+const char *WaveStateLabels[WaveStateCount] = {
+    [WaveStateIdle]     = "WaveStateIdle",
+    [WaveStateInit]     = "WaveStateInit",
+    [WaveStateRunning]  = "WaveStateRunning",
+    [WaveStateFinished] = "WaveStateFinished",
+};
+
 static void Wave_ClearSmallShips(Wave *wave) {
     for (int i = 0; i < MaxSmallShips; i++) {
         wave->ships[i] = NULL;
@@ -88,7 +95,8 @@ Wave Wave_New(CameraFocus direction) {
         .wave_direction = direction,
         .num_rows       = 2,
     };
-    const float row_spacing = 100.f;
+    const float row_spacing     = 100.f;
+    const float travel_distance = 350.f;
 
     Wave_ClearSmallShips(&w);
 
@@ -102,8 +110,10 @@ Wave Wave_New(CameraFocus direction) {
                         .x = grid.start.x + (grid.spacing * col),
                         .y = grid.start.y + (row_spacing * row),
                     };
+                    Vec2 start_at = {.x = pos.x, .y = pos.y - travel_distance};
 
-                    SmallShip ship = SmallShip_Create(pos, Vec2_Zero, 0.f);
+                    SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
+                    SmallShip_MoveTo(&ship, pos);
                     EntityManager_InsertSmallShip(ship);
                 }
             }
@@ -116,8 +126,10 @@ Wave Wave_New(CameraFocus direction) {
                         .x = grid.start.x - (grid.spacing * col),
                         .y = grid.start.y - (row_spacing * row),
                     };
+                    Vec2 start_at = {.x = pos.x, .y = pos.y + travel_distance};
 
-                    SmallShip ship = SmallShip_Create(pos, Vec2_Zero, 0.f);
+                    SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
+                    SmallShip_MoveTo(&ship, pos);
                     EntityManager_InsertSmallShip(ship);
                 }
             }
@@ -131,7 +143,10 @@ Wave Wave_New(CameraFocus direction) {
                         .y = grid.start.y - (grid.spacing * col),
                     };
 
-                    SmallShip ship = SmallShip_Create(pos, Vec2_Zero, 0.f);
+                    Vec2 start_at = {.x = pos.x - travel_distance, .y = pos.y};
+
+                    SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
+                    SmallShip_MoveTo(&ship, pos);
                     EntityManager_InsertSmallShip(ship);
                 }
             }
@@ -144,8 +159,10 @@ Wave Wave_New(CameraFocus direction) {
                         .x = grid.start.x - (row_spacing * row),
                         .y = grid.start.y - (grid.spacing * col),
                     };
+                    Vec2 start_at = {.x = pos.x + travel_distance, .y = pos.y};
 
-                    SmallShip ship = SmallShip_Create(pos, Vec2_Zero, 0.f);
+                    SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
+                    SmallShip_MoveTo(&ship, pos);
                     EntityManager_InsertSmallShip(ship);
                 }
             }
@@ -161,12 +178,13 @@ Wave Wave_New(CameraFocus direction) {
 void Wave_Start(Wave *wave) {
     // can only transition to start from init
     if (wave->state != WaveStateInit) {
-        printf("can't transition from current state to Running\n");
+        printf("Can't transition wave from %s to %s\n",
+               WaveStateLabels[wave->state],
+               WaveStateLabels[WaveStateRunning]);
         return;
     }
 
     Camera *camera = ResourceManager_GetMainCamera();
-    printf("Wave_Start: Setting camera forucs\n");
     Camera_SetFocus(camera, wave->wave_direction);
     wave->state = WaveStateRunning;
 }
