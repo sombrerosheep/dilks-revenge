@@ -115,8 +115,8 @@
 - [ ] refine movement; make the drift feel less slippery
 
 ## enemies I (light)
-- [ ] fires small bullets every 1000-1200ms 
-- [ ] blue square
+- [x] fires small bullets every 1000-1200ms 
+- [x] blue square
 
 ## enemies II (heavy)
 - [ ] fires big bullets every 1600-2000ms 

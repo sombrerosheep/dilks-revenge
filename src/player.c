@@ -11,7 +11,8 @@
 
 #define PLAYER_INIT_HEALTH        100.f
 #define AIM_RADIUS                75.f
-#define PLAYER_PROJECTILE_SPEED   450.f
+#define PLAYER_PROJECTILE_SPEED   900.f
+#define PLAYER_FIRE_RATE          0.5f
 #define PlayerMeterPerSecond      125.f
 #define PlayerDecayMeterPerSecond ((PlayerMeterPerSecond) / .5f)
 
@@ -25,7 +26,7 @@ int Player_Init(Player *p) {
 
     p->aim = Vec2_Zero;
 
-    p->fire_cooldown = 0.f;
+    p->fire_cooldown = PLAYER_FIRE_RATE;
 
     return 0;
 }
@@ -83,16 +84,16 @@ void Player_Update(Player *p, float delta) {
     p->aim = Vec2_Normalize(p->aim);
 
     // Shooting
-    p->fire_cooldown += delta;
+    p->fire_cooldown -= delta;
 
-    if (p->fire_cooldown > 1.5f) {
+    if (p->fire_cooldown < 0) {
         if (controller->mouse_left || controller->space) {
             Vec2 aim_point = (Vec2){
                 .x = (p->aim.x * AIM_RADIUS) + p->position.x,
                 .y = (p->aim.y * AIM_RADIUS) + p->position.y,
             };
             Player_Shoot(aim_point, p->aim);
-            p->fire_cooldown = 0.f;
+            p->fire_cooldown = PLAYER_FIRE_RATE;
         }
     }
 

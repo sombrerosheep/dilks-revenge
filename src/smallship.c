@@ -10,7 +10,7 @@
 #include <SDL_stdinc.h>
 
 #define FIRE_RATE_MIN    1.f
-#define FIRE_RATE_MAX    1.2f
+#define FIRE_RATE_MAX    3.5f
 #define SHIP_SIZE_METERS 6.f
 
 #define ENEMY_PROJECTILE_SPEED 450.f
@@ -49,7 +49,6 @@ static void SmallShip_Shoot(Vec2 pos, Vec2 vel) {
 }
 
 void SmallShip_Update(SmallShip *ship, float delta) {
-
     if (Vec2_Equal(ship->position, ship->target_position) == 0) {
         const float speed = 185.f;
         ship->position.x  = ease(ship->position.x, ship->target_position.x, delta * speed);
@@ -62,7 +61,7 @@ void SmallShip_Update(SmallShip *ship, float delta) {
         }
     } else {
         ship->fire_cooldown -= delta;
-        // only shoot when its not moving?
+
         if (ship->fire_cooldown < 0.f) {
             Vec2 playerPos = EntityManager_GetPlayerPosition();
             Vec2 aim       = {
