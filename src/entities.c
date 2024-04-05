@@ -129,5 +129,5 @@ static void EntityManager_DrawSmallShips(SDL_Renderer *renderer) {
 void EntityManager_Draw(SDL_Renderer *renderer) {
     EntityManager_DrawProjectiles(renderer);
     EntityManager_DrawSmallShips(renderer);
-    Player_Draw(GameEntities.player, renderer);
+    Player_Draw(GameEntities.player);
 }

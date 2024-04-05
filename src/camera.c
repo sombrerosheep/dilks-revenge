@@ -1,8 +1,10 @@
 #include "camera.h"
 
 #include "globals.h"
+#include "resources.h"
 #include "util.h"
 #include "vec.h"
+#include <SDL_render.h>
 
 #define FOCUS_OFFSET 200.f
 
@@ -75,6 +77,7 @@ Vec2 Camera_ScreenToWorldF(const Camera *cam, float x, float y) {
 }
 
 SDL_FRect Camera_GetBounds(const Camera *cam) {
+    // bounds h/w is in pixels, should it be units?
     SDL_FRect rect = (SDL_FRect){
         .x = cam->position.x,
         .y = cam->position.y,
@@ -85,9 +88,68 @@ SDL_FRect Camera_GetBounds(const Camera *cam) {
     return rect;
 }
 
+void Camera_DrawFillRect(Camera *cam, SDL_FRect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+    SDL_Renderer *renderer = ResourceManager_GetRenderer();
+
+    // Eventually PPM will come from a texture/sprite to be drawn
+    float w_pixels  = rect.w * PIXELS_PER_METER;
+    float h_pixels  = rect.h * PIXELS_PER_METER;
+    float half_w_px = w_pixels / 2.f;
+    float half_h_px = h_pixels / 2.f;
+
+    Vec2 screen_pos = Camera_WorldToScreenF(cam, rect.x, rect.y);
+    rect.x          = screen_pos.x - half_h_px;
+    rect.y          = screen_pos.y - half_w_px;
+    rect.w          = w_pixels;
+    rect.h          = h_pixels;
+
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    SDL_RenderFillRectF(renderer, &rect);
+}
+
+void Camera_DrawRect(Camera *cam, SDL_FRect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+    SDL_Renderer *renderer = ResourceManager_GetRenderer();
+
+    // Eventually PPM will come from a texture/sprite to be drawn
+    float w_pixels  = rect.w * PIXELS_PER_METER;
+    float h_pixels  = rect.y * PIXELS_PER_METER;
+    float half_w_px = w_pixels / 2.f;
+    float half_h_px = h_pixels / 2.f;
+
+    Vec2 screen_pos = Camera_WorldToScreenF(cam, rect.x, rect.y);
+    rect.x          = screen_pos.x - half_h_px;
+    rect.y          = screen_pos.y - half_w_px;
+    rect.w          = w_pixels;
+    rect.h          = h_pixels;
+
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    SDL_RenderDrawRectF(renderer, &rect);
+}
+
+void Camera_DrawLine(Camera *cam,
+                     float   x1,
+                     float   y1,
+                     float   x2,
+                     float   y2,
+                     Uint8   r,
+                     Uint8   g,
+                     Uint8   b,
+                     Uint8   a //
+) {
+    SDL_Renderer *renderer = ResourceManager_GetRenderer();
+
+    Vec2 start = Camera_WorldToScreenF(cam, x1, y1);
+    Vec2 end   = Camera_WorldToScreenF(cam, x2, y2);
+
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    SDL_RenderDrawLine(renderer, start.x, start.y, end.x, end.y);
+}
+
 void Camera_Draw(const Camera *camera, SDL_Renderer *renderer) {
     UNUSED(camera);
     UNUSED(renderer);
+
+    // tell the renderer to present the screen
 
 #if DREV_DRAW_BB
     // todo: hardcoded bounding box

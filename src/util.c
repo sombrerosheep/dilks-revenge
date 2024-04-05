@@ -15,6 +15,10 @@ float clamp(float value, float upper, float lower) {
 }
 
 float ease(float have, float want, float ease) {
+    if (have == want) {
+        return have;
+    }
+
     float dir = (have > want) ? -1.f : 1.f;
     have += dir * ease;
 

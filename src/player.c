@@ -63,7 +63,6 @@ void Player_Update(Player *p, float delta) {
             p->being_moved = 0;
         }
     } else {
-
         // get velocity
         p->velocity.x = ease(p->velocity.x, 0.f, decay * delta);
         p->velocity.y = ease(p->velocity.y, 0.f, decay * delta);
@@ -138,36 +137,28 @@ void Player_Update(Player *p, float delta) {
     }
 }
 
-void Player_Draw(const Player *p, SDL_Renderer *renderer) {
+void Player_Draw(const Player *p) {
     Camera *camera = ResourceManager_GetMainCamera();
-
-    SDL_SetRenderDrawColor(renderer, 0xAA, 0x11, 0x11, 0xFF);
-    float w_pixels      = p->size.x * PIXELS_PER_METER;
-    float half_w_pixels = w_pixels / 2.f;
-    float h_pixels      = p->size.y * PIXELS_PER_METER;
-    float half_h_pixels = h_pixels / 2.f;
 
     Vec2 aim_point = (Vec2){
         .x = (p->aim.x * AIM_RADIUS) + p->position.x,
         .y = (p->aim.y * AIM_RADIUS) + p->position.y,
     };
 
-    Vec2 screen     = Camera_WorldToScreen(camera, p->position);
-    Vec2 screen_aim = Camera_WorldToScreen(camera, aim_point);
-
+    // draw the player
     SDL_FRect rect = {
-        .x = screen.x - half_w_pixels,
-        .y = screen.y - half_h_pixels,
-        .w = w_pixels,
-        .h = h_pixels,
+        .x = p->position.x,
+        .y = p->position.y,
+        .w = p->size.x,
+        .h = p->size.y,
     };
 
-    SDL_RenderFillRectF(renderer, &rect);
+    Camera_DrawFillRect(camera, rect, 0xAA, 0x11, 0x11, 0xFF);
 
-    rect.x = screen_aim.x;
-    rect.y = screen_aim.y;
-    rect.w = 10.f;
-    rect.h = 10.f;
-
-    SDL_RenderFillRectF(renderer, &rect);
+    // draw the crosshair box
+    rect.x = aim_point.x;
+    rect.y = aim_point.y;
+    rect.w = 1.f;
+    rect.h = 1.f;
+    Camera_DrawFillRect(camera, rect, 0xAA, 0x11, 0x11, 0xFF);
 }

@@ -1,12 +1,11 @@
 #include "resources.h"
 
-#include "globals.h"
-
 static ResourceManager GameResources;
 
-void ResourceManager_Init(Camera *camera, GameInput *controller) {
+void ResourceManager_Init(Camera *camera, GameInput *controller, SDL_Renderer *renderer) {
     GameResources.game_camera = camera;
     GameResources.controller  = controller;
+    GameResources.renderer    = renderer;
 }
 
 Camera *ResourceManager_GetMainCamera(void) {
@@ -15,6 +14,10 @@ Camera *ResourceManager_GetMainCamera(void) {
 
 const GameInput *ResourceManager_GetController(void) {
     return GameResources.controller;
+}
+
+SDL_Renderer *ResourceManager_GetRenderer(void) {
+    return GameResources.renderer;
 }
 
 void ResourceManager_Destroy(void) {

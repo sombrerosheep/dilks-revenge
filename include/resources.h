@@ -9,14 +9,16 @@
 typedef struct drev_resources ResourceManager;
 
 struct drev_resources {
-    Camera    *game_camera;
-    GameInput *controller;
+    Camera       *game_camera;
+    GameInput    *controller;
+    SDL_Renderer *renderer;
 };
 
-void ResourceManager_Init(Camera *camera, GameInput *controller);
+void ResourceManager_Init(Camera *camera, GameInput *controller, SDL_Renderer *renderer);
 
 Camera          *ResourceManager_GetMainCamera(void);
 const GameInput *ResourceManager_GetController(void);
+SDL_Renderer    *ResourceManager_GetRenderer(void);
 
 void ResourceManager_Destroy(void);
 

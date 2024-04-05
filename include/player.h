@@ -26,6 +26,6 @@ struct drev_player {
 int  Player_Init(Player *p);
 void Player_MoveTo(Player *p, Vec2 target);
 void Player_Update(Player *p, float delta);
-void Player_Draw(const Player *p, SDL_Renderer *renderer);
+void Player_Draw(const Player *p);
 
 #endif // DREV_PLAYER_H
