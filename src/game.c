@@ -9,6 +9,7 @@
 #include "player.h"
 #include "random.h"
 #include "resources.h"
+#include "vec.h"
 #include "wave.h"
 
 #include <stdio.h>
@@ -31,9 +32,9 @@ static void Game_Draw(Game *game) {
     SDL_SetRenderDrawColor(game->system->renderer, 0x33, 0x33, 0x33, 0xFF);
     SDL_RenderClear(game->system->renderer);
 
-    Camera_Draw(&game->state.main_camera, game->system->renderer);
-
     EntityManager_Draw(game->system->renderer);
+
+    Camera_Draw(&game->state.main_camera, game->system->renderer);
 
     SDL_RenderPresent(game->system->renderer);
 }
@@ -44,7 +45,7 @@ static void Game_InitState(Game *game, int width, int height) {
     Camera_Init(&game->state.main_camera, (Vec2){width, height});
     Camera_SetCenter(&game->state.main_camera, Vec2_Zero);
 
-    ResourceManager_Init(&game->state.main_camera, &game->state.controller);
+    ResourceManager_Init(&game->state.main_camera, &game->state.controller, game->system->renderer);
 
     EntityManager_Init(&game->state.projectiles, &game->state.smallShips, &game->state.player);
 
@@ -109,6 +110,7 @@ void Game_Run(Game *g) {
                     } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_c)) {
                         Wave_Clean(&g->state.current_wave);
                         Camera_SetFocus(&g->state.main_camera, CameraFocusCenter);
+                        EntityManager_MovePlayerTo(Vec2_Zero);
                     }
 
                     Wave_Start(&g->state.current_wave);

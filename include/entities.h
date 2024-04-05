@@ -30,6 +30,7 @@ int  EntityManager_AddProjectile(Projectile p);
 int  EntityManager_InsertSmallShip(SmallShip ship);
 int  EntityManager_ClearSmallShips(void);
 Vec2 EntityManager_GetPlayerPosition(void);
+void EntityManager_MovePlayerTo(Vec2 target);
 void EntityManager_Update(float delta);
 void EntityManager_Draw(SDL_Renderer *renderer);
 

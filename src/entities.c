@@ -68,6 +68,10 @@ Vec2 EntityManager_GetPlayerPosition(void) {
     return GameEntities.player->position;
 }
 
+void EntityManager_MovePlayerTo(Vec2 target) {
+    Player_MoveTo(GameEntities.player, target);
+}
+
 static void EntityManager_UpdateProjectiles(SDL_FRect bounds, float delta) {
     for (unsigned int i = 0; i < GameEntities.projectiles->capacity; i++) {
         if (GameEntities.projectiles->items[i].in_use == 1) {

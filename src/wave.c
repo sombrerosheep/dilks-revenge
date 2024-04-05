@@ -51,6 +51,11 @@ static struct wave_grid make_wave_grid(Wave w) {
     Camera          *camera          = ResourceManager_GetMainCamera();
     SDL_FRect        cam_box         = Camera_GetBounds(camera);
 
+    // todo: cam_box is world position
+    //       cam_size is in pixels, not units
+    //       bounds needs to have units and pixels
+    // todo: make this not matter anymore. everything in units?
+    //       camera and renderer do this; texture determines pixels?
     unsigned int dir_width =
         (w.wave_direction == CameraFocusTop || w.wave_direction == CameraFocusBottom) ? cam_box.w
                                                                                       : cam_box.h;
@@ -110,11 +115,13 @@ Wave Wave_New(CameraFocus direction) {
                         .x = grid.start.x + (grid.spacing * col),
                         .y = grid.start.y + (row_spacing * row),
                     };
-                    Vec2 start_at = {.x = pos.x, .y = pos.y - travel_distance};
+                    Vec2 player_desired_pos = {.x = 0.f, .y = pos.y * -1.f};
+                    Vec2 start_at           = {.x = pos.x, .y = pos.y - travel_distance};
 
                     SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
                     EntityManager_InsertSmallShip(ship);
+                    EntityManager_MovePlayerTo(player_desired_pos);
                 }
             }
             break;
@@ -126,11 +133,13 @@ Wave Wave_New(CameraFocus direction) {
                         .x = grid.start.x - (grid.spacing * col),
                         .y = grid.start.y - (row_spacing * row),
                     };
-                    Vec2 start_at = {.x = pos.x, .y = pos.y + travel_distance};
+                    Vec2 start_at           = {.x = pos.x, .y = pos.y + travel_distance};
+                    Vec2 player_desired_pos = {.x = 0.f, .y = pos.y * -1.f};
 
                     SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
                     EntityManager_InsertSmallShip(ship);
+                    EntityManager_MovePlayerTo(player_desired_pos);
                 }
             }
             break;
@@ -142,12 +151,13 @@ Wave Wave_New(CameraFocus direction) {
                         .x = grid.start.x + (row_spacing * row),
                         .y = grid.start.y - (grid.spacing * col),
                     };
-
-                    Vec2 start_at = {.x = pos.x - travel_distance, .y = pos.y};
+                    Vec2 player_desired_pos = {.x = pos.x * -1.f, .y = 0.f};
+                    Vec2 start_at           = {.x = pos.x - travel_distance, .y = pos.y};
 
                     SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
                     EntityManager_InsertSmallShip(ship);
+                    EntityManager_MovePlayerTo(player_desired_pos);
                 }
             }
             break;
@@ -159,11 +169,16 @@ Wave Wave_New(CameraFocus direction) {
                         .x = grid.start.x - (row_spacing * row),
                         .y = grid.start.y - (grid.spacing * col),
                     };
-                    Vec2 start_at = {.x = pos.x + travel_distance, .y = pos.y};
+                    // todo: The player never gets to the desired position
+                    //       is pos.x * -1.f not where I think?
+                    //       the direction seems fine but stopping point must be off
+                    Vec2 player_desired_pos = {.x = pos.x * -1.f, .y = 0.f};
+                    Vec2 start_at           = {.x = pos.x + travel_distance, .y = pos.y};
 
                     SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
                     EntityManager_InsertSmallShip(ship);
+                    EntityManager_MovePlayerTo(player_desired_pos);
                 }
             }
             break;
