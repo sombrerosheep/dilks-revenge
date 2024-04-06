@@ -1,5 +1,6 @@
 #include "projectile.h"
 
+#include "camera.h"
 #include "globals.h"
 #include "resources.h"
 #include "vec.h"
@@ -34,16 +35,15 @@ void Projectile_Update(Projectile *p, float delta) {
     p->position.y += p->velocity.y * p->speed_m_sec * delta;
 }
 
-void Projectile_Draw(const Projectile *p, SDL_Renderer *renderer) {
-    Camera   *camera     = ResourceManager_GetMainCamera();
-    Vec2      screen_pos = Camera_WorldToScreen(camera, p->position);
-    SDL_FRect rect       = (SDL_FRect){
-              .x = screen_pos.x,
-              .y = screen_pos.y,
-              .w = p->size.x * PIXELS_PER_METER,
-              .h = p->size.y * PIXELS_PER_METER,
+void Projectile_Draw(const Projectile *p) {
+    Camera *camera = ResourceManager_GetMainCamera();
+
+    SDL_FRect rect = (SDL_FRect){
+        .x = p->position.x,
+        .y = p->position.y,
+        .w = p->size.x,
+        .h = p->size.y,
     };
 
-    SDL_SetRenderDrawColor(renderer, 0xDD, 0xDD, 0xDD, 0xFF);
-    SDL_RenderFillRectF(renderer, &rect);
+    Camera_DrawFillRect(camera, rect, 0xDD, 0xDD, 0xDD, 0xFF);
 }

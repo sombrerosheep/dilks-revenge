@@ -32,6 +32,6 @@ int  EntityManager_ClearSmallShips(void);
 Vec2 EntityManager_GetPlayerPosition(void);
 void EntityManager_MovePlayerTo(Vec2 target);
 void EntityManager_Update(float delta);
-void EntityManager_Draw(SDL_Renderer *renderer);
+void EntityManager_Draw(void);
 
 #endif // DREV_ENTITIES_H

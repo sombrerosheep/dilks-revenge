@@ -32,6 +32,6 @@ void      Projectile_Init(Projectile    *p,
                           float          speed_m_sec);
 SDL_FRect Projectile_GetBounds(Projectile *p);
 void      Projectile_Update(Projectile *p, float delta);
-void      Projectile_Draw(const Projectile *p, SDL_Renderer *renderer);
+void      Projectile_Draw(const Projectile *p);
 
 #endif // DREV_PROJECTILE_H

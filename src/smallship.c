@@ -79,17 +79,15 @@ void SmallShip_Update(SmallShip *ship, float delta) {
     ship->position.y += ship->velocity.y * SmallShipSpeed * delta;
 }
 
-void SmallShip_Draw(SmallShip *ship, SDL_Renderer *renderer) {
-    Camera *camera     = ResourceManager_GetMainCamera();
-    Vec2    screen_pos = Camera_WorldToScreen(camera, ship->position);
+void SmallShip_Draw(SmallShip *ship) {
+    Camera *camera = ResourceManager_GetMainCamera();
 
     SDL_FRect rect = {
-        .x = screen_pos.x,
-        .y = screen_pos.y,
-        .w = ship->size.x * PIXELS_PER_METER,
-        .h = ship->size.y * PIXELS_PER_METER,
+        .x = ship->position.x,
+        .y = ship->position.y,
+        .w = ship->size.x,
+        .h = ship->size.y,
     };
 
-    SDL_SetRenderDrawColor(renderer, 0x11, 0x11, 0xCC, 0xFF);
-    SDL_RenderFillRectF(renderer, &rect);
+    Camera_DrawFillRect(camera, rect, 0x11, 0x11, 0xCC, 0xFF);
 }

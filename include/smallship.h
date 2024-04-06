@@ -20,6 +20,6 @@ int       SmallShip_Init(SmallShip *ship);
 SmallShip SmallShip_Create(Vec2 position, Vec2 velocity, float rotation);
 void      SmallShip_MoveTo(SmallShip *ship, Vec2 new_position);
 void      SmallShip_Update(SmallShip *ship, float delta);
-void      SmallShip_Draw(SmallShip *ship, SDL_Renderer *renderer);
+void      SmallShip_Draw(SmallShip *ship);
 
 #endif // DREV_SMALL_SHIP_H

@@ -106,28 +106,28 @@ void EntityManager_Update(float delta) {
     Player_Update(GameEntities.player, delta);
 }
 
-static void EntityManager_DrawProjectiles(SDL_Renderer *renderer) {
+static void EntityManager_DrawProjectiles(void) {
     for (unsigned int i = 0; i < GameEntities.projectiles->capacity; i++) {
         if (GameEntities.projectiles->items[i].in_use == 1) {
-            Projectile_Draw(&GameEntities.projectiles->items[i].data, renderer);
+            Projectile_Draw(&GameEntities.projectiles->items[i].data);
         }
     }
 
     return;
 }
 
-static void EntityManager_DrawSmallShips(SDL_Renderer *renderer) {
+static void EntityManager_DrawSmallShips() {
     for (unsigned int i = 0; i < GameEntities.smallShips->capacity; i++) {
         if (GameEntities.smallShips->items[i].in_use == 1) {
-            SmallShip_Draw(&GameEntities.smallShips->items[i].data, renderer);
+            SmallShip_Draw(&GameEntities.smallShips->items[i].data);
         }
     }
 
     return;
 }
 
-void EntityManager_Draw(SDL_Renderer *renderer) {
-    EntityManager_DrawProjectiles(renderer);
-    EntityManager_DrawSmallShips(renderer);
+void EntityManager_Draw(void) {
+    EntityManager_DrawProjectiles();
+    EntityManager_DrawSmallShips();
     Player_Draw(GameEntities.player);
 }

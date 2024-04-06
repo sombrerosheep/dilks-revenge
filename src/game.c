@@ -32,7 +32,7 @@ static void Game_Draw(Game *game) {
     SDL_SetRenderDrawColor(game->system->renderer, 0x33, 0x33, 0x33, 0xFF);
     SDL_RenderClear(game->system->renderer);
 
-    EntityManager_Draw(game->system->renderer);
+    EntityManager_Draw();
 
     Camera_Draw(&game->state.main_camera, game->system->renderer);
 
