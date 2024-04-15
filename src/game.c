@@ -3,6 +3,7 @@
 #include "camera.h"
 #include "clock.h"
 #include "entities.h"
+#include "font.h"
 #include "game_input.h"
 #include "game_state.h"
 #include "globals.h"
@@ -13,6 +14,9 @@
 #include "wave.h"
 
 #include <stdio.h>
+
+// const char *font_path = "/home/swansong/.local/share/fonts/ProggyVector Regular.ttf";
+const char *font_path = "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf";
 
 struct drev_game {
     System   *system;
@@ -36,17 +40,25 @@ static void Game_Draw(Game *game) {
 
     Camera_Draw(&game->state.main_camera, game->system->renderer);
 
+    Font_DrawText(ResourceManager_GetDebugFont(), "Dilks Revenge", 100.f, 100.f);
+
     SDL_RenderPresent(game->system->renderer);
 }
 
 static void Game_InitState(Game *game, int width, int height) {
-    Player_Init(&game->state.player);
-
+    // Resources
     Camera_Init(&game->state.main_camera, (Vec2){width, height});
     Camera_SetCenter(&game->state.main_camera, Vec2_Zero);
 
-    ResourceManager_Init(&game->state.main_camera, &game->state.controller, game->system->renderer);
+    Font_Load(game->system->renderer, &game->state.debug_font, font_path, 128);
 
+    ResourceManager_Init(&game->state.main_camera,
+                         &game->state.controller,
+                         game->system->renderer,
+                         &game->state.debug_font);
+
+    // Entities
+    Player_Init(&game->state.player);
     EntityManager_Init(&game->state.projectiles, &game->state.smallShips, &game->state.player);
 
     game->state.current_wave.state = WaveStateIdle;
