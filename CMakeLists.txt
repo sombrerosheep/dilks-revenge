@@ -27,6 +27,8 @@ endif(DREV_DRAW_BB)
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
+include_directories("./vendor")
+
 ##### Info output #####
 message(STATUS "")
 message(STATUS "====== ${PROJECT_NAME} (${PROJECT_VERSION}) ======")
