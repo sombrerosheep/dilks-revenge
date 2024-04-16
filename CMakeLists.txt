@@ -18,10 +18,20 @@ set(game_include_dir "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 set(PROCESSOR_ARCH "x64")
 
-OPTION(DREV_DRAW_BB "All Debug options on" OFF)
+OPTION(DREV_DRAW_BB "Draw bounding boxes for objects" OFF)
 if (DREV_DRAW_BB)
   add_compile_definitions(DREV_DRAW_BB)
 endif(DREV_DRAW_BB)
+
+OPTION(DREV_PRINT_FONT_DATA "print font metrics on load" OFF)
+if (DREV_PRINT_FONT_DATA)
+  add_compile_definitions(DREV_PRINT_FONT_DATA)
+endif(DREV_PRINT_FONT_DATA)
+
+OPTION(DREV_SAVE_FONT_BITMAP "saves the font atlas image to disk" OFF)
+if (DREV_SAVE_FONT_BITMAP)
+  add_compile_definitions(DREV_SAVE_FONT_BITMAP)
+endif(DREV_SAVE_FONT_BITMAP)
 
 # Dependencies
 find_package(SDL2 REQUIRED)
@@ -46,7 +56,9 @@ message(STATUS "Dependencies:")
 message(STATUS "  SDL_SOURCE_DIR:       ${SDL2_INCLUDE_DIRS}")
 message(STATUS "")
 message(STATUS "Flags:")
-message(STATUS "  DREV_DRAW_BB:         ${DREV_DRAW_BB}")
+message(STATUS "  DREV_DRAW_BB:           ${DREV_DRAW_BB}")
+message(STATUS "  DREV_PRINT_FONT_DATA:   ${DREV_PRINT_FONT_DATA}")
+message(STATUS "  DREV_SAVE_FONT_BITMAP:  ${DREV_SAVE_FONT_BITMAP}")
 message(STATUS "")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

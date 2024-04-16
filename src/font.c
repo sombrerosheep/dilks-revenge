@@ -1,17 +1,17 @@
 #include "font.h"
 
+#include "file.h"
 #include "resources.h"
 
+#ifdef DREV_SAVE_FONT_BITMAP
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb/stb_image_write.h"
+#endif
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #include "stb/stb_truetype.h"
 
 #include <SDL.h>
-
-#define DREV_PRINT_FONT_DATA  0
-#define DREV_SAVE_FONT_BITMAP 0
 
 static SDL_Color ColorWhite = {0xFF, 0xFF, 0xFF, 0xFF};
 static SDL_Color ColorRed   = {0xFF, 0x0, 0x0, 0xFF};
@@ -48,35 +48,10 @@ static void draw_plus(SDL_Renderer *r, Vec2 p) {
     return;
 }
 
-static unsigned char *read_file_contents(const char *filePath) {
-    SDL_RWops *io = SDL_RWFromFile(filePath, "rb");
-
-    if (io == NULL) {
-        printf("Unable to open file from SD_RWFromFile: %s\n", SDL_GetError());
-        return NULL;
-    }
-
-    SDL_RWseek(io, 0, RW_SEEK_END);
-    Sint64 sz = SDL_RWtell(io);
-    SDL_RWseek(io, 0L, SEEK_SET);
-
-    unsigned char *buffer = SDL_malloc(sizeof(unsigned char) * sz);
-    if (buffer == NULL) {
-        printf("Unable to allocate memory for file: %s\n", filePath);
-        return NULL;
-    }
-
-    SDL_RWread(io, buffer, sizeof(unsigned char), sz);
-
-    SDL_RWclose(io);
-
-    return buffer;
-}
-
 int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, size_t font_sz) {
 #define NUM_GLYPHS 95
 
-    unsigned char *file_data = read_file_contents(fontPath);
+    unsigned char *file_data = ReadEntireFile(fontPath, "rb");
 
     stbtt_packedchar glyph_metrics[NUM_GLYPHS] = {0};
 
@@ -154,34 +129,34 @@ int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, size_t font
     }
     SDL_UpdateTexture(f->texture, NULL, pixels, width * sizeof(Uint32));
 
-    // print font and glyph metrics
-    if (DREV_PRINT_FONT_DATA) {
-        printf("size    %lu:\n", font_sz);
-        printf("ascent  %3d:\n", f->ascent);
-        printf("descent %.3d:\n", f->descent);
-        printf("linegap %.3d:\n", f->linegap);
+// print font and glyph metrics
+#ifdef DREV_PRINT_FONT_DATA
+    printf("size    %lu:\n", font_sz);
+    printf("ascent  %3d:\n", f->ascent);
+    printf("descent %.3d:\n", f->descent);
+    printf("linegap %.3d:\n", f->linegap);
 
-        for (int i = 0; i < NUM_GLYPHS; i++) {
-            stbtt_packedchar m = glyph_metrics[i];
-            printf("    '%c':  (x0,y0) = (%4d,%4d),  (x1,y1) = (%4d,%4d),  (xoff,yoff) = "
-                   "(%+5.1f,%+5.1f),  (xoff2,yoff2) = (%+5.1f,%+5.1f),  xadvance = %.3f\n",
-                   32 + i,
-                   m.x0,
-                   m.y0,
-                   m.x1,
-                   m.y1,
-                   m.xoff,
-                   m.yoff,
-                   m.xoff2,
-                   m.yoff2,
-                   m.xadvance);
-        }
+    for (int i = 0; i < NUM_GLYPHS; i++) {
+        stbtt_packedchar m = glyph_metrics[i];
+        printf("    '%c':  (x0,y0) = (%4d,%4d),  (x1,y1) = (%4d,%4d),  (xoff,yoff) = "
+               "(%+5.1f,%+5.1f),  (xoff2,yoff2) = (%+5.1f,%+5.1f),  xadvance = %.3f\n",
+               32 + i,
+               m.x0,
+               m.y0,
+               m.x1,
+               m.y1,
+               m.xoff,
+               m.yoff,
+               m.xoff2,
+               m.yoff2,
+               m.xadvance);
     }
+#endif
 
-    // Write atlas to a file
-    if (DREV_SAVE_FONT_BITMAP) {
-        stbi_write_png("x1.png", width, height, 1, bitmap, 0);
-    }
+// Write atlas to a file
+#ifdef DREV_SAVE_FONT_BITMAP
+    stbi_write_png("x1.png", width, height, 1, bitmap, 0);
+#endif
 
     SDL_free(file_data);
     SDL_free(bitmap);

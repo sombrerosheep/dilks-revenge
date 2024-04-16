@@ -2,6 +2,13 @@
 - [x] const pointer parameters and when necessary
 - [ ] implement GetBounds for all entities
 - [ ] implement DREV_DRAW_BB for all entities
+- [ ] SDL implementaitons of stdlib things
+- [ ] primitive types names?
+  - typedefs for stdint -> my-types
+  - uint32_t u32
+  - int64_t  i64
+  - float    f32
+  - double   f64
 
 ## core I
 - [x] game clock
@@ -20,12 +27,10 @@
 
 ## core IV
 - [ ] texture
-  - stores pixel buffer
-  - how to not let this alloc?
-  - user provides buffer?
+  - use SDL_Texture
 
 ## fonts I
-- [ ] load and use font
+- [x] load and use font
   - store as a single texture atlas
 
 ## entities I
@@ -66,7 +71,7 @@
 ## waves I
 - [x] select a waves direction (up/down/left/righ)
 - [x] get group of enemies (Sequenced or seeded?)
-- [ ] enter as a group (offscreen) stopping at a specific place on-screen
+- [/] enter as a group (offscreen) stopping at a specific place on-screen
 - [ ] wave done when all enemies are dead
 - [ ] player moved to 0,0 then camera pans, then wave starts
   - is this responsibility of the level?
