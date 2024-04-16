@@ -25,4 +25,17 @@ float ease(float have, float want, float ease);
         CONCAT(Contained, T) items[S];                                 \
     }
 
+// SDL helpers
+
+#include <SDL.h>
+
+extern SDL_Color ColorWhite;
+extern SDL_Color ColorRed;
+extern SDL_Color ColorGreen;
+extern SDL_Color ColorBlue;
+extern SDL_Color ColorCyan;
+
+void SetTextureColorMod(SDL_Texture *texture, SDL_Color color);
+void SetRenderDrawColor(SDL_Renderer *renderer, SDL_Color color);
+
 #endif // DREV_UTIL_H

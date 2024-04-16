@@ -29,3 +29,17 @@ float ease(float have, float want, float ease) {
 
     return result;
 }
+
+SDL_Color ColorWhite = {0xFF, 0xFF, 0xFF, 0xFF};
+SDL_Color ColorRed   = {0xFF, 0x0, 0x0, 0xFF};
+SDL_Color ColorGreen = {0x0, 0xFF, 0x0, 0xFF};
+SDL_Color ColorBlue  = {0x0, 0x0, 0xFF, 0xFF};
+SDL_Color ColorCyan  = {0x0, 0xFF, 0xFF, 0xFF};
+
+void SetTextureColorMod(SDL_Texture *texture, SDL_Color color) {
+    SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
+}
+
+void SetRenderDrawColor(SDL_Renderer *renderer, SDL_Color color) {
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+}

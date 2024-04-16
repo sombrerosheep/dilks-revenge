@@ -2,6 +2,7 @@
 
 #include "file.h"
 #include "resources.h"
+#include "util.h"
 
 #ifdef DREV_SAVE_FONT_BITMAP
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -12,20 +13,6 @@
 #include "stb/stb_truetype.h"
 
 #include <SDL.h>
-
-static SDL_Color ColorWhite = {0xFF, 0xFF, 0xFF, 0xFF};
-static SDL_Color ColorRed   = {0xFF, 0x0, 0x0, 0xFF};
-static SDL_Color ColorGreen = {0x0, 0xFF, 0x0, 0xFF};
-static SDL_Color ColorBlue  = {0x0, 0x0, 0xFF, 0xFF};
-static SDL_Color ColorCyan  = {0x0, 0xFF, 0xFF, 0xFF};
-
-static void SDLext_SetTextureColorMod(SDL_Texture *texture, SDL_Color color) {
-    SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
-}
-
-static void SDLext_SetRenderDrawColor(SDL_Renderer *renderer, SDL_Color color) {
-    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-}
 
 static void draw_plus(SDL_Renderer *r, Vec2 p) {
     Vec2 v1, v2;
@@ -41,7 +28,7 @@ static void draw_plus(SDL_Renderer *r, Vec2 p) {
     h2.x = p.x + 10.f;
     h2.y = p.y;
 
-    SDLext_SetRenderDrawColor(r, ColorCyan);
+    SetRenderDrawColor(r, ColorCyan);
     SDL_RenderDrawLineF(r, v1.x, v1.y, v2.x, v2.y);
     SDL_RenderDrawLineF(r, h1.x, h1.y, h2.x, h2.y);
 
@@ -174,13 +161,11 @@ void Font_DrawText(Font *f, const char *text, float x, float y) {
     for (size_t i = 0; i < len; i++) {
         int color = i % 3;
         if (color == 0) {
-            SDLext_SetTextureColorMod(f->texture, ColorRed);
-
+            SetTextureColorMod(f->texture, ColorRed);
         } else if (color == 1) {
-            SDLext_SetTextureColorMod(f->texture, ColorGreen);
-
+            SetTextureColorMod(f->texture, ColorGreen);
         } else {
-            SDLext_SetTextureColorMod(f->texture, ColorBlue);
+            SetTextureColorMod(f->texture, ColorBlue);
         }
 
         char  c = text[i];
@@ -204,7 +189,7 @@ void Font_DrawText(Font *f, const char *text, float x, float y) {
             .h = g.height,
         };
 
-        SDLext_SetRenderDrawColor(renderer, ColorRed);
+        SetRenderDrawColor(renderer, ColorRed);
         SDL_RenderDrawRectF(renderer, &dst_rect);
 
         SDL_RenderCopyF(renderer, f->texture, &src_rect, &dst_rect);
@@ -215,15 +200,15 @@ void Font_DrawText(Font *f, const char *text, float x, float y) {
         }
     }
 
-    SDLext_SetTextureColorMod(f->texture, ColorWhite);
+    SetTextureColorMod(f->texture, ColorWhite);
 
 #ifdef DREV_DRAW_BB
     // Draw the baseline
-    SDLext_SetRenderDrawColor(renderer, ColorGreen);
+    SetRenderDrawColor(renderer, ColorGreen);
     SDL_RenderDrawLine(renderer, x, baseline, current_point + f->font_px_sz, baseline);
 
     // bounding box for the entire message
-    SDLext_SetRenderDrawColor(renderer, ColorRed);
+    SetRenderDrawColor(renderer, ColorRed);
     SDL_Rect text_bb = (SDL_Rect){
         .x = x,
         .y = y,

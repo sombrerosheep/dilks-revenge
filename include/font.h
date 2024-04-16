@@ -18,20 +18,16 @@ struct drev_glyph {
     unsigned short height;   // y1 - y0
     float          offset_x; // xoff
     float          offset_y; // yoff font->ascent - abs(yoff)
-    float xadvance; // offset from current horizontal position to the next horizontal position
-    int   lsb;
+    float          xadvance;
+    int            lsb;
 
-    /*
-      original fields from stbtt_packedchar
-      unsigned short x0, y0, x1, y1; // coordinates of bbox in bitmap
-      float xadvance;                // amount to advance the current point from one character to
-                                     // the next
-      float xoff, yoff;              // bb_x1 && bb_y1 from GetCodepointBitmapBox.
-                                     // offsets from the baseline to render a glyph
-      xoff2, yoff2;                  // bb_x2 && bb_y2 from GetCodepointBitmapBox
-                                     // not sure what these are for
-
-    */
+    // original fields from stbtt_packedchar
+    // unsigned short x0, y0, x1, y1; // coordinates of bbox in bitmap
+    // float          xadvance;
+    // float xoff, yoff;   // bb_x1 && bb_y1 from GetCodepointBitmapBox.
+    //                     // offsets from the baseline to render a glyph
+    // float xoff2, yoff2; // bb_x2 && bb_y2 from GetCodepointBitmapBox
+    //                     // not sure what these are for
 };
 
 struct drev_font {
