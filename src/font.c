@@ -14,27 +14,6 @@
 
 #include <SDL.h>
 
-static void draw_plus(SDL_Renderer *r, Vec2 p) {
-    Vec2 v1, v2;
-    Vec2 h1, h2;
-
-    v1.x = p.x;
-    v1.y = p.y - 10.f;
-    v2.x = p.x;
-    v2.y = p.y + 10.f;
-
-    h1.x = p.x - 10.f;
-    h1.y = p.y;
-    h2.x = p.x + 10.f;
-    h2.y = p.y;
-
-    SetRenderDrawColor(r, ColorCyan);
-    SDL_RenderDrawLineF(r, v1.x, v1.y, v2.x, v2.y);
-    SDL_RenderDrawLineF(r, h1.x, h1.y, h2.x, h2.y);
-
-    return;
-}
-
 int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, size_t font_sz) {
 #define NUM_GLYPHS 95
 
@@ -159,15 +138,6 @@ void Font_DrawText(Font *f, const char *text, float x, float y) {
 
     size_t len = SDL_strlen(text);
     for (size_t i = 0; i < len; i++) {
-        int color = i % 3;
-        if (color == 0) {
-            SetTextureColorMod(f->texture, ColorRed);
-        } else if (color == 1) {
-            SetTextureColorMod(f->texture, ColorGreen);
-        } else {
-            SetTextureColorMod(f->texture, ColorBlue);
-        }
-
         char  c = text[i];
         Glyph g = f->glyphs[c - CHAR_START];
         if (c == ' ') {
@@ -189,20 +159,22 @@ void Font_DrawText(Font *f, const char *text, float x, float y) {
             .h = g.height,
         };
 
+#ifdef DREV_DRAW_TEXT_BB
+        // Draw each characters bounding box and current_point X baseline
         SetRenderDrawColor(renderer, ColorRed);
         SDL_RenderDrawRectF(renderer, &dst_rect);
 
-        SDL_RenderCopyF(renderer, f->texture, &src_rect, &dst_rect);
         draw_plus(renderer, (Vec2){.x = current_point, .y = baseline});
+#endif
+
+        SDL_RenderCopyF(renderer, f->texture, &src_rect, &dst_rect);
 
         if (i != len - 1) {
             current_point += g.xadvance;
         }
     }
 
-    SetTextureColorMod(f->texture, ColorWhite);
-
-#ifdef DREV_DRAW_BB
+#ifdef DREV_DRAW_TEXT_BB
     // Draw the baseline
     SetRenderDrawColor(renderer, ColorGreen);
     SDL_RenderDrawLine(renderer, x, baseline, current_point + f->font_px_sz, baseline);

@@ -33,6 +33,11 @@ if (DREV_SAVE_FONT_BITMAP)
   add_compile_definitions(DREV_SAVE_FONT_BITMAP)
 endif(DREV_SAVE_FONT_BITMAP)
 
+OPTION(DREV_DRAW_TEXT_BB "draws bounding box for characters and text" OFF)
+if (DREV_DRAW_TEXT_BB)
+  add_compile_definitions(DREV_DRAW_TEXT_BB)
+endif(DREV_DRAW_TEXT_BB)
+
 # Dependencies
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})

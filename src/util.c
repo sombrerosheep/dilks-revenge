@@ -43,3 +43,24 @@ void SetTextureColorMod(SDL_Texture *texture, SDL_Color color) {
 void SetRenderDrawColor(SDL_Renderer *renderer, SDL_Color color) {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
+
+void draw_plus(SDL_Renderer *r, Vec2 p) {
+    Vec2 v1, v2;
+    Vec2 h1, h2;
+
+    v1.x = p.x;
+    v1.y = p.y - 10.f;
+    v2.x = p.x;
+    v2.y = p.y + 10.f;
+
+    h1.x = p.x - 10.f;
+    h1.y = p.y;
+    h2.x = p.x + 10.f;
+    h2.y = p.y;
+
+    SetRenderDrawColor(r, ColorCyan);
+    SDL_RenderDrawLineF(r, v1.x, v1.y, v2.x, v2.y);
+    SDL_RenderDrawLineF(r, h1.x, h1.y, h2.x, h2.y);
+
+    return;
+}
