@@ -40,17 +40,9 @@ Vec2      Camera_ScreenToWorldF(const Camera *cam, float x, float y);
 SDL_FRect Camera_GetBounds(const Camera *cam);
 
 // all coordinates for draw functions should be in world coordinates.
-void Camera_DrawFillRect(const Camera *cam, SDL_FRect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-void Camera_DrawRect(const Camera *cam, SDL_FRect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-void Camera_DrawLine(const Camera *cam,
-                     float         x1,
-                     float         y1,
-                     float         x2,
-                     float         y2,
-                     Uint8         r,
-                     Uint8         g,
-                     Uint8         b,
-                     Uint8         a);
+void Camera_DrawFillRect(const Camera *cam, SDL_FRect rect, SDL_Color color);
+void Camera_DrawRect(const Camera *cam, SDL_FRect rect, SDL_Color color);
+void Camera_DrawLine(const Camera *cam, float x1, float y1, float x2, float y2, SDL_Color color);
 
 void Camera_Draw(const Camera *camera, SDL_Renderer *renderer);
 void Camera_Destroy(Camera *camera);

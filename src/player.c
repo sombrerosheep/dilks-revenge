@@ -133,7 +133,8 @@ void Player_Update(Player *p, float delta) {
 }
 
 void Player_Draw(const Player *p) {
-    Camera *camera = ResourceManager_GetMainCamera();
+    Camera   *camera       = ResourceManager_GetMainCamera();
+    SDL_Color player_color = {.r = 0xAA, .g = 0x11, .b = 0x11, .a = 0xFF};
 
     Vec2 aim_point = (Vec2){
         .x = (p->aim.x * AIM_RADIUS) + p->position.x,
@@ -148,12 +149,12 @@ void Player_Draw(const Player *p) {
         .h = p->size.y,
     };
 
-    Camera_DrawFillRect(camera, rect, 0xAA, 0x11, 0x11, 0xFF);
+    Camera_DrawFillRect(camera, rect, player_color);
 
     // draw the crosshair box
     rect.x = aim_point.x;
     rect.y = aim_point.y;
     rect.w = 1.f;
     rect.h = 1.f;
-    Camera_DrawFillRect(camera, rect, 0xAA, 0x11, 0x11, 0xFF);
+    Camera_DrawFillRect(camera, rect, player_color);
 }

@@ -48,7 +48,7 @@
 - [x] integrate input/controller
 
 ## resources III
-- [ ] integrate fonts
+- [x] integrate fonts
 
 ## resources IV
 - [ ] integrate images

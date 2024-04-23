@@ -122,25 +122,21 @@ static SDL_FRect Camera_WorldRectToScreen(const Camera *cam, SDL_FRect rect) {
     return rect;
 }
 
-void Camera_DrawFillRect(const Camera *cam, SDL_FRect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+void Camera_DrawFillRect(const Camera *cam, SDL_FRect rect, SDL_Color color) {
     SDL_Renderer *renderer = ResourceManager_GetRenderer();
 
     SDL_FRect rrect = Camera_WorldRectToScreen(cam, rect);
 
-    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderFillRectF(renderer, &rrect);
 }
 
-void Camera_DrawRectC(const Camera *cam, SDL_FRect rect, SDL_Color color) {
-    Camera_DrawRect(cam, rect, color.r, color.g, color.b, color.a);
-}
-
-void Camera_DrawRect(const Camera *cam, SDL_FRect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+void Camera_DrawRect(const Camera *cam, SDL_FRect rect, SDL_Color color) {
     SDL_Renderer *renderer = ResourceManager_GetRenderer();
 
     SDL_FRect rrect = Camera_WorldRectToScreen(cam, rect);
 
-    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderDrawRectF(renderer, &rrect);
 }
 
@@ -149,17 +145,14 @@ void Camera_DrawLine(const Camera *cam,
                      float         y1,
                      float         x2,
                      float         y2,
-                     Uint8         r,
-                     Uint8         g,
-                     Uint8         b,
-                     Uint8         a //
+                     SDL_Color     color //
 ) {
     SDL_Renderer *renderer = ResourceManager_GetRenderer();
 
     Vec2 start = Camera_WorldToScreenF(cam, x1, y1);
     Vec2 end   = Camera_WorldToScreenF(cam, x2, y2);
 
-    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderDrawLine(renderer, start.x, start.y, end.x, end.y);
 }
 
@@ -175,14 +168,14 @@ void Camera_Draw(const Camera *camera, SDL_Renderer *renderer) {
         .w = camera->half_size.x * 2.f,
         .h = camera->half_size.y * 2.f,
     };
-    Camera_DrawRectC(camera, rect, ColorRed);
+    Camera_DrawRect(camera, rect, ColorRed);
 
     // draw current camera bounds
     // DrawRectC assumes center origin
     rect.x = camera->position.x + camera->half_size.x;
     rect.y = camera->position.y + camera->half_size.y;
 
-    Camera_DrawRectC(camera, rect, ColorGreen);
+    Camera_DrawRect(camera, rect, ColorGreen);
 
     // draw center crosshair
     SetRenderDrawColor(renderer, ColorRed);

@@ -35,6 +35,12 @@ void Projectile_Update(Projectile *p, float delta) {
 }
 
 void Projectile_Draw(const Projectile *p) {
+    SDL_Color projectile_color = {
+        .r = 0xDD,
+        .g = 0xDD,
+        .b = 0xDD,
+        .a = 0xFF,
+    };
     Camera *camera = ResourceManager_GetMainCamera();
 
     SDL_FRect rect = (SDL_FRect){
@@ -44,5 +50,5 @@ void Projectile_Draw(const Projectile *p) {
         .h = p->size.y,
     };
 
-    Camera_DrawFillRect(camera, rect, 0xDD, 0xDD, 0xDD, 0xFF);
+    Camera_DrawFillRect(camera, rect, projectile_color);
 }

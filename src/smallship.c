@@ -78,7 +78,8 @@ void SmallShip_Update(SmallShip *ship, float delta) {
 }
 
 void SmallShip_Draw(SmallShip *ship) {
-    Camera *camera = ResourceManager_GetMainCamera();
+    Camera   *camera           = ResourceManager_GetMainCamera();
+    SDL_Color small_ship_color = {.r = 0x11, .g = 0x11, .b = 0xCC, .a = 0xAA};
 
     SDL_FRect rect = {
         .x = ship->position.x,
@@ -87,5 +88,5 @@ void SmallShip_Draw(SmallShip *ship) {
         .h = ship->size.y,
     };
 
-    Camera_DrawFillRect(camera, rect, 0x11, 0x11, 0xCC, 0xFF);
+    Camera_DrawFillRect(camera, rect, small_ship_color);
 }
