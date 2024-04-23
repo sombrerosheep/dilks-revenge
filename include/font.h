@@ -38,7 +38,7 @@ struct drev_font {
     float        scale;
 };
 
-int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, size_t font_sz);
+int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, float sz);
 
 void Font_DrawText(Font *f, const char *text, float x, float y);
 

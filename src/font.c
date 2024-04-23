@@ -1,6 +1,7 @@
 #include "font.h"
 
 #include "file.h"
+#include "globals.h"
 #include "resources.h"
 #include "util.h"
 
@@ -14,9 +15,10 @@
 
 #include <SDL.h>
 
-int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, size_t font_sz) {
+int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, float sz) {
 #define NUM_GLYPHS 95
 
+    size_t         font_sz   = (size_t)SDL_floorf(sz * PIXELS_PER_UNIT);
     unsigned char *file_data = ReadEntireFile(fontPath, "rb");
 
     stbtt_packedchar glyph_metrics[NUM_GLYPHS] = {0};

@@ -52,9 +52,7 @@ static void Game_InitState(Game *game, int width, int height) {
     Camera_Init(&game->state.main_camera, UNITS_HEIGHT, (float)width / (float)height);
     Camera_SetCenter(&game->state.main_camera, Vec2_Zero);
 
-    // font_sz is in px size. for scaling this would need to be units...
-    // then there's the awkward camera-has-px-conversion stuff
-    Font_Load(game->system->renderer, &game->state.debug_font, font_path, 24);
+    Font_Load(game->system->renderer, &game->state.debug_font, font_path, 3.75);
 
     ResourceManager_Init(&game->state.main_camera,
                          &game->state.controller,
