@@ -1,7 +1,6 @@
 #include "vec.h"
 
 #include <SDL.h>
-#include <math.h>
 
 float Vec2_Magnitude(Vec2 vec) {
     float x2, y2, mag;
@@ -9,7 +8,7 @@ float Vec2_Magnitude(Vec2 vec) {
     x2 = vec.x * vec.x;
     y2 = vec.y * vec.y;
 
-    mag = sqrtf(x2 + y2);
+    mag = SDL_sqrtf(x2 + y2);
 
     return mag;
 }

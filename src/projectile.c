@@ -4,7 +4,6 @@
 #include "globals.h"
 #include "resources.h"
 #include "vec.h"
-#include <SDL_rect.h>
 
 void Projectile_Init(Projectile    *p,
                      ProjectileType type,

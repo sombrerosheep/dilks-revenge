@@ -1,10 +1,10 @@
 #include "entities.h"
+
 #include "camera.h"
 #include "player.h"
 #include "projectile.h"
 #include "resources.h"
 #include "smallship.h"
-#include <SDL_rect.h>
 
 static EntityManager GameEntities;
 

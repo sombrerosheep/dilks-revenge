@@ -72,6 +72,7 @@
 - [x] select a waves direction (up/down/left/righ)
 - [x] get group of enemies (Sequenced or seeded?)
 - [/] enter as a group (offscreen) stopping at a specific place on-screen
+- [ ] as closer enemies are killed, move a further enemy to the vacan spot
 - [ ] wave done when all enemies are dead
 - [ ] player moved to 0,0 then camera pans, then wave starts
   - is this responsibility of the level?

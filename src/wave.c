@@ -1,10 +1,7 @@
 #include "wave.h"
-#include "camera.h"
-#include "entities.h"
+
 #include "globals.h"
 #include "resources.h"
-#include "smallship.h"
-#include "vec.h"
 
 #define DREV_PI 3.14
 
@@ -37,59 +34,64 @@ struct wave_grid {
 const unsigned int max_cols_top_bottom = 8;
 const unsigned int max_cols_left_right = 5;
 
-static unsigned int get_grid_columns(CameraFocus direction) {
-    if (direction == CameraFocusTop || direction == CameraFocusBottom) {
-        return max_cols_top_bottom;
-    }
+// static unsigned int get_grid_columns(CameraFocus direction) {
+//     if (direction == CameraFocusTop || direction == CameraFocusBottom) {
+//         return max_cols_top_bottom;
+//     }
 
-    return max_cols_left_right;
-}
+//     return max_cols_left_right;
+// }
 
 static struct wave_grid make_wave_grid(Wave w) {
     struct wave_grid grid;
-    float            padding_percent = 0.1;
-    Camera          *camera          = ResourceManager_GetMainCamera();
-    SDL_FRect        cam_box         = Camera_GetBounds(camera);
-
-    // todo: cam_box is world position
-    //       cam_size is in pixels, not units
-    //       bounds needs to have units and pixels
-    // todo: make this not matter anymore. everything in units?
-    //       camera and renderer do this; texture determines pixels?
-    unsigned int dir_width =
-        (w.wave_direction == CameraFocusTop || w.wave_direction == CameraFocusBottom) ? cam_box.w
-                                                                                      : cam_box.h;
-    float padding = (float)dir_width * padding_percent;
-
-    grid.width   = (float)dir_width - (padding * 2.f);
-    grid.rows    = 2;
-    grid.columns = get_grid_columns(w.wave_direction);
-    grid.spacing = grid.width / (float)(grid.columns - 1);
 
     switch (w.wave_direction) {
         case CameraFocusTop:
-            grid.start   = (Vec2){.x = -(grid.width / 2.f), .y = -(cam_box.h / 2.f - 10.f)};
-            grid.row_dir = Vec2_Right;
+            grid.width   = 240.f;
+            grid.rows    = 2;
+            grid.columns = 10;
+            grid.spacing = grid.width / ((float)grid.columns - 1.f);
+            grid.start   = (Vec2){.x = -120.f, .y = -100.f};
             grid.col_dir = Vec2_Up;
+            grid.row_dir = Vec2_Right;
             break;
         case CameraFocusBottom:
-            grid.start   = (Vec2){.x = (grid.width / 2.f), .y = (cam_box.h / 2.f) - 60.f};
-            grid.row_dir = Vec2_Right;
+            grid.width   = 240.f;
+            grid.rows    = 2;
+            grid.columns = 10;
+            grid.spacing = grid.width / ((float)grid.columns - 1.f);
+            grid.start   = (Vec2){.x = 120.f, .y = 100.f};
             grid.col_dir = Vec2_Down;
+            grid.row_dir = Vec2_Right;
             break;
         case CameraFocusLeft:
-            grid.start   = (Vec2){.x = -(cam_box.w / 2.f) + 10.f, .y = (grid.width / 2.f)};
-            grid.row_dir = Vec2_Up;
+            grid.width   = 135.f;
+            grid.rows    = 2;
+            grid.columns = 10;
+            grid.spacing = grid.width / ((float)grid.columns - 1.f);
+            grid.start   = (Vec2){.x = -165.f, .y = 65.f};
             grid.col_dir = Vec2_Left;
+            grid.row_dir = Vec2_Up;
             break;
         case CameraFocusRight:
-            grid.start   = (Vec2){.x = (cam_box.w / 2.f) - 60.f, .y = (grid.width / 2.f)};
-            grid.row_dir = Vec2_Up;
+            grid.width   = 135.f;
+            grid.rows    = 2;
+            grid.columns = 10;
+            grid.spacing = grid.width / ((float)grid.columns - 1.f);
+            grid.start   = (Vec2){.x = 165.f, .y = 65.f};
             grid.col_dir = Vec2_Right;
+            grid.row_dir = Vec2_Up;
             break;
         default:
             grid.start = Vec2_Zero;
     }
+
+    // printf("making grid: %s...\n\twidth: %.2f\n\trows: %.2d\n\tcolumns: %.2d\n\tspacing: %.2f\n",
+    //        CameraFocusLabels[w.wave_direction],
+    //        grid.width,
+    //        grid.rows,
+    //        grid.columns,
+    //        grid.spacing);
 
     return grid;
 }
@@ -100,12 +102,16 @@ Wave Wave_New(CameraFocus direction) {
         .wave_direction = direction,
         .num_rows       = 2,
     };
-    const float row_spacing     = 100.f;
-    const float travel_distance = 350.f;
+    const float row_spacing     = 10.f;
+    const float travel_distance = 65.f;
 
     Wave_ClearSmallShips(&w);
 
     struct wave_grid grid = make_wave_grid(w);
+    // printf("grid for wave %s\n", CameraFocusLabels[w.wave_direction]);
+    // printf("\twidth: %.2f\n", grid.width);
+    // printf("\tstart: %.2f x %.2f\n", grid.start.x, grid.start.y);
+    // printf("\tspacing: %.2f\n", grid.spacing);
 
     switch (w.wave_direction) {
         case CameraFocusTop: {
@@ -115,7 +121,7 @@ Wave Wave_New(CameraFocus direction) {
                         .x = grid.start.x + (grid.spacing * col),
                         .y = grid.start.y + (row_spacing * row),
                     };
-                    Vec2 player_desired_pos = {.x = 0.f, .y = pos.y * -1.f};
+                    Vec2 player_desired_pos = {.x = 0.f, .y = pos.y * -1.f - 60.f};
                     Vec2 start_at           = {.x = pos.x, .y = pos.y - travel_distance};
 
                     SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
@@ -133,8 +139,8 @@ Wave Wave_New(CameraFocus direction) {
                         .x = grid.start.x - (grid.spacing * col),
                         .y = grid.start.y - (row_spacing * row),
                     };
+                    Vec2 player_desired_pos = {.x = 0.f, .y = pos.y * -1.f + 60.f};
                     Vec2 start_at           = {.x = pos.x, .y = pos.y + travel_distance};
-                    Vec2 player_desired_pos = {.x = 0.f, .y = pos.y * -1.f};
 
                     SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
@@ -151,7 +157,7 @@ Wave Wave_New(CameraFocus direction) {
                         .x = grid.start.x + (row_spacing * row),
                         .y = grid.start.y - (grid.spacing * col),
                     };
-                    Vec2 player_desired_pos = {.x = pos.x * -1.f, .y = 0.f};
+                    Vec2 player_desired_pos = {.x = pos.x * -1.f - 60.f, .y = 0.f};
                     Vec2 start_at           = {.x = pos.x - travel_distance, .y = pos.y};
 
                     SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
@@ -169,10 +175,7 @@ Wave Wave_New(CameraFocus direction) {
                         .x = grid.start.x - (row_spacing * row),
                         .y = grid.start.y - (grid.spacing * col),
                     };
-                    // todo: The player never gets to the desired position
-                    //       is pos.x * -1.f not where I think?
-                    //       the direction seems fine but stopping point must be off
-                    Vec2 player_desired_pos = {.x = pos.x * -1.f, .y = 0.f};
+                    Vec2 player_desired_pos = {.x = pos.x * -1.f + 60.f, .y = 0.f};
                     Vec2 start_at           = {.x = pos.x + travel_distance, .y = pos.y};
 
                     SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
@@ -206,10 +209,6 @@ void Wave_Start(Wave *wave) {
 
 void Wave_Update(Wave *wave) {
     UNUSED(wave);
-
-    // check each small ships position
-    // if they've reached their limit
-    // set velocities to Vec2_Zero
 }
 
 void Wave_Clean(Wave *wave) {
@@ -219,6 +218,8 @@ void Wave_Clean(Wave *wave) {
 
     EntityManager_ClearSmallShips();
 
+    // Does this need to track pointers or do we expose the container
+    // from the enity manager?
     for (int i = 0; i < MaxSmallShips; i++) {
         wave->ships[i] = NULL;
     }

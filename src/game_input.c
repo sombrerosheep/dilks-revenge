@@ -15,10 +15,10 @@ int Controller_Init(GameInput *controller) {
 
 void Controller_Update(GameInput *controller, System *sys) {
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
-    int          mouse_x, mouse_y, ww, wh, rw, rh;
+    int          mouse_x, mouse_y, win_w, win_h, render_w, render_h;
     Uint32       mouse_state = SDL_GetMouseState(&mouse_x, &mouse_y);
-    SDL_GetWindowSize(sys->window, &ww, &wh);
-    SDL_RenderGetLogicalSize(sys->renderer, &rw, &rh);
+    SDL_GetWindowSize(sys->window, &win_w, &win_h);
+    SDL_RenderGetLogicalSize(sys->renderer, &render_w, &render_h);
 
     controller->up    = keys[SDL_GetScancodeFromKey(SDLK_w)];
     controller->left  = keys[SDL_GetScancodeFromKey(SDLK_a)];
@@ -26,8 +26,9 @@ void Controller_Update(GameInput *controller, System *sys) {
     controller->right = keys[SDL_GetScancodeFromKey(SDLK_d)];
     controller->space = keys[SDL_GetScancodeFromKey(SDLK_SPACE)];
 
-    controller->mouse_x    = (float)mouse_x / (float)ww * (float)rw;
-    controller->mouse_y    = (float)mouse_y / (float)wh * (float)rh;
+    // todo: should be in world pos
+    controller->mouse_x    = (float)mouse_x / (float)win_w * (float)render_w;
+    controller->mouse_y    = (float)mouse_y / (float)win_h * (float)render_h;
     controller->mouse_left = mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT);
 
     return;

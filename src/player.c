@@ -10,7 +10,7 @@
 #include "vec.h"
 
 #define PLAYER_INIT_HEALTH        100.f
-#define AIM_RADIUS                75.f
+#define AIM_RADIUS                15.f
 #define PLAYER_PROJECTILE_SPEED   900.f
 #define PLAYER_FIRE_RATE          0.5f
 #define PlayerMeterPerSecond      125.f
@@ -48,13 +48,13 @@ static void Player_Shoot(Vec2 pos, Vec2 vel) {
 void Player_Update(Player *p, float delta) {
     Camera          *camera     = ResourceManager_GetMainCamera();
     const GameInput *controller = ResourceManager_GetController();
-    float            speed      = PlayerMeterPerSecond * PIXELS_PER_METER;
-    float            decay      = PlayerDecayMeterPerSecond * PIXELS_PER_METER;
+    float            speed      = PlayerMeterPerSecond;
+    float            decay      = PlayerDecayMeterPerSecond;
 
     if (p->being_moved == 1) {
-        const float speed = 185.f;
-        p->position.x     = ease(p->position.x, p->target_position.x, delta * speed);
-        p->position.y     = ease(p->position.y, p->target_position.y, delta * speed);
+        const float ease_speed = PlayerMeterPerSecond;
+        p->position.x          = ease(p->position.x, p->target_position.x, delta * ease_speed);
+        p->position.y          = ease(p->position.y, p->target_position.y, delta * ease_speed);
 
         const float close_enough = 0.01f;
         if (SDL_fabsf(p->position.x - p->target_position.x) < close_enough &&
@@ -118,22 +118,17 @@ void Player_Update(Player *p, float delta) {
         }
     }
 
-    // Constrain player
-    SDL_FRect cam_bounds    = Camera_GetBounds(camera);
-    float     w_pixels      = p->size.x * PIXELS_PER_METER;
-    float     half_w_pixels = w_pixels / 2.f;
-    float     h_pixels      = p->size.y * PIXELS_PER_METER;
-    float     half_h_pixels = h_pixels / 2.f;
+    SDL_FRect cam_bounds = Camera_GetBounds(camera);
 
-    if (p->position.x - half_w_pixels < cam_bounds.x) {
-        p->position.x = cam_bounds.x + half_w_pixels;
-    } else if (p->position.x + half_w_pixels > cam_bounds.x + cam_bounds.w) {
-        p->position.x = cam_bounds.x + cam_bounds.w - half_w_pixels;
+    if (p->position.x < cam_bounds.x) {
+        p->position.x = cam_bounds.x;
+    } else if (p->position.x > cam_bounds.x + cam_bounds.w) {
+        p->position.x = cam_bounds.x + cam_bounds.w;
     }
-    if (p->position.y - half_h_pixels < cam_bounds.y) {
-        p->position.y = cam_bounds.y + half_w_pixels;
-    } else if (p->position.y + half_h_pixels > cam_bounds.y + cam_bounds.h) {
-        p->position.y = cam_bounds.y + cam_bounds.h - half_h_pixels;
+    if (p->position.y < cam_bounds.y) {
+        p->position.y = cam_bounds.y;
+    } else if (p->position.y > cam_bounds.y + cam_bounds.h) {
+        p->position.y = cam_bounds.y + cam_bounds.h;
     }
 }
 

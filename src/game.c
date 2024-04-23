@@ -2,6 +2,7 @@
 
 #include "camera.h"
 #include "clock.h"
+#include "debug.h"
 #include "entities.h"
 #include "font.h"
 #include "game_input.h"
@@ -15,8 +16,9 @@
 
 #include <stdio.h>
 
-// const char *font_path = "/home/swansong/.local/share/fonts/ProggyVector Regular.ttf";
-const char *font_path = "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf";
+const char *font_path = "/home/swansong/.local/share/fonts/ProggyVector Regular.ttf";
+
+// const char *font_path = "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf";
 
 struct drev_game {
     System   *system;
@@ -40,17 +42,19 @@ static void Game_Draw(Game *game) {
 
     Camera_Draw(&game->state.main_camera, game->system->renderer);
 
-    Font_DrawText(ResourceManager_GetDebugFont(), "Dilks Revenge", 100.f, 100.f);
+    Debug_Draw();
 
     SDL_RenderPresent(game->system->renderer);
 }
 
 static void Game_InitState(Game *game, int width, int height) {
     // Resources
-    Camera_Init(&game->state.main_camera, (Vec2){width, height});
+    Camera_Init(&game->state.main_camera, UNITS_HEIGHT, (float)width / (float)height);
     Camera_SetCenter(&game->state.main_camera, Vec2_Zero);
 
-    Font_Load(game->system->renderer, &game->state.debug_font, font_path, 128);
+    // font_sz is in px size. for scaling this would need to be units...
+    // then there's the awkward camera-has-px-conversion stuff
+    Font_Load(game->system->renderer, &game->state.debug_font, font_path, 24);
 
     ResourceManager_Init(&game->state.main_camera,
                          &game->state.controller,
@@ -99,7 +103,7 @@ void Game_Run(Game *g) {
                 running = 0;
             }
 
-            if (event.type == SDL_KEYDOWN) {
+            if (event.type == SDL_KEYUP) {
                 if ( //
                     event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_UP) ||
                     event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_DOWN) ||

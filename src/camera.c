@@ -4,13 +4,20 @@
 #include "resources.h"
 #include "util.h"
 #include "vec.h"
-#include <SDL_render.h>
 
-#define FOCUS_OFFSET 200.f
+#define FOCUS_OFFSET 35.f
 
-int Camera_Init(Camera *camera, Vec2 size) {
-    camera->half_size.x = size.x / 2.f;
-    camera->half_size.y = size.y / 2.f;
+const char *CameraFocusLabels[CameraFocusCount] = {
+    [CameraFocusCenter] = "CameraFocusCenter",
+    [CameraFocusTop]    = "CameraFocusTop",
+    [CameraFocusBottom] = "CameraFocusBottom",
+    [CameraFocusRight]  = "CameraFocusRight",
+    [CameraFocusLeft]   = "CameraFocusLeft",
+};
+
+int Camera_Init(Camera *camera, float unit_height, float ratio) {
+    camera->half_size.y = unit_height / 2.f;
+    camera->half_size.x = unit_height * ratio / 2.f;
 
     Camera_SetCenter(camera, Vec2_Zero);
     camera->position = camera->target_position;
@@ -41,9 +48,19 @@ void Camera_SetFocus(Camera *camera, CameraFocus focus) {
     Camera_SetCenter(camera, center);
 }
 
+// camera position should be in top-left origin
 void Camera_SetCenter(Camera *camera, Vec2 center) {
     camera->target_position.x = center.x - camera->half_size.x;
     camera->target_position.y = center.y - camera->half_size.y;
+}
+
+Vec2 Camera_WorldToScreenF(const Camera *cam, float x, float y) {
+    Vec2 screen = (Vec2){
+        .x = (x - cam->position.x) * PIXELS_PER_UNIT,
+        .y = (y - cam->position.y) * PIXELS_PER_UNIT,
+    };
+
+    return screen;
 }
 
 Vec2 Camera_WorldToScreen(const Camera *cam, Vec2 pos) {
@@ -52,13 +69,13 @@ Vec2 Camera_WorldToScreen(const Camera *cam, Vec2 pos) {
     return screen;
 }
 
-Vec2 Camera_WorldToScreenF(const Camera *cam, float x, float y) {
-    Vec2 screen = (Vec2){
-        .x = x - cam->position.x,
-        .y = y - cam->position.y,
+Vec2 Camera_ScreenToWorldF(const Camera *cam, float x, float y) {
+    Vec2 world = (Vec2){
+        .x = (x / PIXELS_PER_UNIT) + cam->position.x,
+        .y = (y / PIXELS_PER_UNIT) + cam->position.y,
     };
 
-    return screen;
+    return world;
 }
 
 Vec2 Camera_ScreenToWorld(const Camera *cam, Vec2 pos) {
@@ -67,17 +84,8 @@ Vec2 Camera_ScreenToWorld(const Camera *cam, Vec2 pos) {
     return world;
 }
 
-Vec2 Camera_ScreenToWorldF(const Camera *cam, float x, float y) {
-    Vec2 world = (Vec2){
-        .x = x + cam->position.x,
-        .y = y + cam->position.y,
-    };
-
-    return world;
-}
-
+// Camera bounds in world position
 SDL_FRect Camera_GetBounds(const Camera *cam) {
-    // bounds h/w is in pixels, should it be units?
     SDL_FRect rect = (SDL_FRect){
         .x = cam->position.x,
         .y = cam->position.y,
@@ -88,53 +96,63 @@ SDL_FRect Camera_GetBounds(const Camera *cam) {
     return rect;
 }
 
-void Camera_DrawFillRect(Camera *cam, SDL_FRect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-    SDL_Renderer *renderer = ResourceManager_GetRenderer();
+///
+/// @brief returns a screen-pixel dimensioned version of the provided rect
+///        rect is assumed center-origin
+///        x and y will be top-left origin dimensions
+///        width and height will be in pixels
+///
+/// @param cam
+/// @param rect
+/// @return SDL_FRect
+///
+static SDL_FRect Camera_WorldRectToScreen(const Camera *cam, SDL_FRect rect) {
+    Vec2 screen_pos = Camera_WorldToScreenF( //
+        cam,
+        rect.x - (rect.w / 2.f),
+        rect.y - (rect.h / 2.f) //
+    );
 
-    // Eventually PPM will come from a texture/sprite to be drawn
-    float w_pixels  = rect.w * PIXELS_PER_METER;
-    float h_pixels  = rect.h * PIXELS_PER_METER;
-    float half_w_px = w_pixels / 2.f;
-    float half_h_px = h_pixels / 2.f;
+    // Eventually PPU will come from a texture/sprite to be drawn
+    rect.x = screen_pos.x;
+    rect.y = screen_pos.y;
+    rect.w = rect.w * PIXELS_PER_UNIT;
+    rect.h = rect.h * PIXELS_PER_UNIT;
 
-    Vec2 screen_pos = Camera_WorldToScreenF(cam, rect.x, rect.y);
-    rect.x          = screen_pos.x - half_h_px;
-    rect.y          = screen_pos.y - half_w_px;
-    rect.w          = w_pixels;
-    rect.h          = h_pixels;
-
-    SDL_SetRenderDrawColor(renderer, r, g, b, a);
-    SDL_RenderFillRectF(renderer, &rect);
+    return rect;
 }
 
-void Camera_DrawRect(Camera *cam, SDL_FRect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+void Camera_DrawFillRect(const Camera *cam, SDL_FRect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
     SDL_Renderer *renderer = ResourceManager_GetRenderer();
 
-    // Eventually PPM will come from a texture/sprite to be drawn
-    float w_pixels  = rect.w * PIXELS_PER_METER;
-    float h_pixels  = rect.y * PIXELS_PER_METER;
-    float half_w_px = w_pixels / 2.f;
-    float half_h_px = h_pixels / 2.f;
-
-    Vec2 screen_pos = Camera_WorldToScreenF(cam, rect.x, rect.y);
-    rect.x          = screen_pos.x - half_h_px;
-    rect.y          = screen_pos.y - half_w_px;
-    rect.w          = w_pixels;
-    rect.h          = h_pixels;
+    SDL_FRect rrect = Camera_WorldRectToScreen(cam, rect);
 
     SDL_SetRenderDrawColor(renderer, r, g, b, a);
-    SDL_RenderDrawRectF(renderer, &rect);
+    SDL_RenderFillRectF(renderer, &rrect);
 }
 
-void Camera_DrawLine(Camera *cam,
-                     float   x1,
-                     float   y1,
-                     float   x2,
-                     float   y2,
-                     Uint8   r,
-                     Uint8   g,
-                     Uint8   b,
-                     Uint8   a //
+void Camera_DrawRectC(const Camera *cam, SDL_FRect rect, SDL_Color color) {
+    Camera_DrawRect(cam, rect, color.r, color.g, color.b, color.a);
+}
+
+void Camera_DrawRect(const Camera *cam, SDL_FRect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+    SDL_Renderer *renderer = ResourceManager_GetRenderer();
+
+    SDL_FRect rrect = Camera_WorldRectToScreen(cam, rect);
+
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    SDL_RenderDrawRectF(renderer, &rrect);
+}
+
+void Camera_DrawLine(const Camera *cam,
+                     float         x1,
+                     float         y1,
+                     float         x2,
+                     float         y2,
+                     Uint8         r,
+                     Uint8         g,
+                     Uint8         b,
+                     Uint8         a //
 ) {
     SDL_Renderer *renderer = ResourceManager_GetRenderer();
 
@@ -149,10 +167,7 @@ void Camera_Draw(const Camera *camera, SDL_Renderer *renderer) {
     UNUSED(camera);
     UNUSED(renderer);
 
-    // tell the renderer to present the screen
-
 #if DREV_DRAW_BB
-    // todo: hardcoded bounding box
     // draw center bounds
     SDL_FRect rect = {
         .x = 0.f,
@@ -160,43 +175,20 @@ void Camera_Draw(const Camera *camera, SDL_Renderer *renderer) {
         .w = camera->half_size.x * 2.f,
         .h = camera->half_size.y * 2.f,
     };
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0x0, 0x0, 0xFF);
-    SDL_RenderDrawRectF(renderer, &rect);
+    Camera_DrawRectC(camera, rect, ColorRed);
 
-    // draw current bounds
-    Vec2 current_pos = Camera_ScreenToWorldF( //
-        camera,
-        0.f + camera->half_size.x,
-        0.f + camera->half_size.y);
+    // draw current camera bounds
+    // DrawRectC assumes center origin
+    rect.x = camera->position.x + camera->half_size.x;
+    rect.y = camera->position.y + camera->half_size.y;
 
-    rect.x = current_pos.x;
-    rect.y = current_pos.y;
-
-    SDL_SetRenderDrawColor(renderer, 0x0, 0xFF, 0x0, 0xFF);
-    SDL_RenderDrawRectF(renderer, &rect);
+    Camera_DrawRectC(camera, rect, ColorGreen);
 
     // draw center crosshair
-    const float extra = 500.f;
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0x0, 0x0, 0xFF);
-    Vec2 vert_start = (Vec2){
-        .x = camera->half_size.x,
-        .y = -extra,
-    };
-    Vec2 vert_end = (Vec2){
-        .x = camera->half_size.x,
-        .y = camera->half_size.y * 2.f + extra,
-    };
-    Vec2 hor_start = (Vec2){
-        .x = -extra,
-        .y = camera->half_size.y,
-    };
-    Vec2 hor_end = (Vec2){
-        .x = camera->half_size.x * 2.f + extra,
-        .y = camera->half_size.y,
-    };
-
-    SDL_RenderDrawLineF(renderer, vert_start.x, vert_start.y, vert_end.x, vert_end.y);
-    SDL_RenderDrawLineF(renderer, hor_start.x, hor_start.y, hor_end.x, hor_end.y);
+    SetRenderDrawColor(renderer, ColorRed);
+    draw_plus(renderer,
+              (Vec2){.x = camera->half_size.x * PIXELS_PER_UNIT,
+                     .y = camera->half_size.y * PIXELS_PER_UNIT});
 #endif
 }
 

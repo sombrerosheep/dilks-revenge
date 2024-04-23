@@ -1,27 +1,24 @@
 #include "smallship.h"
 
-#include "camera.h"
 #include "entities.h"
-#include "globals.h"
 #include "projectile.h"
 #include "random.h"
 #include "resources.h"
-#include "vec.h"
-#include <SDL_stdinc.h>
 
-#define FIRE_RATE_MIN    1.f
-#define FIRE_RATE_MAX    3.5f
-#define SHIP_SIZE_METERS 6.f
+#define FIRE_RATE_MIN   1.f
+#define FIRE_RATE_MAX   3.5f
+#define SHIP_SIZE_UNITS 6.f
 
 #define ENEMY_PROJECTILE_SPEED 450.f
 #define SmallShipSpeed         125.f
 
 int SmallShip_Init(SmallShip *ship) {
-    ship->position      = Vec2_Zero;
-    ship->size          = Vec2_Newf(SHIP_SIZE_METERS);
-    ship->velocity      = Vec2_Zero;
-    ship->rotation      = 0.f;
-    ship->fire_cooldown = random_getf_between(FIRE_RATE_MIN, FIRE_RATE_MAX);
+    ship->position        = Vec2_Zero;
+    ship->target_position = Vec2_Zero;
+    ship->size            = Vec2_Newf(SHIP_SIZE_UNITS);
+    ship->velocity        = Vec2_Zero;
+    ship->rotation        = 0.f;
+    ship->fire_cooldown   = random_getf_between(FIRE_RATE_MIN, FIRE_RATE_MAX);
 
     return 0;
 }
@@ -31,9 +28,10 @@ SmallShip SmallShip_Create(Vec2 position, Vec2 velocity, float rotation) {
 
     SmallShip_Init(&ship);
 
-    ship.position = position;
-    ship.velocity = Vec2_Normalize(velocity);
-    ship.rotation = rotation;
+    ship.position        = position;
+    ship.target_position = position;
+    ship.velocity        = Vec2_Normalize(velocity);
+    ship.rotation        = rotation;
 
     return ship;
 }
@@ -50,9 +48,9 @@ static void SmallShip_Shoot(Vec2 pos, Vec2 vel) {
 
 void SmallShip_Update(SmallShip *ship, float delta) {
     if (Vec2_Equal(ship->position, ship->target_position) == 0) {
-        const float speed = 185.f;
-        ship->position.x  = ease(ship->position.x, ship->target_position.x, delta * speed);
-        ship->position.y  = ease(ship->position.y, ship->target_position.y, delta * speed);
+        float speed      = SmallShipSpeed;
+        ship->position.x = ease(ship->position.x, ship->target_position.x, delta * speed);
+        ship->position.y = ease(ship->position.y, ship->target_position.y, delta * speed);
 
         const float close_enough = 0.01f;
         if (SDL_fabsf(ship->position.x - ship->target_position.x) < close_enough &&
