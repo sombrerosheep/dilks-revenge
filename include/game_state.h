@@ -6,6 +6,7 @@
 #include "font.h"
 #include "game_input.h"
 #include "player.h"
+#include "system.h"
 #include "wave.h"
 
 typedef struct drev_game_state GameState;
@@ -16,6 +17,7 @@ struct drev_game_state {
     GameInput controller;
     Wave      current_wave;
     Font      debug_font;
+    SysConfig sys_config;
 
     // Entities
     Player              player;

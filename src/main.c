@@ -25,8 +25,9 @@ int main(void) {
         return -1;
     }
 
-    System_Init(&sys, "Dilks Revenge", WINDOW_WIDTH, WINDOW_HEIGHT, GAME_WIDTH, GAME_HEIGHT);
-    Game *dr_game = Game_Create(&sys, GAME_WIDTH, GAME_HEIGHT);
+    SysConfig sys_config = SysConfig_FHD;
+    System_Init(&sys, "Dilks Revenge", sys_config);
+    Game *dr_game = Game_Create(&sys, sys_config);
 
     Game_Run(dr_game);
 

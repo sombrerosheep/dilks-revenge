@@ -2,6 +2,7 @@
 
 #include "globals.h"
 #include "resources.h"
+#include "system.h"
 #include "util.h"
 #include "vec.h"
 
@@ -55,9 +56,10 @@ void Camera_SetCenter(Camera *camera, Vec2 center) {
 }
 
 Vec2 Camera_WorldToScreenF(const Camera *cam, float x, float y) {
-    Vec2 screen = (Vec2){
-        .x = (x - cam->position.x) * PIXELS_PER_UNIT,
-        .y = (y - cam->position.y) * PIXELS_PER_UNIT,
+    const SysConfig *config = ResourceManager_GetSysConfig();
+    Vec2             screen = (Vec2){
+                    .x = (x - cam->position.x) * config->ppu,
+                    .y = (y - cam->position.y) * config->ppu,
     };
 
     return screen;
@@ -70,9 +72,10 @@ Vec2 Camera_WorldToScreen(const Camera *cam, Vec2 pos) {
 }
 
 Vec2 Camera_ScreenToWorldF(const Camera *cam, float x, float y) {
-    Vec2 world = (Vec2){
-        .x = (x / PIXELS_PER_UNIT) + cam->position.x,
-        .y = (y / PIXELS_PER_UNIT) + cam->position.y,
+    const SysConfig *config = ResourceManager_GetSysConfig();
+    Vec2             world  = (Vec2){
+                     .x = (x / config->ppu) + cam->position.x,
+                     .y = (y / config->ppu) + cam->position.y,
     };
 
     return world;
@@ -107,7 +110,8 @@ SDL_FRect Camera_GetBounds(const Camera *cam) {
 /// @return SDL_FRect
 ///
 static SDL_FRect Camera_WorldRectToScreen(const Camera *cam, SDL_FRect rect) {
-    Vec2 screen_pos = Camera_WorldToScreenF( //
+    const SysConfig *config     = ResourceManager_GetSysConfig();
+    Vec2             screen_pos = Camera_WorldToScreenF( //
         cam,
         rect.x - (rect.w / 2.f),
         rect.y - (rect.h / 2.f) //
@@ -116,8 +120,8 @@ static SDL_FRect Camera_WorldRectToScreen(const Camera *cam, SDL_FRect rect) {
     // Eventually PPU will come from a texture/sprite to be drawn
     rect.x = screen_pos.x;
     rect.y = screen_pos.y;
-    rect.w = rect.w * PIXELS_PER_UNIT;
-    rect.h = rect.h * PIXELS_PER_UNIT;
+    rect.w = rect.w * config->ppu;
+    rect.h = rect.h * config->ppu;
 
     return rect;
 }
@@ -161,6 +165,8 @@ void Camera_Draw(const Camera *camera, SDL_Renderer *renderer) {
     UNUSED(renderer);
 
 #if DREV_DRAW_BB
+    const SysConfig *config = ResourceManager_GetSysConfig();
+
     // draw center bounds
     SDL_FRect rect = {
         .x = 0.f,
@@ -180,8 +186,10 @@ void Camera_Draw(const Camera *camera, SDL_Renderer *renderer) {
     // draw center crosshair
     SetRenderDrawColor(renderer, ColorRed);
     draw_plus(renderer,
-              (Vec2){.x = camera->half_size.x * PIXELS_PER_UNIT,
-                     .y = camera->half_size.y * PIXELS_PER_UNIT});
+              (Vec2){
+                  .x = camera->half_size.x * config->ppu,
+                  .y = camera->half_size.y * config->ppu,
+              });
 #endif
 }
 

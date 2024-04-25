@@ -61,19 +61,5 @@ void Debug_Draw(void) {
 
     next_line();
 
-    // this should match camera_screen
-    Vec2 cam_bounds_to_screen = Camera_WorldToScreenF(cam, bounds.x, bounds.y);
-    SDL_assert(cam_bounds_to_screen.x == camera_screen.x);
-    SDL_assert(cam_bounds_to_screen.y == camera_screen.y);
-
-    snprintf(buffer,
-             TEXT_BUFFER_LEN,
-             "CameraPixelBounds: %.2f x %.2f (%.2f x %.2f)\n",
-             cam_bounds_to_screen.x,
-             cam_bounds_to_screen.y,
-             bounds.w * PIXELS_PER_UNIT,
-             bounds.h * PIXELS_PER_UNIT);
-    Font_DrawText(debug, buffer, x, y);
-
     return;
 }
