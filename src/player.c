@@ -11,7 +11,7 @@
 
 #define PLAYER_INIT_HEALTH        100.f
 #define AIM_RADIUS                15.f
-#define PLAYER_PROJECTILE_SPEED   900.f
+#define PLAYER_PROJECTILE_SPEED   400.f
 #define PLAYER_FIRE_RATE          0.5f
 #define PlayerMeterPerSecond      125.f
 #define PlayerDecayMeterPerSecond ((PlayerMeterPerSecond) / .5f)
