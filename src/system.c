@@ -56,6 +56,8 @@ int System_Init(System *sys, char *title, SysConfig config) {
         return -1;
     }
 
+    sys->config = config;
+
     SDL_RenderSetLogicalSize(sys->renderer, config.render_width, config.render_height);
 
     return 0;

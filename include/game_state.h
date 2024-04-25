@@ -17,7 +17,6 @@ struct drev_game_state {
     GameInput controller;
     Wave      current_wave;
     Font      debug_font;
-    SysConfig sys_config;
 
     // Entities
     Player              player;

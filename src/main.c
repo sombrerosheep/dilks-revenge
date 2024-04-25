@@ -27,7 +27,7 @@ int main(void) {
 
     SysConfig sys_config = SysConfig_FHD;
     System_Init(&sys, "Dilks Revenge", sys_config);
-    Game *dr_game = Game_Create(&sys, sys_config);
+    Game *dr_game = Game_Create(&sys);
 
     Game_Run(dr_game);
 

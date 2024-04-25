@@ -5,7 +5,7 @@
 
 typedef struct drev_game Game;
 
-Game *Game_Create(System *system, SysConfig config);
+Game *Game_Create(System *system);
 void  Game_Run(Game *g);
 
 void Game_Destroy(Game *g);

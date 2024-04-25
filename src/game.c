@@ -48,22 +48,19 @@ static void Game_Draw(Game *game) {
     SDL_RenderPresent(game->system->renderer);
 }
 
-static void Game_InitState(Game *game, SysConfig config) {
-    // config
-    game->state.sys_config = config;
-
+static void Game_InitState(Game *game, System *sys) {
     // Resources
-    float ratio      = (float)config.window_width / config.window_height;
-    float units_high = (float)config.window_height / config.ppu;
+    float ratio      = (float)sys->config.window_width / sys->config.window_height;
+    float units_high = (float)sys->config.window_height / sys->config.ppu;
     Camera_Init(&game->state.main_camera, units_high, ratio);
     Camera_SetCenter(&game->state.main_camera, Vec2_Zero);
 
-    Font_Load(game->system->renderer, &game->state.debug_font, font_path, 3.75 * config.ppu);
+    Font_Load(game->system->renderer, &game->state.debug_font, font_path, 3.75 * sys->config.ppu);
 
     ResourceManager_Init(&game->state.main_camera,
                          &game->state.controller,
                          game->system->renderer,
-                         &game->state.sys_config,
+                         &sys->config,
                          &game->state.debug_font);
 
     // Entities
@@ -73,7 +70,7 @@ static void Game_InitState(Game *game, SysConfig config) {
     game->state.current_wave.state = WaveStateIdle;
 }
 
-Game *Game_Create(System *sys, SysConfig config) {
+Game *Game_Create(System *sys) {
     random_init(42);
     Game *g = NULL;
 
@@ -90,7 +87,7 @@ Game *Game_Create(System *sys, SysConfig config) {
 
     g->system = sys;
 
-    Game_InitState(g, config);
+    Game_InitState(g, sys);
 
     return g;
 }

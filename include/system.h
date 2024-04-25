@@ -23,6 +23,7 @@ extern SysConfig SysConfig_8k;
 struct drev_system {
     SDL_Window   *window;
     SDL_Renderer *renderer;
+    SysConfig     config;
 };
 
 int  System_Init(System *sys, char *title, SysConfig config);
