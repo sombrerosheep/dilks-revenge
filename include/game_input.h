@@ -12,8 +12,10 @@ struct drev_controller {
     unsigned int right;
     unsigned int space;
     unsigned int mouse_left;
-    float        mouse_x;
-    float        mouse_y;
+    float        mouse_world_x;
+    float        mouse_world_y;
+    float        mouse_screen_x;
+    float        mouse_screen_y;
 };
 
 int Controller_Init(GameInput *controller);

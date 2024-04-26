@@ -95,11 +95,9 @@ void Player_Update(Player *p, float delta) {
         p->position.x += p->velocity.x * delta;
         p->position.y += p->velocity.y * delta;
 
-        Vec2 mouse_world = Camera_ScreenToWorldF(camera, controller->mouse_x, controller->mouse_y);
-
         p->aim = (Vec2){
-            mouse_world.x - p->position.x,
-            mouse_world.y - p->position.y,
+            controller->mouse_world_x - p->position.x,
+            controller->mouse_world_y - p->position.y,
         };
         p->aim = Vec2_Normalize(p->aim);
 

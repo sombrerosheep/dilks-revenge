@@ -1,5 +1,9 @@
 #include "game_input.h"
 
+#include "camera.h"
+#include "resources.h"
+#include "vec.h"
+
 #include <SDL.h>
 
 int Controller_Init(GameInput *controller) {
@@ -26,10 +30,14 @@ void Controller_Update(GameInput *controller, System *sys) {
     controller->right = keys[SDL_GetScancodeFromKey(SDLK_d)];
     controller->space = keys[SDL_GetScancodeFromKey(SDLK_SPACE)];
 
-    // todo: should be in world pos
-    controller->mouse_x    = (float)mouse_x / (float)win_w * (float)render_w;
-    controller->mouse_y    = (float)mouse_y / (float)win_h * (float)render_h;
-    controller->mouse_left = mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT);
+    controller->mouse_screen_x = (float)mouse_x / (float)win_w * (float)render_w;
+    controller->mouse_screen_y = (float)mouse_y / (float)win_h * (float)render_h;
+    Vec2 mouse_world           = Camera_ScreenToWorldF(ResourceManager_GetMainCamera(),
+                                             controller->mouse_screen_x,
+                                             controller->mouse_screen_y);
+    controller->mouse_world_x  = mouse_world.x;
+    controller->mouse_world_y  = mouse_world.y;
+    controller->mouse_left     = mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT);
 
     return;
 }
