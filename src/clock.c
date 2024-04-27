@@ -1,7 +1,6 @@
 #include "clock.h"
 
 #include <SDL.h>
-#include <stdio.h>
 
 int Clock_Init(Clock *clock) {
     clock->start = SDL_GetTicks();

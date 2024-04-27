@@ -187,7 +187,7 @@ Wave Wave_New(CameraFocus direction) {
             break;
         };
         default:
-            printf("Wave direction not yet implemented\n");
+            SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "Wave direction not yet implemented\n");
     }
 
     return w;
@@ -196,9 +196,10 @@ Wave Wave_New(CameraFocus direction) {
 void Wave_Start(Wave *wave) {
     // can only transition to start from init
     if (wave->state != WaveStateInit) {
-        printf("Can't transition wave from %s to %s\n",
-               WaveStateLabels[wave->state],
-               WaveStateLabels[WaveStateRunning]);
+        SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION,
+                    "Can't transition wave from %s to %s\n",
+                    WaveStateLabels[wave->state],
+                    WaveStateLabels[WaveStateRunning]);
         return;
     }
 

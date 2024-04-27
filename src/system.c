@@ -1,7 +1,5 @@
 #include "system.h"
 
-#include <stdio.h>
-
 SysConfig SysConfig_HD = {
     .window_height = 720,
     .window_width  = 1280,
@@ -45,13 +43,13 @@ int System_Init(System *sys, char *title, SysConfig config) {
                                         config.window_width,
                                         config.window_height,
                                         SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)) == NULL) {
-        printf("ERROR :: Unable to allocate memory for window. SDL Error: %s\n", SDL_GetError());
+        SDL_Log("ERROR :: Unable to allocate memory for window. SDL Error: %s\n", SDL_GetError());
         System_Destroy(sys);
         return -1;
     }
 
     if ((sys->renderer = SDL_CreateRenderer(sys->window, -1, SDL_RENDERER_ACCELERATED)) == NULL) {
-        printf("ERROR :: Unable to allocate memory for renderer. SDL Error: %s\n", SDL_GetError());
+        SDL_Log("ERROR :: Unable to allocate memory for renderer. SDL Error: %s\n", SDL_GetError());
         System_Destroy(sys);
         return -1;
     }

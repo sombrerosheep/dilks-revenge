@@ -15,8 +15,6 @@
 #include "vec.h"
 #include "wave.h"
 
-#include <stdio.h>
-
 const char *font_path = "/home/swansong/.local/share/fonts/ProggyVector Regular.ttf";
 
 // const char *font_path = "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf";
@@ -75,12 +73,12 @@ Game *Game_Create(System *sys) {
     Game *g = NULL;
 
     if ((g = malloc(sizeof(Game))) == NULL) {
-        printf("ERROR :: Unable to allocate memory for Game\n");
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "ERROR :: Unable to allocate memory for Game\n");
         return NULL;
     }
 
     if (Controller_Init(&g->state.controller) != 0) {
-        printf("ERROR :: Unable to initialize controller\n");
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "ERROR :: Unable to initialize controller\n");
         Game_Destroy(g);
         return NULL;
     }

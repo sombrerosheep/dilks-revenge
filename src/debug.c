@@ -28,35 +28,35 @@ void Debug_Draw(void) {
 
     char buffer[TEXT_BUFFER_LEN] = {0};
 
-    snprintf(buffer,
-             TEXT_BUFFER_LEN,
-             "Camera: %.2f x %.2f (%.2f x %.2f)",
-             camera_pos.x,
-             camera_pos.y,
-             camera_screen.x,
-             camera_screen.y);
+    SDL_snprintf(buffer,
+                 TEXT_BUFFER_LEN,
+                 "Camera: %.2f x %.2f (%.2f x %.2f)",
+                 camera_pos.x,
+                 camera_pos.y,
+                 camera_screen.x,
+                 camera_screen.y);
     Font_DrawText(debug, buffer, x, y);
 
     y += Font_GetLineAdvance(debug);
 
-    snprintf(buffer,
-             TEXT_BUFFER_LEN,
-             "Player: %.2f x %.2f (%.2f x %.2f)",
-             player_pos.x,
-             player_pos.y,
-             player_screen.x,
-             player_screen.y);
+    SDL_snprintf(buffer,
+                 TEXT_BUFFER_LEN,
+                 "Player: %.2f x %.2f (%.2f x %.2f)",
+                 player_pos.x,
+                 player_pos.y,
+                 player_screen.x,
+                 player_screen.y);
     Font_DrawText(debug, buffer, x, y);
 
     y += Font_GetLineAdvance(debug);
 
-    snprintf(buffer,
-             TEXT_BUFFER_LEN,
-             "CameraUnitBounds: %.2f x %.2f (%.2f x %.2f)\n",
-             bounds.x,
-             bounds.y,
-             bounds.w,
-             bounds.h);
+    SDL_snprintf(buffer,
+                 TEXT_BUFFER_LEN,
+                 "CameraUnitBounds: %.2f x %.2f (%.2f x %.2f)\n",
+                 bounds.x,
+                 bounds.y,
+                 bounds.w,
+                 bounds.h);
     Font_DrawText(debug, buffer, x, y);
 
     y += Font_GetLineAdvance(debug);

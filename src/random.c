@@ -19,7 +19,7 @@ void random_init(int seed) {
     srand(seed);
 }
 
-int random_get() {
+int random_get(void) {
     int num;
 
     num = rand();
@@ -27,7 +27,7 @@ int random_get() {
     return num;
 }
 
-float random_getf() {
+float random_getf(void) {
     int   num;
     float res;
 

@@ -6,7 +6,9 @@ unsigned char *ReadEntireFile(const char *filePath, const char *mode) {
     SDL_RWops *io = SDL_RWFromFile(filePath, mode);
 
     if (io == NULL) {
-        printf("Unable to open file from SD_RWFromFile: %s\n", SDL_GetError());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+                     "Unable to open file from SD_RWFromFile: %s\n",
+                     SDL_GetError());
         return NULL;
     }
 
@@ -16,7 +18,9 @@ unsigned char *ReadEntireFile(const char *filePath, const char *mode) {
 
     unsigned char *buffer = SDL_malloc(sizeof(unsigned char) * sz);
     if (buffer == NULL) {
-        printf("Unable to allocate memory for file: %s\n", filePath);
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+                     "Unable to allocate memory for file: %s\n",
+                     filePath);
         return NULL;
     }
 

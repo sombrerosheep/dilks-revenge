@@ -41,7 +41,7 @@ int Entities_AddProjectile(Projectile p) {
         }
     }
 
-    printf("Unable to insert projectile...\n");
+    SDL_LogError(SDL_LOG_PRIORITY_WARN, "Unable to insert projectile...\n");
     return -1;
 }
 
