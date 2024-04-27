@@ -41,7 +41,7 @@ void Projectile_Draw(const Projectile *p) {
         .b = 0xDD,
         .a = 0xFF,
     };
-    Camera *camera = ResourceManager_GetMainCamera();
+    Camera *camera = Resources_GetMainCamera();
 
     SDL_FRect rect = (SDL_FRect){
         .x = p->position.x,

@@ -126,8 +126,8 @@ Wave Wave_New(CameraFocus direction) {
 
                     SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
-                    EntityManager_InsertSmallShip(ship);
-                    EntityManager_MovePlayerTo(player_desired_pos);
+                    Entities_InsertSmallShip(ship);
+                    Entities_MovePlayerTo(player_desired_pos);
                 }
             }
             break;
@@ -144,8 +144,8 @@ Wave Wave_New(CameraFocus direction) {
 
                     SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
-                    EntityManager_InsertSmallShip(ship);
-                    EntityManager_MovePlayerTo(player_desired_pos);
+                    Entities_InsertSmallShip(ship);
+                    Entities_MovePlayerTo(player_desired_pos);
                 }
             }
             break;
@@ -162,8 +162,8 @@ Wave Wave_New(CameraFocus direction) {
 
                     SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
-                    EntityManager_InsertSmallShip(ship);
-                    EntityManager_MovePlayerTo(player_desired_pos);
+                    Entities_InsertSmallShip(ship);
+                    Entities_MovePlayerTo(player_desired_pos);
                 }
             }
             break;
@@ -180,8 +180,8 @@ Wave Wave_New(CameraFocus direction) {
 
                     SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
-                    EntityManager_InsertSmallShip(ship);
-                    EntityManager_MovePlayerTo(player_desired_pos);
+                    Entities_InsertSmallShip(ship);
+                    Entities_MovePlayerTo(player_desired_pos);
                 }
             }
             break;
@@ -202,7 +202,7 @@ void Wave_Start(Wave *wave) {
         return;
     }
 
-    Camera *camera = ResourceManager_GetMainCamera();
+    Camera *camera = Resources_GetMainCamera();
     Camera_SetFocus(camera, wave->wave_direction);
     wave->state = WaveStateRunning;
 }
@@ -216,7 +216,7 @@ void Wave_Clean(Wave *wave) {
     wave->state          = WaveStateIdle;
     wave->num_rows       = 0;
 
-    EntityManager_ClearSmallShips();
+    Entities_ClearSmallShips();
 
     // Does this need to track pointers or do we expose the container
     // from the enity manager?

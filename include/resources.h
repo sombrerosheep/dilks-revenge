@@ -18,18 +18,18 @@ struct drev_resources {
     SysConfig    *sys_config;
 };
 
-void ResourceManager_Init(Camera       *camera,
-                          GameInput    *controller,
-                          SDL_Renderer *renderer,
-                          SysConfig    *sys_config,
-                          Font         *debug_font);
+void Resources_Init(Camera       *camera,
+                    GameInput    *controller,
+                    SDL_Renderer *renderer,
+                    SysConfig    *sys_config,
+                    Font         *debug_font);
 
-Camera          *ResourceManager_GetMainCamera(void);
-const GameInput *ResourceManager_GetController(void);
-SDL_Renderer    *ResourceManager_GetRenderer(void);
-Font            *ResourceManager_GetDebugFont(void);
-const SysConfig *ResourceManager_GetSysConfig(void);
+Camera          *Resources_GetMainCamera(void);
+const GameInput *Resources_GetController(void);
+SDL_Renderer    *Resources_GetRenderer(void);
+Font            *Resources_GetDebugFont(void);
+const SysConfig *Resources_GetSysConfig(void);
 
-void ResourceManager_Destroy(void);
+void Resources_Destroy(void);
 
 #endif // DREV_RESOURCES_H

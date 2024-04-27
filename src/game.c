@@ -32,14 +32,14 @@ static void Game_Update(Game *game, Frame delta) {
 
     Wave_Update(&game->state.current_wave);
 
-    EntityManager_Update(delta.sec);
+    Entities_Update(delta.sec);
 }
 
 static void Game_Draw(Game *game) {
     SDL_SetRenderDrawColor(game->system->renderer, 0x33, 0x33, 0x33, 0xFF);
     SDL_RenderClear(game->system->renderer);
 
-    EntityManager_Draw();
+    Entities_Draw();
 
     Camera_Draw(&game->state.main_camera, game->system->renderer);
 
@@ -57,15 +57,15 @@ static void Game_InitState(Game *game, System *sys) {
 
     Font_Load(game->system->renderer, &game->state.debug_font, font_path, 3.75 * sys->config.ppu);
 
-    ResourceManager_Init(&game->state.main_camera,
-                         &game->state.controller,
-                         game->system->renderer,
-                         &sys->config,
-                         &game->state.debug_font);
+    Resources_Init(&game->state.main_camera,
+                   &game->state.controller,
+                   game->system->renderer,
+                   &sys->config,
+                   &game->state.debug_font);
 
     // Entities
     Player_Init(&game->state.player);
-    EntityManager_Init(&game->state.projectiles, &game->state.smallShips, &game->state.player);
+    Entities_Init(&game->state.projectiles, &game->state.smallShips, &game->state.player);
 
     game->state.current_wave.state = WaveStateIdle;
 }
@@ -128,7 +128,7 @@ void Game_Run(Game *g) {
                     } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_c)) {
                         Wave_Clean(&g->state.current_wave);
                         Camera_SetFocus(&g->state.main_camera, CameraFocusCenter);
-                        EntityManager_MovePlayerTo(Vec2_Zero);
+                        Entities_MovePlayerTo(Vec2_Zero);
                     }
 
                     Wave_Start(&g->state.current_wave);

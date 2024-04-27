@@ -32,7 +32,7 @@ void Controller_Update(GameInput *controller, System *sys) {
 
     controller->mouse_screen_x = (float)mouse_x / (float)win_w * (float)render_w;
     controller->mouse_screen_y = (float)mouse_y / (float)win_h * (float)render_h;
-    Vec2 mouse_world           = Camera_ScreenToWorldF(ResourceManager_GetMainCamera(),
+    Vec2 mouse_world           = Camera_ScreenToWorldF(Resources_GetMainCamera(),
                                              controller->mouse_screen_x,
                                              controller->mouse_screen_y);
     controller->mouse_world_x  = mouse_world.x;

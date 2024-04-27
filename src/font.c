@@ -135,7 +135,7 @@ void Font_DrawText(Font *f, const char *text, float x, float y) {
     float current_point = x;
     // Keeps y as the top-left origin moving the baseline down the ascent
     float         baseline = y + f->ascent; // so the origin is top-left
-    SDL_Renderer *renderer = ResourceManager_GetRenderer();
+    SDL_Renderer *renderer = Resources_GetRenderer();
 
     size_t len = SDL_strlen(text);
     for (size_t i = 0; i < len; i++) {

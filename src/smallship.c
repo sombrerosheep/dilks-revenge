@@ -43,7 +43,7 @@ void SmallShip_MoveTo(SmallShip *ship, Vec2 new_position) {
 static void SmallShip_Shoot(Vec2 pos, Vec2 vel) {
     Projectile p;
     Projectile_Init(&p, ProjectileType_Enemy, pos, vel, ENEMY_PROJECTILE_SPEED);
-    EntityManager_AddProjectile(p);
+    Entities_AddProjectile(p);
 }
 
 void SmallShip_Update(SmallShip *ship, float delta) {
@@ -61,7 +61,7 @@ void SmallShip_Update(SmallShip *ship, float delta) {
         ship->fire_cooldown -= delta;
 
         if (ship->fire_cooldown < 0.f) {
-            Vec2 playerPos = EntityManager_GetPlayerPosition();
+            Vec2 playerPos = Entities_GetPlayerPosition();
             Vec2 aim       = {
                       .x = playerPos.x - ship->position.x,
                       .y = playerPos.y - ship->position.y,
@@ -78,7 +78,7 @@ void SmallShip_Update(SmallShip *ship, float delta) {
 }
 
 void SmallShip_Draw(SmallShip *ship) {
-    Camera   *camera           = ResourceManager_GetMainCamera();
+    Camera   *camera           = Resources_GetMainCamera();
     SDL_Color small_ship_color = {.r = 0x11, .g = 0x11, .b = 0xCC, .a = 0xAA};
 
     SDL_FRect rect = {

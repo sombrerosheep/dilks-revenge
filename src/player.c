@@ -42,12 +42,12 @@ void Player_MoveTo(Player *p, Vec2 target) {
 static void Player_Shoot(Vec2 pos, Vec2 vel) {
     Projectile p;
     Projectile_Init(&p, ProjectileType_Player, pos, vel, PLAYER_PROJECTILE_SPEED);
-    EntityManager_AddProjectile(p);
+    Entities_AddProjectile(p);
 }
 
 void Player_Update(Player *p, float delta) {
-    Camera          *camera     = ResourceManager_GetMainCamera();
-    const GameInput *controller = ResourceManager_GetController();
+    Camera          *camera     = Resources_GetMainCamera();
+    const GameInput *controller = Resources_GetController();
     float            speed      = PlayerMeterPerSecond;
     float            decay      = PlayerDecayMeterPerSecond;
 
@@ -131,7 +131,7 @@ void Player_Update(Player *p, float delta) {
 }
 
 void Player_Draw(const Player *p) {
-    Camera   *camera       = ResourceManager_GetMainCamera();
+    Camera   *camera       = Resources_GetMainCamera();
     SDL_Color player_color = {.r = 0xAA, .g = 0x11, .b = 0x11, .a = 0xFF};
 
     Vec2 aim_point = (Vec2){

@@ -13,13 +13,13 @@
 #define UI_LEFT_INDENT  20.f
 
 void Debug_Draw(void) {
-    Camera *cam   = ResourceManager_GetMainCamera();
-    Font   *debug = ResourceManager_GetDebugFont();
+    Camera *cam   = Resources_GetMainCamera();
+    Font   *debug = Resources_GetDebugFont();
 #define next_line() y += debug->ascent + SDL_fabs(debug->descent)
 
-    Vec2      camera_pos    = ResourceManager_GetMainCamera()->position;
+    Vec2      camera_pos    = Resources_GetMainCamera()->position;
     Vec2      camera_screen = Camera_WorldToScreen(cam, camera_pos);
-    Vec2      player_pos    = EntityManager_GetPlayerPosition();
+    Vec2      player_pos    = Entities_GetPlayerPosition();
     Vec2      player_screen = Camera_WorldToScreen(cam, player_pos);
     SDL_FRect bounds        = Camera_GetBounds(cam);
 

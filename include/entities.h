@@ -22,16 +22,16 @@ struct drev_entity_manager {
     Player              *player;
 };
 
-void EntityManager_Init(ProjectileContainer *projectiles,
-                        SmallShipContainer  *smallShips,
-                        Player              *player);
+void Entities_Init(ProjectileContainer *projectiles,
+                   SmallShipContainer  *smallShips,
+                   Player              *player);
 
-int  EntityManager_AddProjectile(Projectile p);
-int  EntityManager_InsertSmallShip(SmallShip ship);
-int  EntityManager_ClearSmallShips(void);
-Vec2 EntityManager_GetPlayerPosition(void);
-void EntityManager_MovePlayerTo(Vec2 target);
-void EntityManager_Update(float delta);
-void EntityManager_Draw(void);
+int  Entities_AddProjectile(Projectile p);
+int  Entities_InsertSmallShip(SmallShip ship);
+int  Entities_ClearSmallShips(void);
+Vec2 Entities_GetPlayerPosition(void);
+void Entities_MovePlayerTo(Vec2 target);
+void Entities_Update(float delta);
+void Entities_Draw(void);
 
 #endif // DREV_ENTITIES_H

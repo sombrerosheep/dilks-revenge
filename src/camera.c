@@ -56,7 +56,7 @@ void Camera_SetCenter(Camera *camera, Vec2 center) {
 }
 
 Vec2 Camera_WorldToScreenF(const Camera *cam, float x, float y) {
-    const SysConfig *config = ResourceManager_GetSysConfig();
+    const SysConfig *config = Resources_GetSysConfig();
     Vec2             screen = (Vec2){
                     .x = (x - cam->position.x) * config->ppu,
                     .y = (y - cam->position.y) * config->ppu,
@@ -72,7 +72,7 @@ Vec2 Camera_WorldToScreen(const Camera *cam, Vec2 pos) {
 }
 
 Vec2 Camera_ScreenToWorldF(const Camera *cam, float x, float y) {
-    const SysConfig *config = ResourceManager_GetSysConfig();
+    const SysConfig *config = Resources_GetSysConfig();
     Vec2             world  = (Vec2){
                      .x = (x / config->ppu) + cam->position.x,
                      .y = (y / config->ppu) + cam->position.y,
@@ -110,7 +110,7 @@ SDL_FRect Camera_GetBounds(const Camera *cam) {
 /// @return SDL_FRect
 ///
 static SDL_FRect Camera_WorldRectToScreen(const Camera *cam, SDL_FRect rect) {
-    const SysConfig *config     = ResourceManager_GetSysConfig();
+    const SysConfig *config     = Resources_GetSysConfig();
     Vec2             screen_pos = Camera_WorldToScreenF( //
         cam,
         rect.x - (rect.w / 2.f),
@@ -127,7 +127,7 @@ static SDL_FRect Camera_WorldRectToScreen(const Camera *cam, SDL_FRect rect) {
 }
 
 void Camera_DrawFillRect(const Camera *cam, SDL_FRect rect, SDL_Color color) {
-    SDL_Renderer *renderer = ResourceManager_GetRenderer();
+    SDL_Renderer *renderer = Resources_GetRenderer();
 
     SDL_FRect rrect = Camera_WorldRectToScreen(cam, rect);
 
@@ -136,7 +136,7 @@ void Camera_DrawFillRect(const Camera *cam, SDL_FRect rect, SDL_Color color) {
 }
 
 void Camera_DrawRect(const Camera *cam, SDL_FRect rect, SDL_Color color) {
-    SDL_Renderer *renderer = ResourceManager_GetRenderer();
+    SDL_Renderer *renderer = Resources_GetRenderer();
 
     SDL_FRect rrect = Camera_WorldRectToScreen(cam, rect);
 
@@ -151,7 +151,7 @@ void Camera_DrawLine(const Camera *cam,
                      float         y2,
                      SDL_Color     color //
 ) {
-    SDL_Renderer *renderer = ResourceManager_GetRenderer();
+    SDL_Renderer *renderer = Resources_GetRenderer();
 
     Vec2 start = Camera_WorldToScreenF(cam, x1, y1);
     Vec2 end   = Camera_WorldToScreenF(cam, x2, y2);
@@ -165,7 +165,7 @@ void Camera_Draw(const Camera *camera, SDL_Renderer *renderer) {
     UNUSED(renderer);
 
 #if DREV_DRAW_BB
-    const SysConfig *config = ResourceManager_GetSysConfig();
+    const SysConfig *config = Resources_GetSysConfig();
 
     // draw center bounds
     SDL_FRect rect = {
