@@ -192,6 +192,10 @@ void Font_DrawText(Font *f, const char *text, float x, float y) {
 #endif
 }
 
+unsigned int Font_GetLineAdvance(const Font *f) {
+    return f->ascent + SDL_fabs(f->descent);
+}
+
 void Font_Unload(Font *f) {
     SDL_DestroyTexture(f->texture);
     f->font_px_sz = 0;

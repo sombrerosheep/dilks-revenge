@@ -11,11 +11,11 @@
 
 #define TEXT_BUFFER_LEN 512
 #define UI_LEFT_INDENT  20.f
+#define UI_TOP_INDENT   20.f
 
 void Debug_Draw(void) {
     Camera *cam   = Resources_GetMainCamera();
     Font   *debug = Resources_GetDebugFont();
-#define next_line() y += debug->ascent + SDL_fabs(debug->descent)
 
     Vec2      camera_pos    = Resources_GetMainCamera()->position;
     Vec2      camera_screen = Camera_WorldToScreen(cam, camera_pos);
@@ -24,7 +24,7 @@ void Debug_Draw(void) {
     SDL_FRect bounds        = Camera_GetBounds(cam);
 
     float x = UI_LEFT_INDENT;
-    float y = 100.f;
+    float y = UI_TOP_INDENT;
 
     char buffer[TEXT_BUFFER_LEN] = {0};
 
@@ -37,7 +37,7 @@ void Debug_Draw(void) {
              camera_screen.y);
     Font_DrawText(debug, buffer, x, y);
 
-    next_line();
+    y += Font_GetLineAdvance(debug);
 
     snprintf(buffer,
              TEXT_BUFFER_LEN,
@@ -48,7 +48,7 @@ void Debug_Draw(void) {
              player_screen.y);
     Font_DrawText(debug, buffer, x, y);
 
-    next_line();
+    y += Font_GetLineAdvance(debug);
 
     snprintf(buffer,
              TEXT_BUFFER_LEN,
@@ -59,7 +59,7 @@ void Debug_Draw(void) {
              bounds.h);
     Font_DrawText(debug, buffer, x, y);
 
-    next_line();
+    y += Font_GetLineAdvance(debug);
 
     return;
 }

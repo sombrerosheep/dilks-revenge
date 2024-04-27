@@ -40,7 +40,8 @@ struct drev_font {
 
 int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, float sz);
 
-void Font_DrawText(Font *f, const char *text, float x, float y);
+unsigned int Font_GetLineAdvance(const Font *f);
+void         Font_DrawText(Font *f, const char *text, float x, float y);
 
 void Font_Unload(Font *f);
 
