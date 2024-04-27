@@ -1,9 +1,11 @@
 #include "smallship.h"
 
+#include "camera.h"
 #include "entities.h"
 #include "projectile.h"
 #include "random.h"
 #include "resources.h"
+#include "util.h"
 
 #define FIRE_RATE_MIN   1.f
 #define FIRE_RATE_MAX   3.5f
@@ -77,6 +79,17 @@ void SmallShip_Update(SmallShip *ship, float delta) {
     ship->position.y += ship->velocity.y * SmallShipSpeed * delta;
 }
 
+SDL_FRect SmallShip_GetBounds(const SmallShip *ship) {
+    SDL_FRect rect = {
+        .x = ship->position.x,
+        .y = ship->position.y,
+        .w = ship->size.x,
+        .h = ship->size.y,
+    };
+
+    return rect;
+}
+
 void SmallShip_Draw(SmallShip *ship) {
     Camera   *camera           = Resources_GetMainCamera();
     SDL_Color small_ship_color = {.r = 0x11, .g = 0x11, .b = 0xCC, .a = 0xAA};
@@ -89,4 +102,8 @@ void SmallShip_Draw(SmallShip *ship) {
     };
 
     Camera_DrawFillRect(camera, rect, small_ship_color);
+
+#ifdef DREV_DRAW_BB
+    Camera_DrawRect(camera, SmallShip_GetBounds(ship), ColorRed);
+#endif
 }

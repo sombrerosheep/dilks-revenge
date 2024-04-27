@@ -130,9 +130,20 @@ void Player_Update(Player *p, float delta) {
     }
 }
 
+SDL_FRect Player_GetBounds(const Player *p) {
+    SDL_FRect rect = {
+        .x = p->position.x,
+        .y = p->position.y,
+        .w = p->size.x,
+        .h = p->size.y,
+    };
+
+    return rect;
+}
+
 void Player_Draw(const Player *p) {
     Camera   *camera       = Resources_GetMainCamera();
-    SDL_Color player_color = {.r = 0xAA, .g = 0x11, .b = 0x11, .a = 0xFF};
+    SDL_Color player_color = {.r = 0xAA, .g = 0x99, .b = 0x11, .a = 0xFF};
 
     Vec2 aim_point = (Vec2){
         .x = (p->aim.x * AIM_RADIUS) + p->position.x,
@@ -155,4 +166,8 @@ void Player_Draw(const Player *p) {
     rect.w = 1.f;
     rect.h = 1.f;
     Camera_DrawFillRect(camera, rect, player_color);
+
+#ifdef DREV_DRAW_BB
+    Camera_DrawRect(camera, Player_GetBounds(p), ColorRed);
+#endif
 }

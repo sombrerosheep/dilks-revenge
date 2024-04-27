@@ -23,9 +23,10 @@ struct drev_player {
     float health;
 };
 
-int  Player_Init(Player *p);
-void Player_MoveTo(Player *p, Vec2 target);
-void Player_Update(Player *p, float delta);
-void Player_Draw(const Player *p);
+int       Player_Init(Player *p);
+void      Player_MoveTo(Player *p, Vec2 target);
+void      Player_Update(Player *p, float delta);
+SDL_FRect Player_GetBounds(const Player *p);
+void      Player_Draw(const Player *p);
 
 #endif // DREV_PLAYER_H

@@ -3,6 +3,7 @@
 #include "camera.h"
 #include "globals.h"
 #include "resources.h"
+#include "util.h"
 #include "vec.h"
 
 void Projectile_Init(Projectile    *p,
@@ -18,7 +19,7 @@ void Projectile_Init(Projectile    *p,
     p->size        = Vec2_Newf(1.);
 }
 
-SDL_FRect Projectile_GetBounds(Projectile *p) {
+SDL_FRect Projectile_GetBounds(const Projectile *p) {
     SDL_FRect rect = {
         .x = p->position.x,
         .y = p->position.y,
@@ -51,4 +52,8 @@ void Projectile_Draw(const Projectile *p) {
     };
 
     Camera_DrawFillRect(camera, rect, projectile_color);
+
+#ifdef DREV_DRAW_BB
+    Camera_DrawRect(camera, Projectile_GetBounds(p), ColorRed);
+#endif
 }

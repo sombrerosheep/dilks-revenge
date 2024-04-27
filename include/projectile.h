@@ -30,7 +30,7 @@ void      Projectile_Init(Projectile    *p,
                           Vec2           position,
                           Vec2           velocity,
                           float          speed_m_sec);
-SDL_FRect Projectile_GetBounds(Projectile *p);
+SDL_FRect Projectile_GetBounds(const Projectile *p);
 void      Projectile_Update(Projectile *p, float delta);
 void      Projectile_Draw(const Projectile *p);
 

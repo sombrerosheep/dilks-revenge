@@ -1,7 +1,7 @@
 ## misc
 - [x] const pointer parameters and when necessary
-- [ ] implement GetBounds for all entities
-- [ ] implement DREV_DRAW_BB for all entities
+- [x] implement GetBounds for all entities
+- [x] implement DREV_DRAW_BB for all entities
 - [ ] SDL implementaitons of stdlib things
 - [ ] primitive types names?
   - typedefs for stdint -> my-types
