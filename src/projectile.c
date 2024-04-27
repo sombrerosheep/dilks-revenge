@@ -14,7 +14,7 @@ void Projectile_Init(Projectile    *p,
 ) {
     p->type        = type;
     p->position    = position;
-    p->velocity    = velocity;
+    p->velocity    = Vec2_Normalize(velocity);
     p->speed_m_sec = speed_m_sec;
     p->size        = Vec2_Newf(1.);
 }

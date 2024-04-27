@@ -24,7 +24,6 @@ struct drev_projectile {
 };
 
 // todo: factor in m/s with speeds
-//       velocity should be normalized
 void      Projectile_Init(Projectile    *p,
                           ProjectileType type,
                           Vec2           position,
