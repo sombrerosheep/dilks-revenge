@@ -15,19 +15,19 @@ static EntityManager GameEntities;
     memset((c)->items, 0, sizeof((c)->items))
 
 void Entities_Init(ProjectileContainer *projectiles,
-                   SmallShipContainer  *smallShips,
+                   SmallShipContainer  *small_ships,
                    Player              *player //
 ) {
     clean_container(projectiles);
     projectiles->capacity = MaxProjectiles;
 
-    clean_container(smallShips);
-    smallShips->capacity = MaxSmallShips;
+    clean_container(small_ships);
+    small_ships->capacity = MaxSmallShips;
 
     GameEntities = (EntityManager){
         .projectiles = projectiles,
         .player      = player,
-        .smallShips  = smallShips,
+        .small_ships = small_ships,
     };
 
     return;
@@ -43,25 +43,26 @@ i8 Entities_AddProjectile(Projectile p) {
         }
     }
 
-    SDL_LogError(SDL_LOG_PRIORITY_WARN, "Unable to insert projectile...\n");
+    SDL_LogError(SDL_LOG_PRIORITY_WARN, "Unable to insert projectile. No slots availablen");
     return -1;
 }
 
 i8 Entities_InsertSmallShip(SmallShip ship) {
-    for (u32 i = 0; i < GameEntities.smallShips->capacity; i++) {
-        if (GameEntities.smallShips->items[i].in_use == 0) {
-            GameEntities.smallShips->items[i].data   = ship;
-            GameEntities.smallShips->items[i].in_use = 1;
+    for (u32 i = 0; i < GameEntities.small_ships->capacity; i++) {
+        if (GameEntities.small_ships->items[i].in_use == 0) {
+            GameEntities.small_ships->items[i].data   = ship;
+            GameEntities.small_ships->items[i].in_use = 1;
 
             return 0;
         }
     }
 
+    SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "Unable to insert small ship. No slots available\n");
     return -1;
 }
 
 i8 Entities_ClearSmallShips(void) {
-    clean_container(GameEntities.smallShips);
+    clean_container(GameEntities.small_ships);
 
     return 0;
 }
@@ -90,9 +91,14 @@ static void Entities_UpdateProjectiles(SDL_FRect bounds, f32 delta) {
 }
 
 static void Entities_UpdateSmallShips(f32 delta) {
-    for (u32 i = 0; i < GameEntities.smallShips->capacity; i++) {
-        if (GameEntities.smallShips->items[i].in_use == 1) {
-            SmallShip_Update(&GameEntities.smallShips->items[i].data, delta);
+    for (u32 i = 0; i < GameEntities.small_ships->capacity; i++) {
+        if (GameEntities.small_ships->items[i].in_use == 1) {
+            if (GameEntities.small_ships->items[i].data.health < 1) {
+                GameEntities.small_ships->items[i].in_use = 0;
+                continue;
+            }
+
+            SmallShip_Update(&GameEntities.small_ships->items[i].data, delta);
         }
     }
 
@@ -125,19 +131,38 @@ void Entities_DamagePlayer(u64 amount) {
     Player_Damage(GameEntities.player, amount);
 }
 
-void Entities_CheckAndHandleCollisions(void) {
+void Entites_DamageSmallShip(SmallShip *ship, u32 amount) {
+    SmallShip_Damage(ship, amount);
+}
 
+static void CheckAndHandleProjectileSmallShipCollision(Projectile *p) {
+    SDL_FRect projectile_bb = Projectile_GetBounds(p);
+
+    for (u32 i = 0; i < GameEntities.small_ships->capacity; i++) {
+        ContainedSmallShip *ship = &GameEntities.small_ships->items[i];
+        if (ship->in_use == 1) {
+            SDL_FRect ship_bb = SmallShip_GetBounds(&ship->data);
+            if (SDL_HasIntersectionF(&projectile_bb, &ship_bb)) {
+                SmallShip_Damage(&ship->data, p->strength);
+                Entities_KillProjectile(p);
+            }
+        }
+    }
+}
+
+void Entities_CheckAndHandleCollisions(void) {
     // Projectiles & Player
     for (u32 i = 0; i < GameEntities.projectiles->capacity; i++) {
         ContainedProjectile *p = &GameEntities.projectiles->items[i];
         if (p->in_use == 1 && Projectile_CanHurtPlayer(&p->data)) {
-            i8        Projectile_CanHurtPlayer(const Projectile *p);
             SDL_FRect player     = Player_GetBounds(GameEntities.player);
             SDL_FRect projectile = Projectile_GetBounds(&p->data);
             if (SDL_HasIntersectionF(&player, &projectile)) {
                 Player_Damage(GameEntities.player, p->data.strength);
                 Entities_KillProjectile(&p->data);
             }
+        } else if (p->data.type == ProjectileType_Player) {
+            CheckAndHandleProjectileSmallShipCollision(&p->data);
         }
     }
 }
@@ -153,9 +178,9 @@ static void Entities_DrawProjectiles(void) {
 }
 
 static void Entities_DrawSmallShips(void) {
-    for (u32 i = 0; i < GameEntities.smallShips->capacity; i++) {
-        if (GameEntities.smallShips->items[i].in_use == 1) {
-            SmallShip_Draw(&GameEntities.smallShips->items[i].data);
+    for (u32 i = 0; i < GameEntities.small_ships->capacity; i++) {
+        if (GameEntities.small_ships->items[i].in_use == 1) {
+            SmallShip_Draw(&GameEntities.small_ships->items[i].data);
         }
     }
 

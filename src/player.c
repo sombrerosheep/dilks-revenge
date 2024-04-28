@@ -15,7 +15,7 @@
 #define PLAYER_FIRE_RATE          0.5f
 #define PlayerMeterPerSecond      125.f
 #define PlayerDecayMeterPerSecond ((PlayerMeterPerSecond) / .5f)
-#define PlayerProjectileDamage    5u
+#define PlayerProjectileDamage    200u
 
 i8 Player_Init(Player *p) {
     p->health          = PLAYER_INIT_HEALTH;

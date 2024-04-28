@@ -19,12 +19,12 @@ typedef struct drev_entity_manager EntityManager;
 
 struct drev_entity_manager {
     ProjectileContainer *projectiles;
-    SmallShipContainer  *smallShips;
+    SmallShipContainer  *small_ships;
     Player              *player;
 };
 
 void Entities_Init(ProjectileContainer *projectiles,
-                   SmallShipContainer  *smallShips,
+                   SmallShipContainer  *small_ships,
                    Player              *player);
 
 i8   Entities_AddProjectile(Projectile p);

@@ -14,6 +14,7 @@
 #define ENEMY_PROJECTILE_SPEED    150.f
 #define SmallShipSpeed            125.f
 #define SmallShipProjectileDamage 5u
+#define SmallShipInitHealth       50u
 
 i8 SmallShip_Init(SmallShip *ship) {
     ship->position        = Vec2_Zero;
@@ -35,6 +36,7 @@ SmallShip SmallShip_Create(Vec2 position, Vec2 velocity, f32 rotation) {
     ship.target_position = position;
     ship.velocity        = Vec2_Normalize(velocity);
     ship.rotation        = rotation;
+    ship.health          = SmallShipInitHealth;
 
     return ship;
 }
@@ -94,6 +96,14 @@ SDL_FRect SmallShip_GetBounds(const SmallShip *ship) {
     };
 
     return rect;
+}
+
+void SmallShip_Damage(SmallShip *ship, u32 amount) {
+    if (ship->health < amount) {
+        ship->health = 0;
+    } else {
+        ship->health -= amount;
+    }
 }
 
 void SmallShip_Draw(SmallShip *ship) {

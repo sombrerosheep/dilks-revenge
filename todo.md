@@ -57,7 +57,7 @@
 
 ## collisions I
 - [x] enemy bullets reduce player health
-- [ ] player bullets reduce enemy health
+- [x] player bullets reduce enemy health
 - [ ] player/enemy collisions destroy both
 
 ## camera III (juice)
