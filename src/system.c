@@ -36,7 +36,7 @@ SysConfig SysConfig_8k = {
     .ppu           = 25.6,
 };
 
-int System_Init(System *sys, char *title, SysConfig config) {
+i8 System_Init(System *sys, char *title, SysConfig config) {
     if ((sys->window = SDL_CreateWindow(title,
                                         100,
                                         50,

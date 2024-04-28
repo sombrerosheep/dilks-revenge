@@ -1,6 +1,7 @@
 #ifndef DREV_FONT_H
 #define DREV_FONT_H
 
+#include "types.h"
 #include "vec.h"
 
 #include <SDL.h>
@@ -12,14 +13,14 @@ typedef struct drev_font  Font;
 typedef struct drev_glyph Glyph;
 
 struct drev_glyph {
-    unsigned short atlas_x;  // x0
-    unsigned short atlas_y;  // y0
-    unsigned short width;    // x1 - x0
-    unsigned short height;   // y1 - y0
-    float          offset_x; // xoff
-    float          offset_y; // yoff font->ascent - abs(yoff)
-    float          xadvance;
-    int            lsb;
+    u16 atlas_x;  // x0
+    u16 atlas_y;  // y0
+    u16 width;    // x1 - x0
+    u16 height;   // y1 - y0
+    f32 offset_x; // xoff
+    f32 offset_y; // yoff font->ascent - abs(yoff)
+    f32 xadvance;
+    i32 lsb; // unused right now...
 
     // original fields from stbtt_packedchar
     // unsigned short x0, y0, x1, y1; // coordinates of bbox in bitmap
@@ -34,14 +35,14 @@ struct drev_font {
     SDL_Texture *texture;
     Glyph        glyphs[CHAR_COUNT];
     size_t       font_px_sz;
-    int          ascent, descent, linegap;
-    float        scale;
+    i32          ascent, descent, linegap;
+    f32          scale;
 };
 
-int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, float sz);
+i8 Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, f32 sz);
 
-unsigned int Font_GetLineAdvance(const Font *f);
-void         Font_DrawText(Font *f, const char *text, float x, float y);
+u32  Font_GetLineAdvance(const Font *f);
+void Font_DrawText(Font *f, const char *text, f32 x, f32 y);
 
 void Font_Unload(Font *f);
 

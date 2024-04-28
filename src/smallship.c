@@ -14,7 +14,7 @@
 #define ENEMY_PROJECTILE_SPEED 150.f
 #define SmallShipSpeed         125.f
 
-int SmallShip_Init(SmallShip *ship) {
+i8 SmallShip_Init(SmallShip *ship) {
     ship->position        = Vec2_Zero;
     ship->target_position = Vec2_Zero;
     ship->size            = Vec2_Newf(SHIP_SIZE_UNITS);
@@ -25,7 +25,7 @@ int SmallShip_Init(SmallShip *ship) {
     return 0;
 }
 
-SmallShip SmallShip_Create(Vec2 position, Vec2 velocity, float rotation) {
+SmallShip SmallShip_Create(Vec2 position, Vec2 velocity, f32 rotation) {
     SmallShip ship;
 
     SmallShip_Init(&ship);
@@ -48,13 +48,13 @@ static void SmallShip_Shoot(Vec2 pos, Vec2 vel) {
     Entities_AddProjectile(p);
 }
 
-void SmallShip_Update(SmallShip *ship, float delta) {
+void SmallShip_Update(SmallShip *ship, f32 delta) {
     if (Vec2_Equal(ship->position, ship->target_position) == 0) {
-        float speed      = SmallShipSpeed;
+        f32 speed        = SmallShipSpeed;
         ship->position.x = ease(ship->position.x, ship->target_position.x, delta * speed);
         ship->position.y = ease(ship->position.y, ship->target_position.y, delta * speed);
 
-        const float close_enough = 0.01f;
+        const f32 close_enough = 0.01f;
         if (SDL_fabsf(ship->position.x - ship->target_position.x) < close_enough &&
             SDL_fabsf(ship->position.y - ship->target_position.y) < close_enough) {
             ship->position = ship->target_position;

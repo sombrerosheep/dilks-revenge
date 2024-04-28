@@ -16,25 +16,25 @@ const char *WaveStateLabels[WaveStateCount] = {
 };
 
 static void Wave_ClearSmallShips(Wave *wave) {
-    for (int i = 0; i < MaxSmallShips; i++) {
+    for (u32 i = 0; i < MaxSmallShips; i++) {
         wave->ships[i] = NULL;
     }
 }
 
 struct wave_grid {
-    Vec2         start;
-    Vec2         row_dir;
-    Vec2         col_dir;
-    float        spacing;
-    float        width;
-    unsigned int columns;
-    unsigned int rows;
+    Vec2 start;
+    Vec2 row_dir;
+    Vec2 col_dir;
+    f32  spacing;
+    f32  width;
+    u32  columns;
+    u32  rows;
 };
 
-const unsigned int max_cols_top_bottom = 8;
-const unsigned int max_cols_left_right = 5;
+const u32 max_cols_top_bottom = 8;
+const u32 max_cols_left_right = 5;
 
-// static unsigned int get_grid_columns(CameraFocus direction) {
+// static u32 get_grid_columns(CameraFocus direction) {
 //     if (direction == CameraFocusTop || direction == CameraFocusBottom) {
 //         return max_cols_top_bottom;
 //     }
@@ -50,7 +50,7 @@ static struct wave_grid make_wave_grid(Wave w) {
             grid.width   = 240.f;
             grid.rows    = 2;
             grid.columns = 10;
-            grid.spacing = grid.width / ((float)grid.columns - 1.f);
+            grid.spacing = grid.width / ((f32)grid.columns - 1.f);
             grid.start   = (Vec2){.x = -120.f, .y = -100.f};
             grid.col_dir = Vec2_Up;
             grid.row_dir = Vec2_Right;
@@ -59,7 +59,7 @@ static struct wave_grid make_wave_grid(Wave w) {
             grid.width   = 240.f;
             grid.rows    = 2;
             grid.columns = 10;
-            grid.spacing = grid.width / ((float)grid.columns - 1.f);
+            grid.spacing = grid.width / ((f32)grid.columns - 1.f);
             grid.start   = (Vec2){.x = 120.f, .y = 100.f};
             grid.col_dir = Vec2_Down;
             grid.row_dir = Vec2_Right;
@@ -68,7 +68,7 @@ static struct wave_grid make_wave_grid(Wave w) {
             grid.width   = 135.f;
             grid.rows    = 2;
             grid.columns = 10;
-            grid.spacing = grid.width / ((float)grid.columns - 1.f);
+            grid.spacing = grid.width / ((f32)grid.columns - 1.f);
             grid.start   = (Vec2){.x = -165.f, .y = 65.f};
             grid.col_dir = Vec2_Left;
             grid.row_dir = Vec2_Up;
@@ -77,7 +77,7 @@ static struct wave_grid make_wave_grid(Wave w) {
             grid.width   = 135.f;
             grid.rows    = 2;
             grid.columns = 10;
-            grid.spacing = grid.width / ((float)grid.columns - 1.f);
+            grid.spacing = grid.width / ((f32)grid.columns - 1.f);
             grid.start   = (Vec2){.x = 165.f, .y = 65.f};
             grid.col_dir = Vec2_Right;
             grid.row_dir = Vec2_Up;
@@ -102,8 +102,8 @@ Wave Wave_New(CameraFocus direction) {
         .wave_direction = direction,
         .num_rows       = 2,
     };
-    const float row_spacing     = 10.f;
-    const float travel_distance = 65.f;
+    const f32 row_spacing     = 10.f;
+    const f32 travel_distance = 65.f;
 
     Wave_ClearSmallShips(&w);
 
@@ -115,8 +115,8 @@ Wave Wave_New(CameraFocus direction) {
 
     switch (w.wave_direction) {
         case CameraFocusTop: {
-            for (unsigned int row = 0; row < grid.rows; row++) {
-                for (unsigned int col = 0; col < grid.columns; col++) {
+            for (u32 row = 0; row < grid.rows; row++) {
+                for (u32 col = 0; col < grid.columns; col++) {
                     Vec2 pos = (Vec2){
                         .x = grid.start.x + (grid.spacing * col),
                         .y = grid.start.y + (row_spacing * row),
@@ -133,8 +133,8 @@ Wave Wave_New(CameraFocus direction) {
             break;
         };
         case CameraFocusBottom: {
-            for (unsigned int row = 0; row < grid.rows; row++) {
-                for (unsigned int col = 0; col < grid.columns; col++) {
+            for (u32 row = 0; row < grid.rows; row++) {
+                for (u32 col = 0; col < grid.columns; col++) {
                     Vec2 pos = (Vec2){
                         .x = grid.start.x - (grid.spacing * col),
                         .y = grid.start.y - (row_spacing * row),
@@ -151,8 +151,8 @@ Wave Wave_New(CameraFocus direction) {
             break;
         };
         case CameraFocusLeft: {
-            for (unsigned int row = 0; row < grid.rows; row++) {
-                for (unsigned int col = 0; col < grid.columns; col++) {
+            for (u32 row = 0; row < grid.rows; row++) {
+                for (u32 col = 0; col < grid.columns; col++) {
                     Vec2 pos = (Vec2){
                         .x = grid.start.x + (row_spacing * row),
                         .y = grid.start.y - (grid.spacing * col),
@@ -169,8 +169,8 @@ Wave Wave_New(CameraFocus direction) {
             break;
         };
         case CameraFocusRight: {
-            for (unsigned int row = 0; row < grid.rows; row++) {
-                for (unsigned int col = 0; col < grid.columns; col++) {
+            for (u32 row = 0; row < grid.rows; row++) {
+                for (u32 col = 0; col < grid.columns; col++) {
                     Vec2 pos = (Vec2){
                         .x = grid.start.x - (row_spacing * row),
                         .y = grid.start.y - (grid.spacing * col),
@@ -221,7 +221,7 @@ void Wave_Clean(Wave *wave) {
 
     // Does this need to track pointers or do we expose the container
     // from the enity manager?
-    for (int i = 0; i < MaxSmallShips; i++) {
+    for (u32 i = 0; i < MaxSmallShips; i++) {
         wave->ships[i] = NULL;
     }
 }

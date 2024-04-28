@@ -1,10 +1,12 @@
 #ifndef DREV_VEC_H
 #define DREV_VEC_H
 
+#include "types.h"
+
 typedef struct drev_vec2 Vec2;
 
 struct drev_vec2 {
-    float x, y;
+    f32 x, y;
 };
 
 #define Vec2_Zero \
@@ -22,7 +24,15 @@ struct drev_vec2 {
 
 float Vec2_Magnitude(Vec2 vec);
 Vec2  Vec2_Normalize(Vec2 vec);
-Vec2  Vec2_Rotate(Vec2 vec, float deg);
-int   Vec2_Equal(Vec2 a, Vec2 b);
+Vec2  Vec2_Rotate(Vec2 vec, f32 deg);
+
+///
+/// @brief determines if two Vec2 are equal
+///
+/// @param a
+/// @param b
+/// @return i8 1 if equal, 0 if not.
+///
+i8 Vec2_Equal(Vec2 a, Vec2 b);
 
 #endif // DREV_VEC_H

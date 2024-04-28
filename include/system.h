@@ -1,6 +1,8 @@
 #ifndef DREV_SYSTEM
 #define DREV_SYSTEM
 
+#include "types.h"
+
 #include <SDL.h>
 
 typedef struct drev_system    System;
@@ -11,7 +13,7 @@ struct drev_sysconfig {
     unsigned int window_width;
     unsigned int render_height;
     unsigned int render_width;
-    float        ppu;
+    f32          ppu;
 };
 
 extern SysConfig SysConfig_HD;
@@ -26,7 +28,7 @@ struct drev_system {
     SysConfig     config;
 };
 
-int  System_Init(System *sys, char *title, SysConfig config);
+i8   System_Init(System *sys, char *title, SysConfig config);
 void System_Destroy(System *sys);
 
 #endif // DREV_SYSTEM

@@ -48,8 +48,8 @@ static void Game_Draw(Game *game) {
 
 static void Game_InitState(Game *game, System *sys) {
     // Resources
-    float ratio      = (float)sys->config.window_width / sys->config.window_height;
-    float units_high = (float)sys->config.window_height / sys->config.ppu;
+    f32 ratio      = (f32)sys->config.window_width / sys->config.window_height;
+    f32 units_high = (f32)sys->config.window_height / sys->config.ppu;
     Camera_Init(&game->state.main_camera, units_high, ratio);
     Camera_SetCenter(&game->state.main_camera, Vec2_Zero);
 
@@ -92,7 +92,7 @@ Game *Game_Create(System *sys) {
 
 void Game_Run(Game *g) {
     SDL_Event event;
-    int       running = 1;
+    i8        running = 1;
     Clock     game_clock;
     Clock_Init(&game_clock);
 

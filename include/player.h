@@ -4,28 +4,28 @@
 #include "camera.h"
 #include "game_input.h"
 #include "projectile.h"
+#include "types.h"
 #include "vec.h"
 
 #include <SDL.h>
 
-typedef struct drev_player Player;
-
+typedef struct drev_player       Player;
 typedef struct player_projectile PlayerProjectile;
 
 struct drev_player {
-    Vec2  position;
-    Vec2  target_position;
-    Vec2  velocity;
-    Vec2  size;
-    Vec2  aim;
-    int   being_moved;
-    float fire_cooldown;
-    float health;
+    Vec2 position;
+    Vec2 target_position;
+    Vec2 velocity;
+    Vec2 size;
+    Vec2 aim;
+    i8   being_moved;
+    f32  fire_cooldown;
+    f32  health;
 };
 
-int       Player_Init(Player *p);
+i8        Player_Init(Player *p);
 void      Player_MoveTo(Player *p, Vec2 target);
-void      Player_Update(Player *p, float delta);
+void      Player_Update(Player *p, f32 delta);
 SDL_FRect Player_GetBounds(const Player *p);
 void      Player_Draw(const Player *p);
 

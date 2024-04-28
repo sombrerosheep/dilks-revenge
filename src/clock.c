@@ -9,8 +9,8 @@ int Clock_Init(Clock *clock) {
 }
 
 Frame Clock_Reset(Clock *clock) {
-    Frame        frame;
-    unsigned int prev_ticks = clock->start;
+    Frame frame;
+    u32   prev_ticks = clock->start;
 
     clock->start = SDL_GetTicks();
 

@@ -19,10 +19,10 @@ typedef enum {
 extern const char *WaveStateLabels[WaveStateCount];
 
 struct drev_wave {
-    WaveState    state;
-    CameraFocus  wave_direction;
-    unsigned int num_rows;
-    SmallShip   *ships[MaxSmallShips];
+    WaveState   state;
+    CameraFocus wave_direction;
+    u16         num_rows;
+    SmallShip  *ships[MaxSmallShips];
 };
 
 Wave Wave_New(CameraFocus direction);

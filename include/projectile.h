@@ -20,7 +20,7 @@ struct drev_projectile {
     Vec2           position;
     Vec2           velocity;
     Vec2           size;
-    float          speed_m_sec;
+    f32            speed_m_sec;
 };
 
 // todo: factor in m/s with speeds
@@ -28,9 +28,9 @@ void      Projectile_Init(Projectile    *p,
                           ProjectileType type,
                           Vec2           position,
                           Vec2           velocity,
-                          float          speed_m_sec);
+                          f32            speed_m_sec);
 SDL_FRect Projectile_GetBounds(const Projectile *p);
-void      Projectile_Update(Projectile *p, float delta);
+void      Projectile_Update(Projectile *p, f32 delta);
 void      Projectile_Draw(const Projectile *p);
 
 #endif // DREV_PROJECTILE_H

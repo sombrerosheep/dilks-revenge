@@ -1,7 +1,7 @@
 #include "util.h"
 
-float clamp(float value, float upper, float lower) {
-    float result = value;
+f32 clamp(f32 value, f32 upper, f32 lower) {
+    f32 result = value;
 
     if (result > upper) {
         result = upper;
@@ -14,15 +14,15 @@ float clamp(float value, float upper, float lower) {
     return result;
 }
 
-float ease(float have, float want, float ease) {
+f32 ease(f32 have, f32 want, f32 ease) {
     if (have == want) {
         return have;
     }
 
-    float dir = (have > want) ? -1.f : 1.f;
+    f32 dir = (have > want) ? -1.f : 1.f;
     have += dir * ease;
 
-    float result = clamp( //
+    f32 result = clamp( //
         have,
         dir > 0.f ? want : have,
         dir < 0.f ? want : have);

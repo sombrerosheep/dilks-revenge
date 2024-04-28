@@ -5,9 +5,9 @@
 
 // Maths
 
-float clamp(float value, float upper, float lower);
+f32 clamp(f32 value, f32 upper, f32 lower);
 
-float ease(float have, float want, float ease);
+f32 ease(f32 have, f32 want, f32 ease);
 
 // Containers
 
@@ -17,13 +17,13 @@ float ease(float have, float want, float ease);
 #define DefineContainedType(T, S)                                      \
     typedef struct CONCAT(drev_contained_, T) CONCAT(Contained, T);    \
     struct CONCAT(drev_contained_, T) {                                \
-        int in_use;                                                    \
-        T   data;                                                      \
+        i8 in_use;                                                     \
+        T  data;                                                       \
     };                                                                 \
     typedef struct CONCAT3(drev_, T, _container) CONCAT(T, Container); \
     struct CONCAT3(drev_, T, _container) {                             \
-        unsigned int capacity;                                         \
-        unsigned int size;                                             \
+        u32 capacity;                                                  \
+        u32 size;                                                      \
         CONCAT(Contained, T) items[S];                                 \
     }
 

@@ -3,7 +3,7 @@
 - [x] implement GetBounds for all entities
 - [x] implement DREV_DRAW_BB for all entities
 - [x] SDL implementaitons of stdlib things
-- [ ] primitive types names?
+- [x] primitive types names?
   - typedefs for stdint -> my-types
   - uint32_t u32
   - int64_t  i64

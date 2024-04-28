@@ -16,7 +16,7 @@ const char *CameraFocusLabels[CameraFocusCount] = {
     [CameraFocusLeft]   = "CameraFocusLeft",
 };
 
-int Camera_Init(Camera *camera, float unit_height, float ratio) {
+i8 Camera_Init(Camera *camera, f32 unit_height, f32 ratio) {
     camera->half_size.y = unit_height / 2.f;
     camera->half_size.x = unit_height * ratio / 2.f;
 
@@ -26,8 +26,8 @@ int Camera_Init(Camera *camera, float unit_height, float ratio) {
     return 0;
 }
 
-void Camera_Update(Camera *camera, float delta) {
-    const float speed  = 250.f;
+void Camera_Update(Camera *camera, f32 delta) {
+    const f32 speed    = 250.f;
     camera->position.x = ease(camera->position.x, camera->target_position.x, delta * speed);
     camera->position.y = ease(camera->position.y, camera->target_position.y, delta * speed);
 }
@@ -55,7 +55,7 @@ void Camera_SetCenter(Camera *camera, Vec2 center) {
     camera->target_position.y = center.y - camera->half_size.y;
 }
 
-Vec2 Camera_WorldToScreenF(const Camera *cam, float x, float y) {
+Vec2 Camera_WorldToScreenF(const Camera *cam, f32 x, f32 y) {
     const SysConfig *config = Resources_GetSysConfig();
     Vec2             screen = (Vec2){
                     .x = (x - cam->position.x) * config->ppu,
@@ -71,7 +71,7 @@ Vec2 Camera_WorldToScreen(const Camera *cam, Vec2 pos) {
     return screen;
 }
 
-Vec2 Camera_ScreenToWorldF(const Camera *cam, float x, float y) {
+Vec2 Camera_ScreenToWorldF(const Camera *cam, f32 x, f32 y) {
     const SysConfig *config = Resources_GetSysConfig();
     Vec2             world  = (Vec2){
                      .x = (x / config->ppu) + cam->position.x,
@@ -145,10 +145,10 @@ void Camera_DrawRect(const Camera *cam, SDL_FRect rect, SDL_Color color) {
 }
 
 void Camera_DrawLine(const Camera *cam,
-                     float         x1,
-                     float         y1,
-                     float         x2,
-                     float         y2,
+                     f32           x1,
+                     f32           y1,
+                     f32           x2,
+                     f32           y2,
                      SDL_Color     color //
 ) {
     SDL_Renderer *renderer = Resources_GetRenderer();

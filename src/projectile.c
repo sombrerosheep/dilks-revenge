@@ -10,7 +10,7 @@ void Projectile_Init(Projectile    *p,
                      ProjectileType type,
                      Vec2           position,
                      Vec2           velocity,
-                     float          speed_m_sec //
+                     f32          speed_m_sec //
 ) {
     p->type        = type;
     p->position    = position;
@@ -30,7 +30,7 @@ SDL_FRect Projectile_GetBounds(const Projectile *p) {
     return rect;
 }
 
-void Projectile_Update(Projectile *p, float delta) {
+void Projectile_Update(Projectile *p, f32 delta) {
     p->position.x += p->velocity.x * p->speed_m_sec * delta;
     p->position.y += p->velocity.y * p->speed_m_sec * delta;
 }

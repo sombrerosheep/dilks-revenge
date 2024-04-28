@@ -31,8 +31,8 @@ void Entities_Init(ProjectileContainer *projectiles,
     return;
 }
 
-int Entities_AddProjectile(Projectile p) {
-    for (unsigned int i = 0; i < GameEntities.projectiles->capacity; i++) {
+i8 Entities_AddProjectile(Projectile p) {
+    for (u32 i = 0; i < GameEntities.projectiles->capacity; i++) {
         if (GameEntities.projectiles->items[i].in_use == 0) {
             GameEntities.projectiles->items[i].data   = p;
             GameEntities.projectiles->items[i].in_use = 1;
@@ -45,8 +45,8 @@ int Entities_AddProjectile(Projectile p) {
     return -1;
 }
 
-int Entities_InsertSmallShip(SmallShip ship) {
-    for (unsigned int i = 0; i < GameEntities.smallShips->capacity; i++) {
+i8 Entities_InsertSmallShip(SmallShip ship) {
+    for (u32 i = 0; i < GameEntities.smallShips->capacity; i++) {
         if (GameEntities.smallShips->items[i].in_use == 0) {
             GameEntities.smallShips->items[i].data   = ship;
             GameEntities.smallShips->items[i].in_use = 1;
@@ -58,7 +58,7 @@ int Entities_InsertSmallShip(SmallShip ship) {
     return -1;
 }
 
-int Entities_ClearSmallShips(void) {
+i8 Entities_ClearSmallShips(void) {
     clean_container(GameEntities.smallShips);
 
     return 0;
@@ -72,8 +72,8 @@ void Entities_MovePlayerTo(Vec2 target) {
     Player_MoveTo(GameEntities.player, target);
 }
 
-static void Entities_UpdateProjectiles(SDL_FRect bounds, float delta) {
-    for (unsigned int i = 0; i < GameEntities.projectiles->capacity; i++) {
+static void Entities_UpdateProjectiles(SDL_FRect bounds, f32 delta) {
+    for (u32 i = 0; i < GameEntities.projectiles->capacity; i++) {
         if (GameEntities.projectiles->items[i].in_use == 1) {
             SDL_FRect bb = Projectile_GetBounds(&GameEntities.projectiles->items[i].data);
             if (SDL_HasIntersectionF(&bb, &bounds) == SDL_FALSE) {
@@ -87,8 +87,8 @@ static void Entities_UpdateProjectiles(SDL_FRect bounds, float delta) {
     return;
 }
 
-static void Entities_UpdateSmallShips(float delta) {
-    for (unsigned int i = 0; i < GameEntities.smallShips->capacity; i++) {
+static void Entities_UpdateSmallShips(f32 delta) {
+    for (u32 i = 0; i < GameEntities.smallShips->capacity; i++) {
         if (GameEntities.smallShips->items[i].in_use == 1) {
             SmallShip_Update(&GameEntities.smallShips->items[i].data, delta);
         }
@@ -97,7 +97,7 @@ static void Entities_UpdateSmallShips(float delta) {
     return;
 }
 
-void Entities_Update(float delta) {
+void Entities_Update(f32 delta) {
     Camera   *camera = Resources_GetMainCamera();
     SDL_FRect bounds = Camera_GetBounds(camera);
 
@@ -107,7 +107,7 @@ void Entities_Update(float delta) {
 }
 
 static void Entities_DrawProjectiles(void) {
-    for (unsigned int i = 0; i < GameEntities.projectiles->capacity; i++) {
+    for (u32 i = 0; i < GameEntities.projectiles->capacity; i++) {
         if (GameEntities.projectiles->items[i].in_use == 1) {
             Projectile_Draw(&GameEntities.projectiles->items[i].data);
         }
@@ -117,7 +117,7 @@ static void Entities_DrawProjectiles(void) {
 }
 
 static void Entities_DrawSmallShips(void) {
-    for (unsigned int i = 0; i < GameEntities.smallShips->capacity; i++) {
+    for (u32 i = 0; i < GameEntities.smallShips->capacity; i++) {
         if (GameEntities.smallShips->items[i].in_use == 1) {
             SmallShip_Draw(&GameEntities.smallShips->items[i].data);
         }

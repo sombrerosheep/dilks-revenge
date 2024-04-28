@@ -16,7 +16,7 @@
 #define PlayerMeterPerSecond      125.f
 #define PlayerDecayMeterPerSecond ((PlayerMeterPerSecond) / .5f)
 
-int Player_Init(Player *p) {
+i8 Player_Init(Player *p) {
     p->health          = PLAYER_INIT_HEALTH;
     p->position        = Vec2_Newf(0.f);
     p->target_position = Vec2_Newf(0.f);
@@ -45,18 +45,18 @@ static void Player_Shoot(Vec2 pos, Vec2 vel) {
     Entities_AddProjectile(p);
 }
 
-void Player_Update(Player *p, float delta) {
+void Player_Update(Player *p, f32 delta) {
     Camera          *camera     = Resources_GetMainCamera();
     const GameInput *controller = Resources_GetController();
-    float            speed      = PlayerMeterPerSecond;
-    float            decay      = PlayerDecayMeterPerSecond;
+    f32              speed      = PlayerMeterPerSecond;
+    f32              decay      = PlayerDecayMeterPerSecond;
 
     if (p->being_moved == 1) {
-        const float ease_speed = PlayerMeterPerSecond;
-        p->position.x          = ease(p->position.x, p->target_position.x, delta * ease_speed);
-        p->position.y          = ease(p->position.y, p->target_position.y, delta * ease_speed);
+        const f32 ease_speed = PlayerMeterPerSecond;
+        p->position.x        = ease(p->position.x, p->target_position.x, delta * ease_speed);
+        p->position.y        = ease(p->position.y, p->target_position.y, delta * ease_speed);
 
-        const float close_enough = 0.01f;
+        const f32 close_enough = 0.01f;
         if (SDL_fabsf(p->position.x - p->target_position.x) < close_enough &&
             SDL_fabsf(p->position.y - p->target_position.y) < close_enough) {
             p->velocity    = Vec2_Zero;
@@ -87,7 +87,7 @@ void Player_Update(Player *p, float delta) {
         p->velocity.y = clamp(p->velocity.y, speed, -speed);
 
         // move player
-        float v_mag = Vec2_Magnitude(p->velocity);
+        f32 v_mag   = Vec2_Magnitude(p->velocity);
         p->velocity = Vec2_Normalize(p->velocity);
         p->velocity.x *= v_mag;
         p->velocity.y *= v_mag;

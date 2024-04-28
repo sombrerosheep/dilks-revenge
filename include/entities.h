@@ -4,6 +4,7 @@
 #include "player.h"
 #include "projectile.h"
 #include "smallship.h"
+#include "types.h"
 #include "util.h"
 
 #include <SDL.h>
@@ -26,12 +27,12 @@ void Entities_Init(ProjectileContainer *projectiles,
                    SmallShipContainer  *smallShips,
                    Player              *player);
 
-int  Entities_AddProjectile(Projectile p);
-int  Entities_InsertSmallShip(SmallShip ship);
-int  Entities_ClearSmallShips(void);
+i8   Entities_AddProjectile(Projectile p);
+i8   Entities_InsertSmallShip(SmallShip ship);
+i8   Entities_ClearSmallShips(void);
 Vec2 Entities_GetPlayerPosition(void);
 void Entities_MovePlayerTo(Vec2 target);
-void Entities_Update(float delta);
+void Entities_Update(f32 delta);
 void Entities_Draw(void);
 
 #endif // DREV_ENTITIES_H

@@ -29,20 +29,20 @@ struct drev_camera {
     // for multiple cameras, this may need another Vec2 screen_pos;
 };
 
-int       Camera_Init(Camera *camera, float unit_height, float ratio);
-void      Camera_Update(Camera *camera, float delta);
+i8        Camera_Init(Camera *camera, f32 unit_height, f32 ratio);
+void      Camera_Update(Camera *camera, f32 delta);
 void      Camera_SetFocus(Camera *camera, CameraFocus focus);
 void      Camera_SetCenter(Camera *camera, Vec2 center);
 Vec2      Camera_WorldToScreen(const Camera *cam, Vec2 pos);
-Vec2      Camera_WorldToScreenF(const Camera *cam, float x, float y);
+Vec2      Camera_WorldToScreenF(const Camera *cam, f32 x, f32 y);
 Vec2      Camera_ScreenToWorld(const Camera *cam, Vec2 pos);
-Vec2      Camera_ScreenToWorldF(const Camera *cam, float x, float y);
+Vec2      Camera_ScreenToWorldF(const Camera *cam, f32 x, f32 y);
 SDL_FRect Camera_GetBounds(const Camera *cam);
 
 // all coordinates for draw functions should be in world coordinates.
 void Camera_DrawFillRect(const Camera *cam, SDL_FRect rect, SDL_Color color);
 void Camera_DrawRect(const Camera *cam, SDL_FRect rect, SDL_Color color);
-void Camera_DrawLine(const Camera *cam, float x1, float y1, float x2, float y2, SDL_Color color);
+void Camera_DrawLine(const Camera *cam, f32 x1, f32 y1, f32 x2, f32 y2, SDL_Color color);
 
 void Camera_Draw(const Camera *camera, SDL_Renderer *renderer);
 void Camera_Destroy(Camera *camera);

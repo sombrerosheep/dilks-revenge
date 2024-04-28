@@ -15,7 +15,7 @@
 
 #include <SDL.h>
 
-int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, float font_sz) {
+i8 Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, f32 font_sz) {
 #define NUM_GLYPHS 95
 
     unsigned char *file_data = ReadEntireFile(fontPath, "rb");
@@ -24,8 +24,8 @@ int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, float font_
 
     // make a bitmap larger than what we need
     // we'll crop it later
-    int            width      = 1024;
-    int            max_height = 1024;
+    i32            width      = 1024;
+    i32            max_height = 1024;
     unsigned char *bitmap     = SDL_malloc(max_height * width);
 
     // do the packing, based on the ranges specified
@@ -39,12 +39,12 @@ int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, float font_
     stbtt_fontinfo info;
     stbtt_InitFont(&info, file_data, stbtt_GetFontOffsetForIndex(file_data, 0));
 
-    int ascent, descent, lineGap;
+    i32 ascent, descent, lineGap;
     stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
 
     // todo: is there a reason to call stbtt_ScaleForPixelHeight vs calculating?
-    // float scale = stbtt_ScaleForPixelHeight(&info, ranges[i].font_size);
-    float scale = (float)font_sz / (float)(ascent - descent);
+    // f32 scale = stbtt_ScaleForPixelHeight(&info, ranges[i].font_size);
+    f32 scale = (f32)font_sz / (f32)(ascent - descent);
 
     f->scale      = scale;
     f->ascent     = ascent * scale;
@@ -52,7 +52,7 @@ int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, float font_
     f->linegap    = lineGap * scale;
     f->font_px_sz = font_sz;
 
-    for (unsigned int i = 0; i < NUM_GLYPHS; i++) {
+    for (u32 i = 0; i < NUM_GLYPHS; i++) {
         stbtt_packedchar pc = glyph_metrics[i];
 
         int lsb;
@@ -89,12 +89,12 @@ int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, float font_
                                    height);
     SDL_SetTextureBlendMode(f->texture, SDL_BLENDMODE_BLEND);
 
-    Uint32          *pixels = SDL_malloc(height * width * sizeof(Uint32));
+    u32             *pixels = SDL_malloc(height * width * sizeof(u32));
     SDL_PixelFormat *format = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA32);
-    for (int i = 0; i < width * height; i++) {
+    for (i32 i = 0; i < width * height; i++) {
         pixels[i] = SDL_MapRGBA(format, 0xff, 0xff, 0xff, bitmap[i]);
     }
-    SDL_UpdateTexture(f->texture, NULL, pixels, width * sizeof(Uint32));
+    SDL_UpdateTexture(f->texture, NULL, pixels, width * sizeof(u32));
 
 // print font and glyph metrics
 #ifdef DREV_PRINT_FONT_DATA
@@ -131,10 +131,10 @@ int Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, float font_
     return 0;
 }
 
-void Font_DrawText(Font *f, const char *text, float x, float y) {
-    float current_point = x;
+void Font_DrawText(Font *f, const char *text, f32 x, f32 y) {
+    f32 current_point = x;
     // Keeps y as the top-left origin moving the baseline down the ascent
-    float         baseline = y + f->ascent; // so the origin is top-left
+    f32           baseline = y + f->ascent; // so the origin is top-left
     SDL_Renderer *renderer = Resources_GetRenderer();
 
     size_t len = SDL_strlen(text);
@@ -192,7 +192,7 @@ void Font_DrawText(Font *f, const char *text, float x, float y) {
 #endif
 }
 
-unsigned int Font_GetLineAdvance(const Font *f) {
+u32 Font_GetLineAdvance(const Font *f) {
     return f->ascent + SDL_fabs(f->descent);
 }
 

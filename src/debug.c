@@ -23,8 +23,8 @@ void Debug_Draw(void) {
     Vec2      player_screen = Camera_WorldToScreen(cam, player_pos);
     SDL_FRect bounds        = Camera_GetBounds(cam);
 
-    float x = UI_LEFT_INDENT;
-    float y = UI_TOP_INDENT;
+    f32 x = UI_LEFT_INDENT;
+    f32 y = UI_TOP_INDENT;
 
     char buffer[TEXT_BUFFER_LEN] = {0};
 
