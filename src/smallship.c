@@ -11,8 +11,9 @@
 #define FIRE_RATE_MAX   3.5f
 #define SHIP_SIZE_UNITS 6.f
 
-#define ENEMY_PROJECTILE_SPEED 150.f
-#define SmallShipSpeed         125.f
+#define ENEMY_PROJECTILE_SPEED    150.f
+#define SmallShipSpeed            125.f
+#define SmallShipProjectileDamage 5u
 
 i8 SmallShip_Init(SmallShip *ship) {
     ship->position        = Vec2_Zero;
@@ -44,7 +45,12 @@ void SmallShip_MoveTo(SmallShip *ship, Vec2 new_position) {
 
 static void SmallShip_Shoot(Vec2 pos, Vec2 vel) {
     Projectile p;
-    Projectile_Init(&p, ProjectileType_Enemy, pos, vel, ENEMY_PROJECTILE_SPEED);
+    Projectile_Init(&p,
+                    ProjectileType_Enemy,
+                    pos,
+                    vel,
+                    ENEMY_PROJECTILE_SPEED,
+                    SmallShipProjectileDamage);
     Entities_AddProjectile(p);
 }
 

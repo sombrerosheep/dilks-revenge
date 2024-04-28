@@ -15,6 +15,7 @@
 #define PLAYER_FIRE_RATE          0.5f
 #define PlayerMeterPerSecond      125.f
 #define PlayerDecayMeterPerSecond ((PlayerMeterPerSecond) / .5f)
+#define PlayerProjectileDamage    5u
 
 i8 Player_Init(Player *p) {
     p->health          = PLAYER_INIT_HEALTH;
@@ -39,9 +40,22 @@ void Player_MoveTo(Player *p, Vec2 target) {
     p->being_moved     = 1;
 }
 
+void Player_Damage(Player *p, u64 amount) {
+    if (amount > p->health) {
+        p->health = 0;
+    } else {
+        p->health -= amount;
+    }
+}
+
 static void Player_Shoot(Vec2 pos, Vec2 vel) {
     Projectile p;
-    Projectile_Init(&p, ProjectileType_Player, pos, vel, PLAYER_PROJECTILE_SPEED);
+    Projectile_Init(&p,
+                    ProjectileType_Player,
+                    pos,
+                    vel,
+                    PLAYER_PROJECTILE_SPEED,
+                    PlayerProjectileDamage);
     Entities_AddProjectile(p);
 }
 

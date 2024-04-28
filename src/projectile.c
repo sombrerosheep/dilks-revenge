@@ -10,13 +10,17 @@ void Projectile_Init(Projectile    *p,
                      ProjectileType type,
                      Vec2           position,
                      Vec2           velocity,
-                     f32          speed_m_sec //
+                     f32            speed_m_sec,
+                     u32            strength //
 ) {
     p->type        = type;
     p->position    = position;
     p->velocity    = Vec2_Normalize(velocity);
     p->speed_m_sec = speed_m_sec;
     p->size        = Vec2_Newf(1.);
+
+    // todo: should this be a lookup based on the projectile type?
+    p->strength = strength;
 }
 
 SDL_FRect Projectile_GetBounds(const Projectile *p) {
@@ -28,6 +32,15 @@ SDL_FRect Projectile_GetBounds(const Projectile *p) {
     };
 
     return rect;
+}
+
+i8 Projectile_CanHurtPlayer(const Projectile *p) {
+    switch (p->type) {
+        case ProjectileType_Enemy:
+            return 1;
+        default:
+            return 0;
+    }
 }
 
 void Projectile_Update(Projectile *p, f32 delta) {

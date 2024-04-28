@@ -20,11 +20,12 @@ struct drev_player {
     Vec2 aim;
     i8   being_moved;
     f32  fire_cooldown;
-    f32  health;
+    u64  health;
 };
 
 i8        Player_Init(Player *p);
 void      Player_MoveTo(Player *p, Vec2 target);
+void      Player_Damage(Player *p, u64 amount);
 void      Player_Update(Player *p, f32 delta);
 SDL_FRect Player_GetBounds(const Player *p);
 void      Player_Draw(const Player *p);

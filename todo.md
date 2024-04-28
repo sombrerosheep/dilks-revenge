@@ -56,7 +56,7 @@
 - [ ] red square 
 
 ## collisions I
-- [ ] enemy bullets reduce player health
+- [x] enemy bullets reduce player health
 - [ ] player bullets reduce enemy health
 - [ ] player/enemy collisions destroy both
 

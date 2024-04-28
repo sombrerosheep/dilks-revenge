@@ -31,6 +31,8 @@ static void Game_Update(Game *game, Frame delta) {
     Wave_Update(&game->state.current_wave);
 
     Entities_Update(delta.sec);
+
+    Entities_CheckAndHandleCollisions();
 }
 
 static void Game_Draw(Game *game) {

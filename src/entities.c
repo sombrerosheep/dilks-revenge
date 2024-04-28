@@ -5,6 +5,8 @@
 #include "projectile.h"
 #include "resources.h"
 #include "smallship.h"
+#include <SDL_log.h>
+#include <SDL_rect.h>
 
 static EntityManager GameEntities;
 
@@ -104,6 +106,40 @@ void Entities_Update(f32 delta) {
     Entities_UpdateProjectiles(bounds, delta);
     Entities_UpdateSmallShips(delta);
     Player_Update(GameEntities.player, delta);
+}
+
+void Entities_KillProjectile(Projectile *p) {
+    for (u32 i = 0; i < GameEntities.projectiles->capacity; i++) {
+        if (&GameEntities.projectiles->items[i].data == p) {
+            GameEntities.projectiles->items[i].in_use = 0;
+            return;
+        }
+    }
+
+    SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION,
+                "Entities_KillProjectile::Not found (%p)\n",
+                (void *)p);
+}
+
+void Entities_DamagePlayer(u64 amount) {
+    Player_Damage(GameEntities.player, amount);
+}
+
+void Entities_CheckAndHandleCollisions(void) {
+
+    // Projectiles & Player
+    for (u32 i = 0; i < GameEntities.projectiles->capacity; i++) {
+        ContainedProjectile *p = &GameEntities.projectiles->items[i];
+        if (p->in_use == 1 && Projectile_CanHurtPlayer(&p->data)) {
+            i8        Projectile_CanHurtPlayer(const Projectile *p);
+            SDL_FRect player     = Player_GetBounds(GameEntities.player);
+            SDL_FRect projectile = Projectile_GetBounds(&p->data);
+            if (SDL_HasIntersectionF(&player, &projectile)) {
+                Player_Damage(GameEntities.player, p->data.strength);
+                Entities_KillProjectile(&p->data);
+            }
+        }
+    }
 }
 
 static void Entities_DrawProjectiles(void) {
