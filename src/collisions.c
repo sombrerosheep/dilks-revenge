@@ -5,11 +5,16 @@
 #include "smallship.h"
 
 void HandlePlayerProjectileCollision(Player *player, Projectile *projectile) {
-    UNUSED(player);
-    Entities_DamagePlayer(projectile->strength);
+    Player_Damage(player, projectile->strength);
+    Entities_KillProjectile(projectile);
+}
+
+void HandlePlayerSmallShipCollision(Player *player, SmallShip *ship) {
+    Player_Kill(player);
+    SmallShip_Kill(ship);
 }
 
 void HandleSmallShipProjectileCollision(SmallShip *ship, Projectile *projectile) {
-    SDL_Log("Damaging Small ship!");
     SmallShip_Damage(ship, projectile->strength);
+    Entities_KillProjectile(projectile);
 }

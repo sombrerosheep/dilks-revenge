@@ -1,12 +1,11 @@
 #include "entities.h"
 
 #include "camera.h"
+#include "collisions.h"
 #include "player.h"
 #include "projectile.h"
 #include "resources.h"
 #include "smallship.h"
-#include <SDL_log.h>
-#include <SDL_rect.h>
 
 static EntityManager GameEntities;
 
@@ -127,12 +126,19 @@ void Entities_KillProjectile(Projectile *p) {
                 (void *)p);
 }
 
-void Entities_DamagePlayer(u64 amount) {
-    Player_Damage(GameEntities.player, amount);
-}
+static void CheckAndHandlePlayerSmallShipCollision(void) {
+    for (u32 i = 0; i < GameEntities.small_ships->capacity; i++) {
+        ContainedSmallShip *ship = &GameEntities.small_ships->items[i];
+        if (ship->in_use == 0) {
+            continue;
+        }
 
-void Entites_DamageSmallShip(SmallShip *ship, u32 amount) {
-    SmallShip_Damage(ship, amount);
+        SDL_FRect player_bb = Player_GetBounds(GameEntities.player);
+        SDL_FRect ship_bb   = SmallShip_GetBounds(&ship->data);
+        if (SDL_HasIntersectionF(&player_bb, &ship_bb)) {
+            HandlePlayerSmallShipCollision(GameEntities.player, &ship->data);
+        }
+    }
 }
 
 static void CheckAndHandleProjectileSmallShipCollision(Projectile *p) {
@@ -143,28 +149,39 @@ static void CheckAndHandleProjectileSmallShipCollision(Projectile *p) {
         if (ship->in_use == 1) {
             SDL_FRect ship_bb = SmallShip_GetBounds(&ship->data);
             if (SDL_HasIntersectionF(&projectile_bb, &ship_bb)) {
-                SmallShip_Damage(&ship->data, p->strength);
-                Entities_KillProjectile(p);
+                HandleSmallShipProjectileCollision(&ship->data, p);
             }
         }
     }
 }
 
-void Entities_CheckAndHandleCollisions(void) {
-    // Projectiles & Player
+static void CheckAndHandleProjectileCollisions(void) {
     for (u32 i = 0; i < GameEntities.projectiles->capacity; i++) {
         ContainedProjectile *p = &GameEntities.projectiles->items[i];
-        if (p->in_use == 1 && Projectile_CanHurtPlayer(&p->data)) {
+        if (p->in_use == 0) {
+            continue;
+        }
+
+        // Projectiles + player
+        if (Projectile_CanHurtPlayer(&p->data)) {
             SDL_FRect player     = Player_GetBounds(GameEntities.player);
             SDL_FRect projectile = Projectile_GetBounds(&p->data);
             if (SDL_HasIntersectionF(&player, &projectile)) {
-                Player_Damage(GameEntities.player, p->data.strength);
-                Entities_KillProjectile(&p->data);
+                HandlePlayerProjectileCollision(GameEntities.player, &p->data);
             }
         } else if (p->data.type == ProjectileType_Player) {
+            // Projectiles + SmallShip
             CheckAndHandleProjectileSmallShipCollision(&p->data);
         }
     }
+}
+
+void Entities_CheckAndHandleCollisions(void) {
+    // Projectiles + SmallShip | Player
+    CheckAndHandleProjectileCollisions();
+
+    // SmallShip + Player
+    CheckAndHandlePlayerSmallShipCollision();
 }
 
 static void Entities_DrawProjectiles(void) {

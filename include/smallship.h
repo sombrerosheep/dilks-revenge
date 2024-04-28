@@ -24,6 +24,7 @@ void      SmallShip_MoveTo(SmallShip *ship, Vec2 new_position);
 void      SmallShip_Update(SmallShip *ship, f32 delta);
 SDL_FRect SmallShip_GetBounds(const SmallShip *ship);
 void      SmallShip_Damage(SmallShip *ship, u32 amount);
+void      SmallShip_Kill(SmallShip *ship);
 void      SmallShip_Draw(SmallShip *ship);
 
 #endif // DREV_SMALL_SHIP_H

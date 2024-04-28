@@ -48,6 +48,10 @@ void Player_Damage(Player *p, u64 amount) {
     }
 }
 
+void Player_Kill(Player *p) {
+    p->health = 0;
+}
+
 static void Player_Shoot(Vec2 pos, Vec2 vel) {
     Projectile p;
     Projectile_Init(&p,

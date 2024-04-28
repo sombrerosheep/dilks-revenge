@@ -3,6 +3,7 @@
 ## core IV
 - [ ] texture
   - use SDL_Texture
+  - Do I really need an abstraction for this?
 
 ## resources IV
 - [ ] integrate images
@@ -54,11 +55,6 @@
 ## enemies II (heavy)
 - [ ] fires big bullets every 1600-2000ms 
 - [ ] red square 
-
-## collisions I
-- [x] enemy bullets reduce player health
-- [x] player bullets reduce enemy health
-- [ ] player/enemy collisions destroy both
 
 ## camera III (juice)
 - [ ] small shake when player is hit 
@@ -254,3 +250,8 @@
 - [x] select a waves direction (up/down/left/righ)
 - [x] get group of enemies (Sequenced or seeded?)
 - [x] enter as a group (offscreen) stopping at a specific place on-screen
+
+## collisions I
+- [x] enemy bullets reduce player health
+- [x] player bullets reduce enemy health
+- [x] player/enemy collisions destroy both

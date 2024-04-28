@@ -6,6 +6,7 @@
 #include "smallship.h"
 
 void HandlePlayerProjectileCollision(Player *player, Projectile *projectile);
+void HandlePlayerSmallShipCollision(Player *player, SmallShip *ship);
 void HandleSmallShipProjectileCollision(SmallShip *ship, Projectile *projectile);
 
 #endif // DREV_COLLISIONS_H

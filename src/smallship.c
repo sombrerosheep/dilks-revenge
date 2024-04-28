@@ -106,6 +106,10 @@ void SmallShip_Damage(SmallShip *ship, u32 amount) {
     }
 }
 
+void SmallShip_Kill(SmallShip *ship) {
+    ship->health = 0;
+}
+
 void SmallShip_Draw(SmallShip *ship) {
     Camera   *camera           = Resources_GetMainCamera();
     SDL_Color small_ship_color = {.r = 0x11, .g = 0x11, .b = 0xCC, .a = 0xAA};

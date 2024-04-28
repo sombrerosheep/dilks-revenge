@@ -33,7 +33,6 @@ i8   Entities_ClearSmallShips(void);
 Vec2 Entities_GetPlayerPosition(void);
 void Entities_MovePlayerTo(Vec2 target);
 void Entities_KillProjectile(Projectile *p);
-void Entities_DamagePlayer(u64 amount);
 
 void Entities_CheckAndHandleCollisions(void);
 
