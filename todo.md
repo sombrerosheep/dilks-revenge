@@ -1,54 +1,8 @@
-## misc
-- [x] const pointer parameters and when necessary
-- [x] implement GetBounds for all entities
-- [x] implement DREV_DRAW_BB for all entities
-- [x] SDL implementaitons of stdlib things
-- [x] primitive types names?
-  - typedefs for stdint -> my-types
-  - uint32_t u32
-  - int64_t  i64
-  - float    f32
-  - double   f64
-
-## core I
-- [x] game clock
-  - need ms [uint] per frame
-  - need s [float] per frame
-
-## core II
-- [x] scale
-  - size of ship and enemies and other entities by "meters"
-  - all speeds by m/sec
-
-## core III
-- [x] game memory
-  - layout
-  - only one up-front allocation
+# todo
 
 ## core IV
 - [ ] texture
   - use SDL_Texture
-
-## fonts I
-- [x] load and use font
-  - store as a single texture atlas
-
-## entities I
-- [x] entity manager
-- [x] projectiles as entities
-- [x] player as entity
-
-## resources I
-- [x] resource manager
-  - global singleton for entities to access as needed
-  - keeps the entity interface clean to abstract later
-- [x] integrate camera
-
-## resources II
-- [x] integrate input/controller
-
-## resources III
-- [x] integrate fonts
 
 ## resources IV
 - [ ] integrate images
@@ -68,16 +22,13 @@
   - game loads the pack.
   - utilty bundles the package
 
-## waves I
-- [x] select a waves direction (up/down/left/righ)
-- [x] get group of enemies (Sequenced or seeded?)
-- [/] enter as a group (offscreen) stopping at a specific place on-screen
+## waves II
 - [ ] as closer enemies are killed, move a further enemy to the vacan spot
 - [ ] wave done when all enemies are dead
 - [ ] player moved to 0,0 then camera pans, then wave starts
   - is this responsibility of the level?
 
-## waves II
+## waves III
 - [ ] when a wave enters, movement to/from each extent with everyone on screen
   - 5 enemies at the top move left to right, keeping everyone always on screen
   - if 1 outside enemy dies, then the group moves slightly more (etc...)
@@ -90,15 +41,6 @@
 ## levels II
 - [ ] every 10th wave is a boss
 
-## camera I
-- [x] implement camera 
-- [x] camera movement commands 
-  - [x] to center
-  - [x] to left
-  - [x] to right
-  - [x] to top
-  - [x] to bottom
-
 ## camera II
 - [x] lerp camera when moving to wave direction
 - [ ] small buffer outside of camera
@@ -106,23 +48,8 @@
 - [ ] slightly move camera when moving
   - slight "tilt"
 
-## player I
-- [x] movement
-- [x] small drift after moving?
-- [x] player aim with mouse
-- [x] player constrained by camera
-
-## player II
-- [x] player has health
-- [x] player shoot with LMB 
-- [x] player shoots bullets 
-
 ## player III
 - [ ] refine movement; make the drift feel less slippery
-
-## enemies I (light)
-- [x] fires small bullets every 1000-1200ms 
-- [x] blue square
 
 ## enemies II (heavy)
 - [ ] fires big bullets every 1600-2000ms 
@@ -247,4 +174,83 @@
 - do you get a new ship offer at certain planet?
 - do you get a new upgrade/weapon at each planet?
 - do you get a new upgrade/weapon at each planet?
-- 
+
+
+# done
+
+## camera I
+- [x] implement camera 
+- [x] camera movement commands 
+  - [x] to center
+  - [x] to left
+  - [x] to right
+  - [x] to top
+  - [x] to bottom
+
+## core I
+- [x] game clock
+  - need ms [uint] per frame
+  - need s [float] per frame
+
+## core II
+- [x] scale
+  - size of ship and enemies and other entities by "meters"
+  - all speeds by m/sec
+
+## core III
+- [x] game memory
+  - layout
+  - only one up-front allocation
+
+## enemies I (light)
+- [x] fires small bullets every 1000-1200ms 
+- [x] blue square
+
+## entities I
+- [x] entity manager
+- [x] projectiles as entities
+- [x] player as entity
+
+## fonts I
+- [x] load and use font
+  - store as a single texture atlas
+
+## misc
+- [x] const pointer parameters and when necessary
+- [x] implement GetBounds for all entities
+- [x] implement DREV_DRAW_BB for all entities
+- [x] SDL implementaitons of stdlib things
+- [x] primitive types names?
+  - typedefs for stdint -> my-types
+  - uint32_t u32
+  - int64_t  i64
+  - float    f32
+  - double   f64
+
+## player I
+- [x] movement
+- [x] small drift after moving?
+- [x] player aim with mouse
+- [x] player constrained by camera
+
+## player II
+- [x] player has health
+- [x] player shoot with LMB 
+- [x] player shoots bullets 
+
+## resources I
+- [x] resource manager
+  - global singleton for entities to access as needed
+  - keeps the entity interface clean to abstract later
+- [x] integrate camera
+
+## resources II
+- [x] integrate input/controller
+
+## resources III
+- [x] integrate fonts
+
+## waves I
+- [x] select a waves direction (up/down/left/righ)
+- [x] get group of enemies (Sequenced or seeded?)
+- [x] enter as a group (offscreen) stopping at a specific place on-screen
