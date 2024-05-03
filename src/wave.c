@@ -2,6 +2,7 @@
 
 #include "globals.h"
 #include "resources.h"
+#include "smallship.h"
 
 #define DREV_PI 3.14
 
@@ -124,7 +125,8 @@ Wave Wave_New(CameraFocus direction) {
                     Vec2 player_desired_pos = {.x = 0.f, .y = pos.y * -1.f - 60.f};
                     Vec2 start_at           = {.x = pos.x, .y = pos.y - travel_distance};
 
-                    SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
+                    SmallShip ship;
+                    SmallShip_Init(&ship, SmallShipType_Light, start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
                     Entities_InsertSmallShip(ship);
                     Entities_MovePlayerTo(player_desired_pos);
@@ -142,7 +144,8 @@ Wave Wave_New(CameraFocus direction) {
                     Vec2 player_desired_pos = {.x = 0.f, .y = pos.y * -1.f + 60.f};
                     Vec2 start_at           = {.x = pos.x, .y = pos.y + travel_distance};
 
-                    SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
+                    SmallShip ship;
+                    SmallShip_Init(&ship, SmallShipType_Light, start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
                     Entities_InsertSmallShip(ship);
                     Entities_MovePlayerTo(player_desired_pos);
@@ -160,7 +163,8 @@ Wave Wave_New(CameraFocus direction) {
                     Vec2 player_desired_pos = {.x = pos.x * -1.f - 60.f, .y = 0.f};
                     Vec2 start_at           = {.x = pos.x - travel_distance, .y = pos.y};
 
-                    SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
+                    SmallShip ship;
+                    SmallShip_Init(&ship, SmallShipType_Light, start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
                     Entities_InsertSmallShip(ship);
                     Entities_MovePlayerTo(player_desired_pos);
@@ -178,7 +182,8 @@ Wave Wave_New(CameraFocus direction) {
                     Vec2 player_desired_pos = {.x = pos.x * -1.f + 60.f, .y = 0.f};
                     Vec2 start_at           = {.x = pos.x + travel_distance, .y = pos.y};
 
-                    SmallShip ship = SmallShip_Create(start_at, Vec2_Zero, 0.f);
+                    SmallShip ship;
+                    SmallShip_Init(&ship, SmallShipType_Light, start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
                     Entities_InsertSmallShip(ship);
                     Entities_MovePlayerTo(player_desired_pos);

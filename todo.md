@@ -5,6 +5,16 @@
   - use SDL_Texture
   - Do I really need an abstraction for this?
 
+## core V
+- [ ] configurable "meters per unit"
+- [ ] new ppu dimensions. need mpu first. Right now its 1:1
+  | Resolution | PPU    | Player     | Screen (W) | Screen (H) | Ratio |
+  | ---------- | ------ | ---------- | ---------- | ---------- | ----- |
+  | 1280x720   | 10.67  | 4u (44px)  | 120u       | 67.5u      | 1.777 |
+  | 1920x1080  | 16     | 4u (64px)  | 120u       | 67.5u      | 1.777 |
+  | 3840x2160  | 32     | 4u (128px) | 120u       | 67.5u      | 1.777 |
+  | 7680x4320  | 64     | 4u (256px) | 120u       | 67.5u      | 1.777 |
+
 ## resources IV
 - [ ] integrate images
 
@@ -171,6 +181,10 @@
 - do you get a new upgrade/weapon at each planet?
 - do you get a new upgrade/weapon at each planet?
 
+# new enemy: drones
+- swarms of 5 (or so)
+- buzzing in circles as if they were bugs
+- hard to hit but weak attack and defense
 
 # done
 

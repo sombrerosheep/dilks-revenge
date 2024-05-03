@@ -6,61 +6,76 @@
 #include "random.h"
 #include "resources.h"
 #include "util.h"
+#include "vec.h"
 
-#define FIRE_RATE_MIN   1.f
-#define FIRE_RATE_MAX   3.5f
-#define SHIP_SIZE_UNITS 6.f
+struct drev_smallshipconfig {
+    float fire_rate_min;
+    float fire_rate_max;
+    float size;
+    float ship_speed;
+    float projectile_speed;
+    u32   projectile_damage;
+    u32   inititial_health;
+};
 
-#define ENEMY_PROJECTILE_SPEED    150.f
-#define SmallShipSpeed            125.f
-#define SmallShipProjectileDamage 5u
-#define SmallShipInitHealth       50u
+static struct drev_smallshipconfig configs[SmallShipType_Count] = { //
+    [SmallShipType_Light] = {
+        .fire_rate_min     = 1.5f,
+        .fire_rate_max     = 5.f,
+        .size              = 6.f,
+        .ship_speed        = 125.f,
+        .projectile_speed  = 150.f,
+        .projectile_damage = 5u,
+        .inititial_health  = 50u,
+    }};
 
-i8 SmallShip_Init(SmallShip *ship) {
-    ship->position        = Vec2_Zero;
-    ship->target_position = Vec2_Zero;
-    ship->size            = Vec2_Newf(SHIP_SIZE_UNITS);
-    ship->velocity        = Vec2_Zero;
-    ship->rotation        = 0.f;
-    ship->fire_cooldown   = random_getf_between(FIRE_RATE_MIN, FIRE_RATE_MAX);
+#define HeavyShipFireRateMin 3.f
+#define HeavyShipFireRateMax 6.f
+
+#define HeavyShipSize 12.f
+
+#define SmallShipTravelSpeed 125.f
+
+#define HeavyShipProjectileSpeed 80.f
+
+#define HeavyShipSpeed 125.f
+
+#define HeavyShipProjectileDamage 5u
+
+#define HeavyShipInitHealth 50u
+
+i8 SmallShip_Init(SmallShip *ship, SmallShipType type, Vec2 position, Vec2 velocity, f32 rotation) {
+    struct drev_smallshipconfig config = configs[type];
+
+    ship->type            = type;
+    ship->position        = position;
+    ship->target_position = position;
+    ship->velocity        = Vec2_Normalize(velocity);
+    ship->rotation        = rotation;
+    ship->fire_cooldown   = random_getf_between(config.fire_rate_min, config.fire_rate_max);
+    ship->size            = Vec2_Newf(config.size);
+    ship->health          = config.inititial_health;
 
     return 0;
-}
-
-SmallShip SmallShip_Create(Vec2 position, Vec2 velocity, f32 rotation) {
-    SmallShip ship;
-
-    SmallShip_Init(&ship);
-
-    ship.position        = position;
-    ship.target_position = position;
-    ship.velocity        = Vec2_Normalize(velocity);
-    ship.rotation        = rotation;
-    ship.health          = SmallShipInitHealth;
-
-    return ship;
 }
 
 void SmallShip_MoveTo(SmallShip *ship, Vec2 new_position) {
     ship->target_position = new_position;
 }
 
-static void SmallShip_Shoot(Vec2 pos, Vec2 vel) {
+static void SmallShip_Shoot(Vec2 pos, Vec2 vel, float speed, u32 strength) {
     Projectile p;
-    Projectile_Init(&p,
-                    ProjectileType_Enemy,
-                    pos,
-                    vel,
-                    ENEMY_PROJECTILE_SPEED,
-                    SmallShipProjectileDamage);
+    Projectile_Init(&p, ProjectileType_Enemy, pos, vel, speed, strength);
     Entities_AddProjectile(p);
 }
 
 void SmallShip_Update(SmallShip *ship, f32 delta) {
+    struct drev_smallshipconfig config = configs[ship->type];
     if (Vec2_Equal(ship->position, ship->target_position) == 0) {
-        f32 speed        = SmallShipSpeed;
-        ship->position.x = ease(ship->position.x, ship->target_position.x, delta * speed);
-        ship->position.y = ease(ship->position.y, ship->target_position.y, delta * speed);
+        ship->position.x =
+            ease(ship->position.x, ship->target_position.x, delta * SmallShipTravelSpeed);
+        ship->position.y =
+            ease(ship->position.y, ship->target_position.y, delta * SmallShipTravelSpeed);
 
         const f32 close_enough = 0.01f;
         if (SDL_fabsf(ship->position.x - ship->target_position.x) < close_enough &&
@@ -78,13 +93,13 @@ void SmallShip_Update(SmallShip *ship, f32 delta) {
             };
             aim = Vec2_Normalize(aim);
 
-            SmallShip_Shoot(ship->position, aim);
-            ship->fire_cooldown = random_getf_between(FIRE_RATE_MIN, FIRE_RATE_MAX);
+            SmallShip_Shoot(ship->position, aim, config.projectile_speed, config.projectile_damage);
+            ship->fire_cooldown = random_getf_between(config.fire_rate_min, config.fire_rate_max);
         }
     }
 
-    ship->position.x += ship->velocity.x * SmallShipSpeed * delta;
-    ship->position.y += ship->velocity.y * SmallShipSpeed * delta;
+    ship->position.x += ship->velocity.x * config.ship_speed * delta;
+    ship->position.y += ship->velocity.y * config.ship_speed * delta;
 }
 
 SDL_FRect SmallShip_GetBounds(const SmallShip *ship) {
