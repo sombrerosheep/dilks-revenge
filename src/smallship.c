@@ -9,40 +9,42 @@
 #include "vec.h"
 
 struct drev_smallshipconfig {
+    u32   inititial_health;
     float fire_rate_min;
     float fire_rate_max;
     float size;
     float ship_speed;
     float projectile_speed;
     u32   projectile_damage;
-    u32   inititial_health;
+    float projectile_size;
 };
 
-static struct drev_smallshipconfig configs[SmallShipType_Count] = { //
-    [SmallShipType_Light] = {
-        .fire_rate_min     = 1.5f,
-        .fire_rate_max     = 5.f,
-        .size              = 6.f,
-        .ship_speed        = 125.f,
-        .projectile_speed  = 150.f,
-        .projectile_damage = 5u,
-        .inititial_health  = 50u,
-    }};
-
-#define HeavyShipFireRateMin 3.f
-#define HeavyShipFireRateMax 6.f
-
-#define HeavyShipSize 12.f
+static struct drev_smallshipconfig configs[SmallShipType_Count] = {
+    [SmallShipType_Light] =
+        {
+            .inititial_health  = 50u,
+            .fire_rate_min     = 1.5f,
+            .fire_rate_max     = 5.f,
+            .size              = 6.f,
+            .ship_speed        = 125.f,
+            .projectile_speed  = 150.f,
+            .projectile_damage = 5u,
+            .projectile_size   = 1.f,
+        },
+    [SmallShipType_Heavy] =
+        {
+            .inititial_health  = 75u,
+            .fire_rate_min     = 3.f,
+            .fire_rate_max     = 6.f,
+            .size              = 12.f,
+            .ship_speed        = 125.f,
+            .projectile_speed  = 75.f,
+            .projectile_damage = 20u,
+            .projectile_size   = 3.f,
+        },
+};
 
 #define SmallShipTravelSpeed 125.f
-
-#define HeavyShipProjectileSpeed 80.f
-
-#define HeavyShipSpeed 125.f
-
-#define HeavyShipProjectileDamage 5u
-
-#define HeavyShipInitHealth 50u
 
 i8 SmallShip_Init(SmallShip *ship, SmallShipType type, Vec2 position, Vec2 velocity, f32 rotation) {
     struct drev_smallshipconfig config = configs[type];
@@ -63,9 +65,9 @@ void SmallShip_MoveTo(SmallShip *ship, Vec2 new_position) {
     ship->target_position = new_position;
 }
 
-static void SmallShip_Shoot(Vec2 pos, Vec2 vel, float speed, u32 strength) {
+static void SmallShip_Shoot(Vec2 pos, Vec2 vel, float speed, u32 strength, float sz) {
     Projectile p;
-    Projectile_Init(&p, ProjectileType_Enemy, pos, vel, speed, strength);
+    Projectile_Init(&p, ProjectileType_Enemy, pos, vel, speed, strength, sz);
     Entities_AddProjectile(p);
 }
 
@@ -93,7 +95,11 @@ void SmallShip_Update(SmallShip *ship, f32 delta) {
             };
             aim = Vec2_Normalize(aim);
 
-            SmallShip_Shoot(ship->position, aim, config.projectile_speed, config.projectile_damage);
+            SmallShip_Shoot(ship->position,
+                            aim,
+                            config.projectile_speed,
+                            config.projectile_damage,
+                            config.projectile_size);
             ship->fire_cooldown = random_getf_between(config.fire_rate_min, config.fire_rate_max);
         }
     }

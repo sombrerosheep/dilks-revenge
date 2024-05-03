@@ -16,6 +16,7 @@
 #define PlayerMeterPerSecond      125.f
 #define PlayerDecayMeterPerSecond ((PlayerMeterPerSecond) / .5f)
 #define PlayerProjectileDamage    200u
+#define PlayerProjectileSize      1.f
 
 i8 Player_Init(Player *p) {
     p->health          = PLAYER_INIT_HEALTH;
@@ -59,7 +60,8 @@ static void Player_Shoot(Vec2 pos, Vec2 vel) {
                     pos,
                     vel,
                     PLAYER_PROJECTILE_SPEED,
-                    PlayerProjectileDamage);
+                    PlayerProjectileDamage,
+                    PlayerProjectileSize);
     Entities_AddProjectile(p);
 }
 

@@ -10,6 +10,7 @@ typedef struct drev_small_ship SmallShip;
 
 typedef enum {
     SmallShipType_Light = 0,
+    SmallShipType_Heavy,
 
     SmallShipType_Count
 } SmallShipType;

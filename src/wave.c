@@ -1,6 +1,7 @@
 #include "wave.h"
 
 #include "globals.h"
+#include "random.h"
 #include "resources.h"
 #include "smallship.h"
 
@@ -125,8 +126,10 @@ Wave Wave_New(CameraFocus direction) {
                     Vec2 player_desired_pos = {.x = 0.f, .y = pos.y * -1.f - 60.f};
                     Vec2 start_at           = {.x = pos.x, .y = pos.y - travel_distance};
 
+                    SmallShipType type =
+                        random_get_between(SmallShipType_Light, SmallShipType_Heavy);
                     SmallShip ship;
-                    SmallShip_Init(&ship, SmallShipType_Light, start_at, Vec2_Zero, 0.f);
+                    SmallShip_Init(&ship, type, start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
                     Entities_InsertSmallShip(ship);
                     Entities_MovePlayerTo(player_desired_pos);
@@ -144,8 +147,10 @@ Wave Wave_New(CameraFocus direction) {
                     Vec2 player_desired_pos = {.x = 0.f, .y = pos.y * -1.f + 60.f};
                     Vec2 start_at           = {.x = pos.x, .y = pos.y + travel_distance};
 
+                    SmallShipType type =
+                        random_get_between(SmallShipType_Light, SmallShipType_Heavy);
                     SmallShip ship;
-                    SmallShip_Init(&ship, SmallShipType_Light, start_at, Vec2_Zero, 0.f);
+                    SmallShip_Init(&ship, type, start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
                     Entities_InsertSmallShip(ship);
                     Entities_MovePlayerTo(player_desired_pos);
@@ -163,8 +168,10 @@ Wave Wave_New(CameraFocus direction) {
                     Vec2 player_desired_pos = {.x = pos.x * -1.f - 60.f, .y = 0.f};
                     Vec2 start_at           = {.x = pos.x - travel_distance, .y = pos.y};
 
+                    SmallShipType type =
+                        random_get_between(SmallShipType_Light, SmallShipType_Heavy);
                     SmallShip ship;
-                    SmallShip_Init(&ship, SmallShipType_Light, start_at, Vec2_Zero, 0.f);
+                    SmallShip_Init(&ship, type, start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
                     Entities_InsertSmallShip(ship);
                     Entities_MovePlayerTo(player_desired_pos);
@@ -182,8 +189,10 @@ Wave Wave_New(CameraFocus direction) {
                     Vec2 player_desired_pos = {.x = pos.x * -1.f + 60.f, .y = 0.f};
                     Vec2 start_at           = {.x = pos.x + travel_distance, .y = pos.y};
 
+                    SmallShipType type =
+                        random_get_between(SmallShipType_Light, SmallShipType_Heavy);
                     SmallShip ship;
-                    SmallShip_Init(&ship, SmallShipType_Light, start_at, Vec2_Zero, 0.f);
+                    SmallShip_Init(&ship, type, start_at, Vec2_Zero, 0.f);
                     SmallShip_MoveTo(&ship, pos);
                     Entities_InsertSmallShip(ship);
                     Entities_MovePlayerTo(player_desired_pos);

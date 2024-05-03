@@ -11,13 +11,14 @@ void Projectile_Init(Projectile    *p,
                      Vec2           position,
                      Vec2           velocity,
                      f32            speed_m_sec,
-                     u32            strength //
+                     u32            strength,
+                     float          sz //
 ) {
     p->type        = type;
     p->position    = position;
     p->velocity    = Vec2_Normalize(velocity);
     p->speed_m_sec = speed_m_sec;
-    p->size        = Vec2_Newf(1.);
+    p->size        = Vec2_Newf(sz);
 
     // todo: should this be a lookup based on the projectile type?
     p->strength = strength;
