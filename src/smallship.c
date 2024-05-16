@@ -7,16 +7,18 @@
 #include "resources.h"
 #include "util.h"
 #include "vec.h"
+#include <SDL_pixels.h>
 
 struct drev_smallshipconfig {
-    u32   inititial_health;
-    float fire_rate_min;
-    float fire_rate_max;
-    float size;
-    float ship_speed;
-    float projectile_speed;
-    u32   projectile_damage;
-    float projectile_size;
+    u32       inititial_health;
+    float     fire_rate_min;
+    float     fire_rate_max;
+    float     size;
+    float     ship_speed;
+    float     projectile_speed;
+    u32       projectile_damage;
+    float     projectile_size;
+    SDL_Color color;
 };
 
 static struct drev_smallshipconfig configs[SmallShipType_Count] = {
@@ -36,7 +38,7 @@ static struct drev_smallshipconfig configs[SmallShipType_Count] = {
             .inititial_health  = 75u,
             .fire_rate_min     = 3.f,
             .fire_rate_max     = 6.f,
-            .size              = 12.f,
+            .size              = 6.f,
             .ship_speed        = 125.f,
             .projectile_speed  = 75.f,
             .projectile_damage = 20u,
@@ -133,7 +135,13 @@ void SmallShip_Kill(SmallShip *ship) {
 
 void SmallShip_Draw(SmallShip *ship) {
     Camera   *camera           = Resources_GetMainCamera();
-    SDL_Color small_ship_color = {.r = 0x11, .g = 0x11, .b = 0xCC, .a = 0xAA};
+    SDL_Color light_ship_color = {.r = 0x11, .g = 0x11, .b = 0xCC, .a = 0xAA};
+    SDL_Color heavy_ship_color = ColorRed;
+    SDL_Color ship_color       = light_ship_color;
+
+    if (ship->type == SmallShipType_Heavy) {
+        ship_color = heavy_ship_color;
+    }
 
     SDL_FRect rect = {
         .x = ship->position.x,
@@ -142,7 +150,7 @@ void SmallShip_Draw(SmallShip *ship) {
         .h = ship->size.y,
     };
 
-    Camera_DrawFillRect(camera, rect, small_ship_color);
+    Camera_DrawFillRect(camera, rect, ship_color);
 
 #ifdef DREV_DRAW_BB
     Camera_DrawRect(camera, SmallShip_GetBounds(ship), ColorRed);

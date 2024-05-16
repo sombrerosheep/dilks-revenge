@@ -62,10 +62,6 @@
 ## player III
 - [ ] refine movement; make the drift feel less slippery
 
-## enemies II (heavy)
-- [ ] fires big bullets every 1600-2000ms 
-- [ ] red square 
-
 ## camera III (juice)
 - [ ] small shake when player is hit 
 - [ ] even smaller shake when enemy dies? 
@@ -269,3 +265,7 @@
 - [x] enemy bullets reduce player health
 - [x] player bullets reduce enemy health
 - [x] player/enemy collisions destroy both
+
+## enemies II (heavy)
+- [x] fires big bullets every 1600-2000ms 
+- [x] red square 
