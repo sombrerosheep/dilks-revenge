@@ -6,7 +6,7 @@
 #include "util.h"
 #include "vec.h"
 
-#define FOCUS_OFFSET 35.f
+#define FOCUS_OFFSET 35.f / MetersPerUnit
 
 const char *CameraFocusLabels[CameraFocusCount] = {
     [CameraFocusCenter] = "CameraFocusCenter",

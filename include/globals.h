@@ -11,4 +11,8 @@
 
 #define max(x, y) ((x) > (y) ? (x) : (y))
 
+// Physics
+
+#define MetersPerUnit 2.5f
+
 #endif // DREV_GLOBALS_H

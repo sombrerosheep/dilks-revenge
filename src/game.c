@@ -55,7 +55,11 @@ static void Game_InitState(Game *game, System *sys) {
     Camera_Init(&game->state.main_camera, units_high, ratio);
     Camera_SetCenter(&game->state.main_camera, Vec2_Zero);
 
-    Font_Load(game->system->renderer, &game->state.debug_font, font_path, 3.75 * sys->config.ppu);
+    float font_unit_sz = 1.5;
+    Font_Load(game->system->renderer,
+              &game->state.debug_font,
+              font_path,
+              font_unit_sz * sys->config.ppu);
 
     Resources_Init(&game->state.main_camera,
                    &game->state.controller,

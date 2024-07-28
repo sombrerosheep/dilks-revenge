@@ -2,12 +2,12 @@
 
 #include "camera.h"
 #include "entities.h"
+#include "globals.h"
 #include "projectile.h"
 #include "random.h"
 #include "resources.h"
 #include "util.h"
 #include "vec.h"
-#include <SDL_pixels.h>
 
 struct drev_smallshipconfig {
     u32       inititial_health;
@@ -57,7 +57,7 @@ i8 SmallShip_Init(SmallShip *ship, SmallShipType type, Vec2 position, Vec2 veloc
     ship->velocity        = Vec2_Normalize(velocity);
     ship->rotation        = rotation;
     ship->fire_cooldown   = random_getf_between(config.fire_rate_min, config.fire_rate_max);
-    ship->size            = Vec2_Newf(config.size);
+    ship->size            = Vec2_Newf(config.size / MetersPerUnit);
     ship->health          = config.inititial_health;
 
     return 0;
@@ -76,10 +76,12 @@ static void SmallShip_Shoot(Vec2 pos, Vec2 vel, float speed, u32 strength, float
 void SmallShip_Update(SmallShip *ship, f32 delta) {
     struct drev_smallshipconfig config = configs[ship->type];
     if (Vec2_Equal(ship->position, ship->target_position) == 0) {
-        ship->position.x =
-            ease(ship->position.x, ship->target_position.x, delta * SmallShipTravelSpeed);
-        ship->position.y =
-            ease(ship->position.y, ship->target_position.y, delta * SmallShipTravelSpeed);
+        ship->position.x = ease(ship->position.x,
+                                ship->target_position.x,
+                                delta * (SmallShipTravelSpeed / MetersPerUnit));
+        ship->position.y = ease(ship->position.y,
+                                ship->target_position.y,
+                                delta * (SmallShipTravelSpeed / MetersPerUnit));
 
         const f32 close_enough = 0.01f;
         if (SDL_fabsf(ship->position.x - ship->target_position.x) < close_enough &&
@@ -106,8 +108,8 @@ void SmallShip_Update(SmallShip *ship, f32 delta) {
         }
     }
 
-    ship->position.x += ship->velocity.x * config.ship_speed * delta;
-    ship->position.y += ship->velocity.y * config.ship_speed * delta;
+    ship->position.x += ship->velocity.x * (config.ship_speed / MetersPerUnit) * delta;
+    ship->position.y += ship->velocity.y * (config.ship_speed / MetersPerUnit) * delta;
 }
 
 SDL_FRect SmallShip_GetBounds(const SmallShip *ship) {

@@ -18,7 +18,7 @@ void Projectile_Init(Projectile    *p,
     p->position    = position;
     p->velocity    = Vec2_Normalize(velocity);
     p->speed_m_sec = speed_m_sec;
-    p->size        = Vec2_Newf(sz);
+    p->size        = Vec2_Newf(sz / MetersPerUnit);
 
     // todo: should this be a lookup based on the projectile type?
     p->strength = strength;
@@ -45,8 +45,8 @@ i8 Projectile_CanHurtPlayer(const Projectile *p) {
 }
 
 void Projectile_Update(Projectile *p, f32 delta) {
-    p->position.x += p->velocity.x * p->speed_m_sec * delta;
-    p->position.y += p->velocity.y * p->speed_m_sec * delta;
+    p->position.x += p->velocity.x * (p->speed_m_sec / MetersPerUnit) * delta;
+    p->position.y += p->velocity.y * (p->speed_m_sec / MetersPerUnit) * delta;
 }
 
 void Projectile_Draw(const Projectile *p) {

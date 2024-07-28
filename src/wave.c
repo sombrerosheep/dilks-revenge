@@ -49,38 +49,38 @@ static struct wave_grid make_wave_grid(Wave w) {
 
     switch (w.wave_direction) {
         case CameraFocusTop:
-            grid.width   = 240.f;
+            grid.width   = 240.f / MetersPerUnit;
             grid.rows    = 2;
             grid.columns = 10;
             grid.spacing = grid.width / ((f32)grid.columns - 1.f);
-            grid.start   = (Vec2){.x = -120.f, .y = -100.f};
+            grid.start   = (Vec2){.x = -120.f / MetersPerUnit, .y = -100.f / MetersPerUnit};
             grid.col_dir = Vec2_Up;
             grid.row_dir = Vec2_Right;
             break;
         case CameraFocusBottom:
-            grid.width   = 240.f;
+            grid.width   = 240.f / MetersPerUnit;
             grid.rows    = 2;
             grid.columns = 10;
             grid.spacing = grid.width / ((f32)grid.columns - 1.f);
-            grid.start   = (Vec2){.x = 120.f, .y = 100.f};
+            grid.start   = (Vec2){.x = 120.f / MetersPerUnit, .y = 100.f / MetersPerUnit};
             grid.col_dir = Vec2_Down;
             grid.row_dir = Vec2_Right;
             break;
         case CameraFocusLeft:
-            grid.width   = 135.f;
+            grid.width   = 135.f / MetersPerUnit;
             grid.rows    = 2;
             grid.columns = 10;
             grid.spacing = grid.width / ((f32)grid.columns - 1.f);
-            grid.start   = (Vec2){.x = -165.f, .y = 65.f};
+            grid.start   = (Vec2){.x = -165.f / MetersPerUnit, .y = 65.f / MetersPerUnit};
             grid.col_dir = Vec2_Left;
             grid.row_dir = Vec2_Up;
             break;
         case CameraFocusRight:
-            grid.width   = 135.f;
+            grid.width   = 135.f / MetersPerUnit;
             grid.rows    = 2;
             grid.columns = 10;
             grid.spacing = grid.width / ((f32)grid.columns - 1.f);
-            grid.start   = (Vec2){.x = 165.f, .y = 65.f};
+            grid.start   = (Vec2){.x = 165.f / MetersPerUnit, .y = 65.f / MetersPerUnit};
             grid.col_dir = Vec2_Right;
             grid.row_dir = Vec2_Up;
             break;
@@ -104,8 +104,8 @@ Wave Wave_New(CameraFocus direction) {
         .wave_direction = direction,
         .num_rows       = 2,
     };
-    const f32 row_spacing     = 10.f;
-    const f32 travel_distance = 65.f;
+    const f32 row_spacing     = 10.f / MetersPerUnit;
+    const f32 travel_distance = 65.f / MetersPerUnit;
 
     Wave_ClearSmallShips(&w);
 

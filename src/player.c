@@ -10,9 +10,9 @@
 #include "vec.h"
 
 #define PLAYER_INIT_HEALTH        100.f
-#define AIM_RADIUS                15.f
+#define AIM_RADIUS                15.f / MetersPerUnit
 #define PLAYER_PROJECTILE_SPEED   400.f
-#define PLAYER_FIRE_RATE          0.5f
+#define PLAYER_FIRE_RATE          0.2f
 #define PlayerMeterPerSecond      125.f
 #define PlayerDecayMeterPerSecond ((PlayerMeterPerSecond) / .5f)
 #define PlayerProjectileDamage    200u
@@ -24,8 +24,8 @@ i8 Player_Init(Player *p) {
     p->target_position = Vec2_Newf(0.f);
     p->velocity        = Vec2_Zero;
 
-    p->size.x = 10.f;
-    p->size.y = 10.f;
+    p->size.x = 10.f / MetersPerUnit;
+    p->size.y = 10.f / MetersPerUnit;
 
     p->aim = Vec2_Zero;
 
@@ -68,8 +68,8 @@ static void Player_Shoot(Vec2 pos, Vec2 vel) {
 void Player_Update(Player *p, f32 delta) {
     Camera          *camera     = Resources_GetMainCamera();
     const GameInput *controller = Resources_GetController();
-    f32              speed      = PlayerMeterPerSecond;
-    f32              decay      = PlayerDecayMeterPerSecond;
+    f32              speed      = PlayerMeterPerSecond / MetersPerUnit;
+    f32              decay      = PlayerDecayMeterPerSecond / MetersPerUnit;
 
     if (p->being_moved == 1) {
         const f32 ease_speed = PlayerMeterPerSecond;

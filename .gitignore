@@ -3,8 +3,12 @@
 \#*\#
 .\#*
 
+# clangd
+.cache
+
 # build dir
 build/
+build_prev/
 
 # ide
 .vscode/
