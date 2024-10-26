@@ -2,12 +2,12 @@
 
 #include "camera.h"
 #include "entities.h"
+#include "maths.h"
 #include "projectile.h"
 #include "random.h"
 #include "resources.h"
 #include "util.h"
 #include "vec.h"
-#include <SDL.h>
 
 struct drev_smallshipconfig {
     u32       inititial_health;
@@ -45,9 +45,6 @@ static struct drev_smallshipconfig configs[SmallShipType_Count] = {
             .projectile_size   = 3.f,
         },
 };
-
-#define DegToRad(x) ((x) * ((M_PI) / 180.f))
-#define RadToDeg(x) ((x) * (180.f / M_PI))
 
 #define SmallShipTravelSpeed 125.f
 #define SmallShipAimErrorDeg 15.0

@@ -5,11 +5,6 @@
 #include "resources.h"
 #include "smallship.h"
 
-#define DREV_PI 3.14
-
-#define DEG_TO_RAD(a) ((a) * (DREV_PI / 180.f))
-#define RAD_TO_DEG(a) ((a) * (180.f / DREV_PI))
-
 const char *WaveStateLabels[WaveStateCount] = {
     [WaveStateIdle]     = "WaveStateIdle",
     [WaveStateInit]     = "WaveStateInit",
