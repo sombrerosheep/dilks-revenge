@@ -31,7 +31,7 @@ int main(void) {
         return -1;
     }
 
-    SysConfig sys_config = SysConfig_HD;
+    SysConfig sys_config = SysConfig_FHD;
     System_Init(&sys, "Dilks Revenge", sys_config);
     Game *dr_game = Game_Create(&sys);
 
