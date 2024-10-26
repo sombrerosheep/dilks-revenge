@@ -14,8 +14,8 @@ f32 Vec2_Magnitude(Vec2 vec) {
 }
 
 Vec2 Vec2_Normalize(Vec2 vec) {
-    Vec2  norm;
-    f32 mag;
+    Vec2 norm;
+    f32  mag;
 
     norm = Vec2_Zero;
     mag  = Vec2_Magnitude(vec);
@@ -29,9 +29,9 @@ Vec2 Vec2_Normalize(Vec2 vec) {
 }
 
 Vec2 Vec2_Rotate(Vec2 vec, f32 deg) {
-    Vec2  rot   = Vec2_Zero;
-    f32 a_sin = SDL_sinf(deg);
-    f32 a_cos = SDL_cosf(deg);
+    Vec2 rot   = Vec2_Zero;
+    f32  a_sin = SDL_sinf(deg);
+    f32  a_cos = SDL_cosf(deg);
 
     rot.x = vec.x * a_cos - vec.y * a_sin;
     rot.y = vec.y * a_cos + vec.x * a_sin;

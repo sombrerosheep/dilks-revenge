@@ -9,3 +9,5 @@ build/
 # ide
 .vscode/
 !.vscode/settings.json
+.cache/
+build_prev/

@@ -7,7 +7,7 @@
 #include "resources.h"
 #include "util.h"
 #include "vec.h"
-#include <SDL_pixels.h>
+#include <SDL.h>
 
 struct drev_smallshipconfig {
     u32       inititial_health;
@@ -46,7 +46,11 @@ static struct drev_smallshipconfig configs[SmallShipType_Count] = {
         },
 };
 
+#define DegToRad(x) ((x) * ((M_PI) / 180.f))
+#define RadToDeg(x) ((x) * (180.f / M_PI))
+
 #define SmallShipTravelSpeed 125.f
+#define SmallShipAimErrorDeg 15.0
 
 i8 SmallShip_Init(SmallShip *ship, SmallShipType type, Vec2 position, Vec2 velocity, f32 rotation) {
     struct drev_smallshipconfig config = configs[type];
@@ -95,7 +99,11 @@ void SmallShip_Update(SmallShip *ship, f32 delta) {
                       .x = playerPos.x - ship->position.x,
                       .y = playerPos.y - ship->position.y,
             };
-            aim = Vec2_Normalize(aim);
+
+            f32 err = random_getf_between(-SmallShipAimErrorDeg, SmallShipAimErrorDeg);
+            err     = DegToRad(err);
+            aim     = Vec2_Normalize(aim);
+            aim     = Vec2_Rotate(aim, err);
 
             SmallShip_Shoot(ship->position,
                             aim,

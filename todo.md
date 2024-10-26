@@ -66,9 +66,6 @@
 - [ ] small shake when player is hit 
 - [ ] even smaller shake when enemy dies? 
 
-## enemies III
-- [ ] aim has a margin of error  
-
 ## background I
 - [ ] stars moving slowly in direction of wave
 
@@ -269,3 +266,6 @@
 ## enemies II (heavy)
 - [x] fires big bullets every 1600-2000ms 
 - [x] red square 
+
+## enemies III
+- [x] aim has a margin of error  
