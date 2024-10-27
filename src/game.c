@@ -42,6 +42,7 @@ static void Game_Draw(Game *game) {
     Entities_Draw();
 
     Camera_Draw(&game->state.main_camera, game->system->renderer);
+    Wave_Draw(&game->state.current_wave);
 
     Debug_Draw();
 

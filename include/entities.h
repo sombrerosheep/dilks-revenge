@@ -27,12 +27,12 @@ void Entities_Init(ProjectileContainer *projectiles,
                    SmallShipContainer  *small_ships,
                    Player              *player);
 
-i8   Entities_AddProjectile(Projectile p);
-i8   Entities_InsertSmallShip(SmallShip ship);
-i8   Entities_ClearSmallShips(void);
-Vec2 Entities_GetPlayerPosition(void);
-void Entities_MovePlayerTo(Vec2 target);
-void Entities_KillProjectile(Projectile *p);
+i8                  Entities_AddProjectile(Projectile p);
+ContainedSmallShip *Entities_InsertSmallShip(SmallShip ship);
+i8                  Entities_ClearSmallShips(void);
+Vec2                Entities_GetPlayerPosition(void);
+void                Entities_MovePlayerTo(Vec2 target);
+void                Entities_KillProjectile(Projectile *p);
 
 void Entities_CheckAndHandleCollisions(void);
 

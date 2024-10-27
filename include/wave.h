@@ -19,15 +19,15 @@ typedef enum {
 extern const char *WaveStateLabels[WaveStateCount];
 
 struct drev_wave {
-    WaveState   state;
-    CameraFocus wave_direction;
-    u16         num_rows;
-    SmallShip  *ships[MaxSmallShips];
+    WaveState           state;
+    CameraFocus         wave_direction;
+    ContainedSmallShip *ships[MaxSmallShips];
 };
 
 Wave Wave_New(CameraFocus direction);
 void Wave_Start(Wave *wave);
 void Wave_Update(Wave *wave);
+void Wave_Draw(Wave *wave);
 
 void Wave_Clean(Wave *wave);
 

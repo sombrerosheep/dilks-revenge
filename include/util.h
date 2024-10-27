@@ -39,6 +39,6 @@ extern SDL_Color ColorCyan;
 
 void SetTextureColorMod(SDL_Texture *texture, SDL_Color color);
 void SetRenderDrawColor(SDL_Renderer *renderer, SDL_Color color);
-void draw_plus(SDL_Renderer *r, Vec2 p);
+void draw_plus(SDL_Renderer *r, Vec2 p, f32 len);
 
 #endif // DREV_UTIL_H

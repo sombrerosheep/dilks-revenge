@@ -46,18 +46,18 @@ i8 Entities_AddProjectile(Projectile p) {
     return -1;
 }
 
-i8 Entities_InsertSmallShip(SmallShip ship) {
+ContainedSmallShip *Entities_InsertSmallShip(SmallShip ship) {
     for (u32 i = 0; i < GameEntities.small_ships->capacity; i++) {
         if (GameEntities.small_ships->items[i].in_use == 0) {
             GameEntities.small_ships->items[i].data   = ship;
             GameEntities.small_ships->items[i].in_use = 1;
 
-            return 0;
+            return &GameEntities.small_ships->items[i];
         }
     }
 
     SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "Unable to insert small ship. No slots available\n");
-    return -1;
+    return NULL;
 }
 
 i8 Entities_ClearSmallShips(void) {

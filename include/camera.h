@@ -42,6 +42,7 @@ SDL_FRect Camera_GetBounds(const Camera *cam);
 // all coordinates for draw functions should be in world coordinates.
 void Camera_DrawFillRect(const Camera *cam, SDL_FRect rect, SDL_Color color);
 void Camera_DrawRect(const Camera *cam, SDL_FRect rect, SDL_Color color);
+void Camera_DrawPlus(const Camera *camera, Vec2 p, SDL_Color color);
 void Camera_DrawLine(const Camera *cam, f32 x1, f32 y1, f32 x2, f32 y2, SDL_Color color);
 
 void Camera_Draw(const Camera *camera, SDL_Renderer *renderer);

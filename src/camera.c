@@ -183,14 +183,33 @@ void Camera_Draw(const Camera *camera, SDL_Renderer *renderer) {
 
     Camera_DrawRect(camera, rect, ColorGreen);
 
+    // Draw 0x0
+    Camera_DrawPlus(camera, Vec2_Zero, ColorCyan);
+
     // draw center crosshair
     SetRenderDrawColor(renderer, ColorRed);
     draw_plus(renderer,
               (Vec2){
                   .x = camera->half_size.x * config->ppu,
                   .y = camera->half_size.y * config->ppu,
-              });
+              },
+              10.f);
 #endif
+}
+
+void Camera_DrawPlus(const Camera *camera, Vec2 p, SDL_Color color) {
+    SDL_Renderer *renderer = Resources_GetRenderer();
+
+    Vec2 screen_p = Camera_WorldToScreenF(camera, p.x, p.y);
+    // printf("drawing plus at %.2fx%.2f (%.2fx%.2f)\n", screen_p.x, screen_p.y, p.x, p.y);
+
+    SetRenderDrawColor(renderer, color);
+    draw_plus(renderer,
+              (Vec2){
+                  .x = screen_p.x,
+                  .y = screen_p.y,
+              },
+              10.f);
 }
 
 void Camera_Destroy(Camera *camera) {
