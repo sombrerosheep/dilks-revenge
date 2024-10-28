@@ -8,6 +8,7 @@
 #include "random.h"
 #include "resources.h"
 #include "smallship.h"
+#include "types.h"
 #include "util.h"
 #include "vec.h"
 
@@ -124,8 +125,28 @@ static Vec2 get_position_for_ship(Vec2 origin, f32 col_spacing, f32 row_spacing,
     return pos;
 }
 
+static Vec2 transpose_index_for_x_y(u32 index, u32 stride) {
+    Vec2 pos = Vec2_Zero;
+    if (index < stride) {
+        pos.x = index;
+        return pos;
+    }
+
+    pos.x = index % stride;
+    pos.y = (f32)(index / stride);
+
+    return pos;
+}
+
+static u32 transpose_x_y_for_index(u32 x, u32 y, u32 stride) {
+    u32 index = x + (y * stride);
+
+    return index;
+}
+
 static void set_grid_ship(Wave *wave, ContainedSmallShip *ship, u32 x, u32 y, u32 stride) {
-    u32 index          = x + (y * stride);
+    u32 index = transpose_x_y_for_index(x, y, stride);
+    printf("setting ship at: %u\n", index);
     wave->ships[index] = ship;
 
     return;
@@ -256,8 +277,55 @@ void Wave_Start(Wave *wave) {
     wave->state = WaveStateRunning;
 }
 
+i32 get_ship_to_relocate(Wave *wave) {
+    for (u32 i = grid_columns; i < MaxSmallShips; i++) {
+        if (wave->ships[i] == NULL) {
+            continue;
+        }
+
+        if (wave->ships[i]->in_use == 1) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 void Wave_Update(Wave *wave) {
-    UNUSED(wave);
+    if (wave->wave_direction == CameraFocusCenter || wave->wave_direction == CameraFocusCenter) {
+        return;
+    }
+    for (u32 i = 0; i < grid_columns; i++) {
+        if (wave->ships[i] == NULL) {
+            continue;
+        }
+
+        if (wave->ships[i]->in_use == 1) {
+            // printf("%u: ship in use...\n", i);
+            continue;
+        }
+
+        // find a ship from the next row
+        i32 ship_to_move = get_ship_to_relocate(wave);
+        if (ship_to_move < 0) {
+            break;
+        }
+
+        // get x/y from index
+        Vec2 move_to = transpose_index_for_x_y(i, grid_columns);
+        // get pos from x/y
+        struct wave_grid grid = make_wave_grid(*wave);
+        move_to =
+            get_position_for_ship(grid.start, grid.spacing, -row_spacing, move_to.x, move_to.y);
+        // move ship to that spot
+        move_to = transpose_for_direction(move_to, wave->wave_direction);
+        SmallShip_MoveTo(&wave->ships[ship_to_move]->data, move_to);
+
+        wave->ships[i] = wave->ships[ship_to_move];
+        wave->ships[ship_to_move] = NULL;
+        
+        break;
+    }
 }
 
 void Wave_Draw(Wave *wave) {
@@ -273,9 +341,5 @@ void Wave_Clean(Wave *wave) {
 
     Entities_ClearSmallShips();
 
-    // Does this need to track pointers or do we expose the container
-    // from the enity manager?
-    for (u32 i = 0; i < MaxSmallShips; i++) {
-        wave->ships[i] = NULL;
-    }
+    Wave_ClearSmallShips(wave);
 }
