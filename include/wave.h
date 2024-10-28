@@ -26,6 +26,7 @@ struct drev_wave {
 
 Wave Wave_New(CameraFocus direction);
 void Wave_Start(Wave *wave);
+void Wave_End(Wave *wave);
 void Wave_Update(Wave *wave);
 void Wave_Draw(Wave *wave);
 

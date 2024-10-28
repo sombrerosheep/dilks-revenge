@@ -127,9 +127,7 @@ void Game_Run(Game *g) {
                         Wave_Clean(&g->state.current_wave);
                         g->state.current_wave = Wave_New(CameraFocusRight);
                     } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_c)) {
-                        Wave_Clean(&g->state.current_wave);
-                        Camera_SetFocus(&g->state.main_camera, CameraFocusCenter);
-                        Entities_MovePlayerTo(Vec2_Zero);
+                        Wave_End(&g->state.current_wave);
                     }
 
                     Wave_Start(&g->state.current_wave);

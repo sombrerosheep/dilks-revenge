@@ -145,8 +145,7 @@ static u32 transpose_x_y_for_index(u32 x, u32 y, u32 stride) {
 }
 
 static void set_grid_ship(Wave *wave, ContainedSmallShip *ship, u32 x, u32 y, u32 stride) {
-    u32 index = transpose_x_y_for_index(x, y, stride);
-    printf("setting ship at: %u\n", index);
+    u32 index          = transpose_x_y_for_index(x, y, stride);
     wave->ships[index] = ship;
 
     return;
@@ -277,7 +276,15 @@ void Wave_Start(Wave *wave) {
     wave->state = WaveStateRunning;
 }
 
-i32 get_ship_to_relocate(Wave *wave) {
+void Wave_End(Wave *wave) {
+    Camera *camera = Resources_GetMainCamera();
+
+    Wave_Clean(wave);
+    Camera_SetFocus(camera, CameraFocusCenter);
+    Entities_MovePlayerTo(Vec2_Zero);
+}
+
+static i32 get_ship_to_relocate(Wave *wave) {
     for (u32 i = grid_columns; i < MaxSmallShips; i++) {
         if (wave->ships[i] == NULL) {
             continue;
@@ -295,13 +302,13 @@ void Wave_Update(Wave *wave) {
     if (wave->wave_direction == CameraFocusCenter || wave->wave_direction == CameraFocusCenter) {
         return;
     }
+
     for (u32 i = 0; i < grid_columns; i++) {
         if (wave->ships[i] == NULL) {
             continue;
         }
 
         if (wave->ships[i]->in_use == 1) {
-            // printf("%u: ship in use...\n", i);
             continue;
         }
 
@@ -321,10 +328,23 @@ void Wave_Update(Wave *wave) {
         move_to = transpose_for_direction(move_to, wave->wave_direction);
         SmallShip_MoveTo(&wave->ships[ship_to_move]->data, move_to);
 
-        wave->ships[i] = wave->ships[ship_to_move];
+        wave->ships[i]            = wave->ships[ship_to_move];
         wave->ships[ship_to_move] = NULL;
-        
+
         break;
+    }
+
+    // Update enemies count
+    u32 enemies = 0;
+    for (u32 i = 0; i < MaxSmallShips; i++) {
+        if (wave->ships[i] != NULL && wave->ships[i]->in_use == 1) {
+            enemies++;
+        }
+    }
+
+    if (enemies == 0) {
+        // all enemies are dead and the wave is over/complete
+        Wave_End(wave);
     }
 }
 

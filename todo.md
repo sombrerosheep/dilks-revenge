@@ -35,8 +35,8 @@
 
 ## waves II
 - [x] as closer enemies are killed, move a further enemy to the vacan spot
-- [ ] wave done when all enemies are dead
-- [ ] player moved to 0,0 then camera pans, then wave starts
+- [x] wave done when all enemies are dead
+- [x] player moved to 0,0 then camera pans, then wave starts
   - is this responsibility of the level?
 
 ## waves III
