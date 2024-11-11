@@ -132,10 +132,16 @@ i8 Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, f32 font_sz)
 }
 
 void Font_DrawText(Font *f, const char *text, f32 x, f32 y) {
+    Font_DrawTextC(f, text, x, y, ColorWhite);
+}
+
+void Font_DrawTextC(Font *f, const char *text, f32 x, f32 y, SDL_Color c) {
     f32 current_point = x;
     // Keeps y as the top-left origin moving the baseline down the ascent
     f32           baseline = y + f->ascent; // so the origin is top-left
     SDL_Renderer *renderer = Resources_GetRenderer();
+
+    SDL_SetTextureColorMod(f->texture, c.r, c.g, c.b);
 
     size_t len = SDL_strlen(text);
     for (size_t i = 0; i < len; i++) {
