@@ -8,6 +8,7 @@
 #include "game_input.h"
 #include "game_state.h"
 #include "globals.h"
+#include "main_menu.h"
 #include "player.h"
 #include "random.h"
 #include "resources.h"
@@ -19,13 +20,27 @@ const char *font_path = "/home/swansong/.local/share/fonts/ProggyVector Regular.
 
 // const char *font_path = "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf";
 
-struct drev_game {
-    System   *system;
-    GameState state;
+enum GameMode {
+    GameModeMenu = 0,
+    GameModePlay,
+    GameModePause,
+    GameModeCount,
 };
 
-static void Game_Update(Game *game, Frame delta) {
-    Controller_Update(&game->state.controller, game->system);
+const char *GameModeLabels[GameModeCount] = {
+    [GameModeMenu]  = "GameModeMenu",
+    [GameModePlay]  = "GameModePlay",
+    [GameModePause] = "GameModePause",
+};
+
+struct drev_game {
+    System       *system;
+    GameState     state;
+    enum GameMode mode;
+    MainMenu      main_menu;
+};
+
+static void Game_UpdateModePlay(Game *game, Frame delta) {
     Camera_Update(&game->state.main_camera, delta.sec);
 
     Wave_Update(&game->state.current_wave);
@@ -35,14 +50,47 @@ static void Game_Update(Game *game, Frame delta) {
     Entities_CheckAndHandleCollisions();
 }
 
+static void Game_Update(Game *game, Frame delta) {
+    Controller_Update(&game->state.controller, game->system);
+
+    switch (game->mode) {
+        case GameModePlay:
+            Game_UpdateModePlay(game, delta);
+            break;
+        case GameModeMenu:
+            MainMenu_Update(&game->main_menu);
+            break;
+        case GameModePause: // fallthrough
+        default:
+            SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION,
+                        "Update::Non implemented mode: %s\n",
+                        GameModeLabels[game->mode]);
+            break;
+    }
+}
+
 static void Game_Draw(Game *game) {
     SDL_SetRenderDrawColor(game->system->renderer, 0x33, 0x33, 0x33, 0xFF);
     SDL_RenderClear(game->system->renderer);
 
-    Entities_Draw();
+    switch (game->mode) {
+        case GameModePlay: {
+            Entities_Draw();
 
-    Camera_Draw(&game->state.main_camera, game->system->renderer);
-    Wave_Draw(&game->state.current_wave);
+            Camera_Draw(&game->state.main_camera, game->system->renderer);
+            Wave_Draw(&game->state.current_wave);
+            break;
+        }
+        case GameModeMenu:
+            MainMenu_Draw(&game->main_menu);
+            break;
+        case GameModePause: // fallthrough
+        default:
+            SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION,
+                        "Draw::Non implemented mode: %s\n",
+                        GameModeLabels[game->mode]);
+            break;
+    }
 
     Debug_Draw();
 
@@ -56,12 +104,16 @@ static void Game_InitState(Game *game, System *sys) {
     Camera_Init(&game->state.main_camera, units_high, ratio);
     Camera_SetCenter(&game->state.main_camera, Vec2_Zero);
 
+    Font_Load(game->system->renderer, &game->state.title_font, font_path, 32 * sys->config.ppu);
+    Font_Load(game->system->renderer, &game->state.menu_font, font_path, 16 * sys->config.ppu);
     Font_Load(game->system->renderer, &game->state.debug_font, font_path, 3.75 * sys->config.ppu);
 
     Resources_Init(&game->state.main_camera,
                    &game->state.controller,
                    game->system->renderer,
                    &sys->config,
+                   &game->state.title_font,
+                   &game->state.menu_font,
                    &game->state.debug_font);
 
     // Entities
@@ -89,6 +141,9 @@ Game *Game_Create(System *sys) {
     g->system = sys;
 
     Game_InitState(g, sys);
+
+    MainMenu_Init(&g->main_menu);
+    g->mode = GameModeMenu;
 
     return g;
 }

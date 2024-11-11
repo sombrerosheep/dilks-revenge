@@ -14,6 +14,8 @@ struct drev_resources {
     Camera       *game_camera;
     GameInput    *controller;
     SDL_Renderer *renderer;
+    Font         *title_font;
+    Font         *menu_font;
     Font         *debug_font;
     SysConfig    *sys_config;
 };
@@ -22,11 +24,15 @@ void Resources_Init(Camera       *camera,
                     GameInput    *controller,
                     SDL_Renderer *renderer,
                     SysConfig    *sys_config,
+                    Font         *title_font,
+                    Font         *menu_font,
                     Font         *debug_font);
 
 Camera          *Resources_GetMainCamera(void);
 const GameInput *Resources_GetController(void);
 SDL_Renderer    *Resources_GetRenderer(void);
+Font            *Resources_GetTitleFont(void);
+Font            *Resources_GetMenuFont(void);
 Font            *Resources_GetDebugFont(void);
 const SysConfig *Resources_GetSysConfig(void);
 

@@ -16,6 +16,8 @@ struct drev_game_state {
     Camera    main_camera;
     GameInput controller;
     Wave      current_wave;
+    Font      title_font;
+    Font      menu_font;
     Font      debug_font;
 
     // Entities
