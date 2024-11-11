@@ -16,4 +16,9 @@ typedef Uint64 u64;
 typedef float  f32;
 typedef double f64;
 
+typedef i8 bool;
+
+extern const i8 true;
+extern const i8 false;
+
 #endif // DREV_TYPES_H
