@@ -14,11 +14,11 @@
 
 const u32 grid_rows       = 2;
 const u32 grid_columns    = MaxSmallShips / grid_rows;
-const f32 row_spacing     = 10.f;
-const f32 travel_distance = 65.f;
+const f32 row_spacing     = 10.f; // units
+const f32 travel_distance = 65.f; // units
 
-const f32 grid_w_v = 240.f;
-const f32 grid_w_h = 135.f;
+const f32 grid_w_v = 240.f; // units
+const f32 grid_w_h = 135.f; // units
 
 const char *WaveStateLabels[WaveStateCount] = {
     [WaveStateIdle]     = "WaveStateIdle",
