@@ -87,19 +87,19 @@ void Player_Update(Player *p, f32 delta) {
         p->velocity.x = ease(p->velocity.x, 0.f, decay * delta);
         p->velocity.y = ease(p->velocity.y, 0.f, decay * delta);
 
-        if (controller->down) {
+        if (Controller_Is(controller->down)) {
             p->velocity.y += speed;
         }
 
-        if (controller->up) {
+        if (Controller_Is(controller->up)) {
             p->velocity.y -= speed;
         }
 
-        if (controller->left) {
+        if (Controller_Is(controller->left)) {
             p->velocity.x -= speed;
         }
 
-        if (controller->right) {
+        if (Controller_Is(controller->right)) {
             p->velocity.x += speed;
         }
 
@@ -125,7 +125,7 @@ void Player_Update(Player *p, f32 delta) {
         p->fire_cooldown -= delta;
 
         if (p->fire_cooldown < 0) {
-            if (controller->mouse_left || controller->space) {
+            if (controller->mouse_left || Controller_Is(controller->space)) {
                 Vec2 aim_point = (Vec2){
                     .x = (p->aim.x * AIM_RADIUS) + p->position.x,
                     .y = (p->aim.y * AIM_RADIUS) + p->position.y,
