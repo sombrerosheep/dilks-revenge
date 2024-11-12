@@ -5,6 +5,7 @@
 static ResourceManager GameResources;
 
 void Resources_Init(Camera       *camera,
+                    Camera       *ui_camera,
                     GameInput    *controller,
                     SDL_Renderer *renderer,
                     SysConfig    *sys_config,
@@ -12,6 +13,7 @@ void Resources_Init(Camera       *camera,
                     Font         *menu_font,
                     Font         *debug_font) {
     GameResources.game_camera = camera;
+    GameResources.ui_camera   = ui_camera;
     GameResources.controller  = controller;
     GameResources.renderer    = renderer;
     GameResources.sys_config  = sys_config;
@@ -22,6 +24,10 @@ void Resources_Init(Camera       *camera,
 
 Camera *Resources_GetMainCamera(void) {
     return GameResources.game_camera;
+}
+
+Camera *Resources_GetUICamera(void) {
+    return GameResources.ui_camera;
 }
 
 const GameInput *Resources_GetController(void) {

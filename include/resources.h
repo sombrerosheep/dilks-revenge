@@ -12,6 +12,7 @@ typedef struct drev_resources ResourceManager;
 
 struct drev_resources {
     Camera       *game_camera;
+    Camera       *ui_camera;
     GameInput    *controller;
     SDL_Renderer *renderer;
     Font         *title_font;
@@ -21,6 +22,7 @@ struct drev_resources {
 };
 
 void Resources_Init(Camera       *camera,
+                    Camera       *ui_camera,
                     GameInput    *controller,
                     SDL_Renderer *renderer,
                     SysConfig    *sys_config,
@@ -29,6 +31,7 @@ void Resources_Init(Camera       *camera,
                     Font         *debug_font);
 
 Camera          *Resources_GetMainCamera(void);
+Camera          *Resources_GetUICamera(void);
 const GameInput *Resources_GetController(void);
 SDL_Renderer    *Resources_GetRenderer(void);
 Font            *Resources_GetTitleFont(void);
