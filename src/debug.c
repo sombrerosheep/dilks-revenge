@@ -52,7 +52,7 @@ void Debug_Draw(void) {
 
     SDL_snprintf(buffer,
                  TEXT_BUFFER_LEN,
-                 "CameraUnitBounds: %.2f x %.2f (%.2f x %.2f)\n",
+                 "CameraUnitBounds: %.2f x %.2f (%.2f x %.2f)",
                  bounds.x,
                  bounds.y,
                  bounds.w,

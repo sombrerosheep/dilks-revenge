@@ -131,6 +131,36 @@ i8 Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, f32 font_sz)
     return 0;
 }
 
+SDL_FRect Font_MeasureText(Font *f, const char *text) {
+    f32 x             = 0;
+    f32 y             = 0;
+    f32 current_point = x;
+
+    size_t len = SDL_strlen(text);
+    for (size_t i = 0; i < len; i++) {
+        char  c = text[i];
+        Glyph g = f->glyphs[c - CHAR_START];
+        if (c == ' ') {
+            // no need for a draw command for whitespace
+            current_point += g.xadvance;
+            continue;
+        }
+
+        // if (i != len - 1) {
+        current_point += g.xadvance;
+        // }
+    }
+
+    SDL_FRect text_bb = (SDL_FRect){
+        .x = x,
+        .y = y,
+        .w = current_point,
+        .h = SDL_abs(f->ascent) + SDL_abs(f->descent),
+    };
+
+    return text_bb;
+}
+
 void Font_DrawText(Font *f, const char *text, f32 x, f32 y) {
     Font_DrawTextC(f, text, x, y, ColorWhite);
 }
@@ -171,27 +201,27 @@ void Font_DrawTextC(Font *f, const char *text, f32 x, f32 y, SDL_Color c) {
         SetRenderDrawColor(renderer, ColorRed);
         SDL_RenderDrawRectF(renderer, &dst_rect);
 
-        draw_plus(renderer, (Vec2){.x = current_point, .y = baseline});
+        draw_plus(renderer, (Vec2){.x = current_point, .y = baseline}, 10.f);
 #endif
 
         SDL_RenderCopyF(renderer, f->texture, &src_rect, &dst_rect);
 
-        if (i != len - 1) {
-            current_point += g.xadvance;
-        }
+        current_point += g.xadvance;
     }
 
 #ifdef DREV_DRAW_TEXT_BB
     // Draw the baseline
     SetRenderDrawColor(renderer, ColorGreen);
-    SDL_RenderDrawLine(renderer, x, baseline, current_point + f->font_px_sz, baseline);
+    // Why was f->font_px_sz here? to give some extra runway?
+    // SDL_RenderDrawLine(renderer, x, baseline, current_point + f->font_px_sz, baseline);
+    SDL_RenderDrawLine(renderer, x, baseline, current_point, baseline);
 
     // bounding box for the entire message
     SetRenderDrawColor(renderer, ColorRed);
     SDL_Rect text_bb = (SDL_Rect){
         .x = x,
         .y = y,
-        .w = current_point,
+        .w = current_point - x,
         .h = SDL_abs(f->ascent) + SDL_abs(f->descent),
     };
     SDL_RenderDrawRect(renderer, &text_bb);

@@ -40,6 +40,11 @@
   - is this responsibility of the level?
 
 ## waves III
+as an enemy dies:
+- [ ] if the immediate one behind dies, move it forward
+- [ ] if the immediate one behind dies, look for closest based on that position.
+
+## waves IV
 - [ ] when a wave enters, movement to/from each extent with everyone on screen
   - 5 enemies at the top move left to right, keeping everyone always on screen
   - if 1 outside enemy dies, then the group moves slightly more (etc...)
@@ -80,8 +85,9 @@
 - [ ] smooth transitions between waves when switching directions 
 
 ## main menu
-- [ ] play
-- [ ] quit
+- [x] play
+- [x] quit
+- [ ] mouse
 
 ## game over
 - [ ] appears when player health is zero
