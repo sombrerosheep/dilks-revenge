@@ -4,6 +4,7 @@ BIN_NAME=dilks-revenge
 TARGET=$(BUILDDIR)/bin/$(BIN_NAME)
 
 CMAKE_FLAGS := "-DDREV_DRAW_BB=ON"
+# CMAKE_FLAGS += "-DDREV_DRAW_TEXT_BB=ON"
 
 CLANG_FMT_FILES += src/*.c
 CLANG_FMT_FILES += include/*.h
@@ -36,7 +37,7 @@ run:
 
 test:
 	cmake -B $(BUILDDIR) $(CMAKE_TEST_FLAGS);
-	cd $(BUILDDIR); 
+	cd $(BUILDDIR);
 	make;
 	cd $(WORKDIR);
 	$(TARGET)
