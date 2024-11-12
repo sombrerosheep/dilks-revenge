@@ -87,7 +87,7 @@ as an enemy dies:
 ## main menu
 - [x] play
 - [x] quit
-- [ ] mouse
+- [x] mouse
 
 ## game over
 - [ ] appears when player health is zero

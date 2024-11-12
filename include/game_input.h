@@ -14,8 +14,6 @@ struct drev_controller {
     KeyState right;
     KeyState space;
     u8       mouse_left;
-    f32      mouse_world_x;
-    f32      mouse_world_y;
     f32      mouse_screen_x;
     f32      mouse_screen_y;
 };

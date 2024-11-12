@@ -18,8 +18,6 @@ int Controller_Init(GameInput *controller) {
     controller->mouse_left     = 0;
     controller->mouse_screen_x = 0.f;
     controller->mouse_screen_y = 0.f;
-    controller->mouse_world_x  = 0.f;
-    controller->mouse_screen_y = 0.f;
 
     return 0;
 }
@@ -50,7 +48,7 @@ void Controller_Update(GameInput *controller, System *sys) {
     controller->right <<= 4;
     controller->space <<= 4;
 
-    // set the is bits if pressed 
+    // set the is bits if pressed
     if (keys[SDL_GetScancodeFromKey(SDLK_w)]) {
         controller->up |= is;
     }
@@ -73,11 +71,6 @@ void Controller_Update(GameInput *controller, System *sys) {
 
     controller->mouse_screen_x = (f32)mouse_x / (f32)win_w * (f32)render_w;
     controller->mouse_screen_y = (f32)mouse_y / (f32)win_h * (f32)render_h;
-    Vec2 mouse_world           = Camera_ScreenToWorldF(Resources_GetMainCamera(),
-                                             controller->mouse_screen_x,
-                                             controller->mouse_screen_y);
-    controller->mouse_world_x  = mouse_world.x;
-    controller->mouse_world_y  = mouse_world.y;
     controller->mouse_left     = mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT);
 
     return;

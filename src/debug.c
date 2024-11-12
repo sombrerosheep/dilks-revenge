@@ -17,11 +17,12 @@ void Debug_Draw(void) {
     Camera *cam   = Resources_GetMainCamera();
     Font   *debug = Resources_GetDebugFont();
 
-    Vec2      camera_pos    = Resources_GetMainCamera()->position;
-    Vec2      camera_screen = Camera_WorldToScreen(cam, camera_pos);
-    Vec2      player_pos    = Entities_GetPlayerPosition();
-    Vec2      player_screen = Camera_WorldToScreen(cam, player_pos);
-    SDL_FRect bounds        = Camera_GetBounds(cam);
+    Vec2             camera_pos    = Resources_GetMainCamera()->position;
+    Vec2             camera_screen = Camera_WorldToScreen(cam, camera_pos);
+    Vec2             player_pos    = Entities_GetPlayerPosition();
+    Vec2             player_screen = Camera_WorldToScreen(cam, player_pos);
+    SDL_FRect        bounds        = Camera_GetBounds(cam);
+    const GameInput *input         = Resources_GetController();
 
     f32 x = UI_LEFT_INDENT;
     f32 y = UI_TOP_INDENT;
@@ -57,6 +58,15 @@ void Debug_Draw(void) {
                  bounds.y,
                  bounds.w,
                  bounds.h);
+    Font_DrawText(debug, buffer, x, y);
+
+    y += Font_GetLineAdvance(debug);
+
+    SDL_snprintf(buffer,
+                 TEXT_BUFFER_LEN,
+                 "MouseScreen: %.2f x %.2f",
+                 input->mouse_screen_x,
+                 input->mouse_screen_y);
     Font_DrawText(debug, buffer, x, y);
 
     y += Font_GetLineAdvance(debug);

@@ -5,14 +5,26 @@
 #include "game_input.h"
 #include "types.h"
 
+typedef struct drev_main_menu MainMenu;
+typedef struct option         Option;
 typedef void (*CallbackFunc)(void);
 
-typedef struct drev_main_menu MainMenu;
+enum menu_items {
+    MenuItemPlay = 0,
+    MenuItemQuit,
+    MenuItemCount
+};
+
+struct option {
+    const char  *text;
+    SDL_FRect    box;
+    CallbackFunc callback;
+};
 
 struct drev_main_menu {
-    i8           selected;
-    CallbackFunc play_func;
-    CallbackFunc quit_func;
+    i8     selected;
+    u8     num_options;
+    Option options[MenuItemCount];
 };
 
 i8   MainMenu_Init(MainMenu *menu, CallbackFunc play, CallbackFunc quit);

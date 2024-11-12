@@ -101,6 +101,32 @@ SDL_FRect Camera_GetBounds(const Camera *cam) {
 }
 
 ///
+/// @brief returns a world-unit dimensioned version of the provided rect
+///        rect is assumed center-origin
+///        x and y will be top-left origin in units
+///        width and height will be in units
+///
+/// @param cam
+/// @param rect center-origin rect in pixels
+/// @return SDL_FRect
+///
+SDL_FRect Camera_ScreenToWorldRect(Camera *cam, SDL_FRect rect) {
+    const SysConfig *config     = Resources_GetSysConfig();
+    Vec2             screen_pos = Camera_WorldToScreenF( //
+        cam,
+        rect.x - (rect.w / 2.f),
+        rect.y - (rect.h / 2.f) //
+    );
+
+    rect.x = screen_pos.x;
+    rect.y = screen_pos.y;
+    rect.w /= config->ppu;
+    rect.h /= config->ppu;
+
+    return rect;
+}
+
+///
 /// @brief returns a screen-pixel dimensioned version of the provided rect
 ///        rect is assumed center-origin
 ///        x and y will be top-left origin dimensions
@@ -198,10 +224,10 @@ void Camera_Draw(const Camera *camera, SDL_Renderer *renderer) {
 #endif
 }
 
-void Camera_DrawPlus(const Camera *camera, Vec2 p, SDL_Color color) {
+void Camera_DrawPlusF(const Camera *camera, f32 x, f32 y, SDL_Color color) {
     SDL_Renderer *renderer = Resources_GetRenderer();
 
-    Vec2 screen_p = Camera_WorldToScreenF(camera, p.x, p.y);
+    Vec2 screen_p = Camera_WorldToScreenF(camera, x, y);
     // printf("drawing plus at %.2fx%.2f (%.2fx%.2f)\n", screen_p.x, screen_p.y, p.x, p.y);
 
     SetRenderDrawColor(renderer, color);
@@ -211,6 +237,10 @@ void Camera_DrawPlus(const Camera *camera, Vec2 p, SDL_Color color) {
                   .y = screen_p.y,
               },
               10.f);
+}
+
+void Camera_DrawPlus(const Camera *camera, Vec2 p, SDL_Color color) {
+    Camera_DrawPlusF(camera, p.x, p.y, color);
 }
 
 void Camera_DrawText(const Camera *cam, Font *f, const char *text, f32 x, f32 y, SDL_Color color) {

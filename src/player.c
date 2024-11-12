@@ -115,10 +115,12 @@ void Player_Update(Player *p, f32 delta) {
         p->position.x += p->velocity.x * delta;
         p->position.y += p->velocity.y * delta;
 
-        p->aim = (Vec2){
-            controller->mouse_world_x - p->position.x,
-            controller->mouse_world_y - p->position.y,
-        };
+        p->aim = Camera_ScreenToWorldF(Resources_GetMainCamera(),
+                                       controller->mouse_screen_x,
+                                       controller->mouse_screen_y);
+        p->aim.x -= p->position.x;
+        p->aim.y -= p->position.y;
+
         p->aim = Vec2_Normalize(p->aim);
 
         // Shooting
