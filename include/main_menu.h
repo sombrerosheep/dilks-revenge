@@ -5,14 +5,17 @@
 #include "game_input.h"
 #include "types.h"
 
+typedef void (*CallbackFunc)(void);
+
 typedef struct drev_main_menu MainMenu;
 
 struct drev_main_menu {
-    int selected;
-    int items;
+    i8           selected;
+    CallbackFunc play_func;
+    CallbackFunc quit_func;
 };
 
-i8   MainMenu_Init(MainMenu *menu);
+i8   MainMenu_Init(MainMenu *menu, CallbackFunc play, CallbackFunc quit);
 void MainMenu_Update(MainMenu *menu);
 void MainMenu_Draw(MainMenu *menu);
 

@@ -15,6 +15,7 @@
 #include "system.h"
 #include "vec.h"
 #include "wave.h"
+#include <SDL_events.h>
 
 const char *font_path = "/home/swansong/.local/share/fonts/ProggyVector Regular.ttf";
 
@@ -123,9 +124,29 @@ static void Game_InitState(Game *game, System *sys) {
     game->state.current_wave.state = WaveStateIdle;
 }
 
+u32 PlayEventId;
+
+static void play_callback(void) {
+    SDL_Event play = {
+        .type = PlayEventId,
+    };
+
+    SDL_PushEvent(&play);
+}
+
+static void quit_callback(void) {
+    SDL_Event quit = {
+        .type = SDL_QUIT,
+    };
+
+    SDL_PushEvent(&quit);
+}
+
 Game *Game_Create(System *sys) {
     random_init(42);
     Game *g = NULL;
+
+    PlayEventId = SDL_RegisterEvents(1);
 
     if ((g = malloc(sizeof(Game))) == NULL) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "ERROR :: Unable to allocate memory for Game\n");
@@ -142,7 +163,7 @@ Game *Game_Create(System *sys) {
 
     Game_InitState(g, sys);
 
-    MainMenu_Init(&g->main_menu);
+    MainMenu_Init(&g->main_menu, play_callback, quit_callback);
     g->mode = GameModeMenu;
 
     return g;
@@ -187,6 +208,10 @@ void Game_Run(Game *g) {
 
                     Wave_Start(&g->state.current_wave);
                 }
+            }
+
+            if (event.type == PlayEventId) {
+                g->mode = GameModePlay;
             }
         }
 

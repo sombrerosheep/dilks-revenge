@@ -12,8 +12,10 @@ const char *options[num_menu_items] = {
     "Quit",
 };
 
-i8 MainMenu_Init(MainMenu *menu) {
-    menu->selected = 0;
+i8 MainMenu_Init(MainMenu *menu, CallbackFunc play, CallbackFunc quit) {
+    menu->selected  = 0;
+    menu->play_func = play;
+    menu->quit_func = quit;
 
     return 0;
 }
@@ -38,6 +40,16 @@ void MainMenu_Update(MainMenu *menu) {
 
     if (menu->selected >= num_menu_items) {
         menu->selected = 0;
+    }
+
+    if (Controller_Is(input->space)) {
+        if (menu->selected == 0) {
+            menu->play_func();
+        }
+
+        if (menu->selected == 1) {
+            menu->quit_func();
+        }
     }
 }
 
