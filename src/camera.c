@@ -1,5 +1,6 @@
 #include "camera.h"
 
+#include "font.h"
 #include "globals.h"
 #include "resources.h"
 #include "system.h"
@@ -210,6 +211,12 @@ void Camera_DrawPlus(const Camera *camera, Vec2 p, SDL_Color color) {
                   .y = screen_p.y,
               },
               10.f);
+}
+
+void Camera_DrawText(const Camera *cam, Font *f, const char *text, f32 x, f32 y, SDL_Color color) {
+    Vec2 screen_p = Camera_WorldToScreenF(cam, x, y);
+
+    Font_DrawTextC(f, text, screen_p.x, screen_p.y, color);
 }
 
 void Camera_Destroy(Camera *camera) {

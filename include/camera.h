@@ -1,6 +1,7 @@
 #ifndef DREV_CAMERA_H
 #define DREV_CAMERA_H
 
+#include "font.h"
 #include "game_input.h"
 #include "vec.h"
 
@@ -39,11 +40,12 @@ Vec2      Camera_ScreenToWorld(const Camera *cam, Vec2 pos);
 Vec2      Camera_ScreenToWorldF(const Camera *cam, f32 x, f32 y);
 SDL_FRect Camera_GetBounds(const Camera *cam);
 
-// all coordinates for draw functions should be in world coordinates.
+// all coordinates for draw functions should be in world coordinates (x/y) and units.
 void Camera_DrawFillRect(const Camera *cam, SDL_FRect rect, SDL_Color color);
 void Camera_DrawRect(const Camera *cam, SDL_FRect rect, SDL_Color color);
 void Camera_DrawPlus(const Camera *camera, Vec2 p, SDL_Color color);
 void Camera_DrawLine(const Camera *cam, f32 x1, f32 y1, f32 x2, f32 y2, SDL_Color color);
+void Camera_DrawText(const Camera *cam, Font *f, const char *text, f32 x, f32 y, SDL_Color color);
 
 void Camera_Draw(const Camera *camera, SDL_Renderer *renderer);
 void Camera_Destroy(Camera *camera);
