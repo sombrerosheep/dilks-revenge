@@ -1,4 +1,5 @@
 #include "ui.h"
+#include "game_input.h"
 #include "resources.h"
 #include "system.h"
 #include "util.h"
@@ -67,7 +68,7 @@ void UI_Update(UI *ui) {
         ui->selected = 0;
     }
 
-    if (Controller_Is(input->fire)) {
+    if (Controller_JustPressed(input->fire)) {
         ui->buttons[ui->selected].callback();
     }
 }
