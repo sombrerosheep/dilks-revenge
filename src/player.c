@@ -127,7 +127,7 @@ void Player_Update(Player *p, f32 delta) {
         p->fire_cooldown -= delta;
 
         if (p->fire_cooldown < 0) {
-            if (controller->mouse_left || Controller_Is(controller->space)) {
+            if (controller->mouse_left || Controller_Is(controller->fire)) {
                 Vec2 aim_point = (Vec2){
                     .x = (p->aim.x * AIM_RADIUS) + p->position.x,
                     .y = (p->aim.y * AIM_RADIUS) + p->position.y,

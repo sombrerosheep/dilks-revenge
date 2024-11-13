@@ -67,7 +67,7 @@ void UI_Update(UI *ui) {
         ui->selected = 0;
     }
 
-    if (Controller_Is(input->space)) {
+    if (Controller_Is(input->fire)) {
         ui->buttons[ui->selected].callback();
     }
 }

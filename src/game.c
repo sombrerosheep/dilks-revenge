@@ -7,6 +7,7 @@
 #include "events.h"
 #include "font.h"
 #include "game_input.h"
+#include "game_mode.h"
 #include "game_state.h"
 #include "globals.h"
 #include "player.h"
@@ -26,6 +27,14 @@ struct drev_game {
     System   *system;
     GameState state;
 };
+
+static void pause_callback(void) {
+    SDL_Event pause = {
+        .type = PauseEventId,
+    };
+
+    SDL_PushEvent(&pause);
+}
 
 static void unpause_callback(void) {
     SDL_Event unpause = {
@@ -60,6 +69,10 @@ static void quit_callback(void) {
 }
 
 static void Game_UpdateModePlay(Game *game, Frame delta) {
+    if (Controller_JustPressed(game->state.controller.pause)) {
+        pause_callback();
+    }
+
     Camera_Update(&game->state.main_camera, delta.sec);
 
     Wave_Update(&game->state.current_wave);
@@ -78,10 +91,12 @@ static void Game_Update(Game *game, Frame delta) {
             break;
         case GameModeMenu:
             Camera_Update(&game->state.ui_camera, delta.sec);
-            // MainMenu_Update(&game->state.main_menu);
             UI_Update(&game->state.main_menu);
             break;
-        case GameModePause: // fallthrough
+        case GameModePause:
+            Camera_Update(&game->state.ui_camera, delta.sec);
+            UI_Update(&game->state.pause_menu);
+            break;
         default:
             SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION,
                         "Update::Non implemented mode: %s\n",
@@ -102,12 +117,16 @@ static void Game_Draw(Game *game) {
             Wave_Draw(&game->state.current_wave);
             break;
         }
-        case GameModeMenu:
+        case GameModeMenu: {
             Camera_Draw(&game->state.ui_camera, game->system->renderer);
-            // MainMenu_Draw(&game->state.main_menu);
             UI_Draw(&game->state.main_menu);
             break;
-        case GameModePause: // fallthrough
+        }
+        case GameModePause: {
+            Camera_Draw(&game->state.ui_camera, game->system->renderer);
+            UI_Draw(&game->state.pause_menu);
+            break;
+        }
         default:
             SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION,
                         "Draw::Non implemented mode: %s\n",
@@ -130,7 +149,7 @@ enum pause_menu_items {
 Button pause_menu_buttons[PauseMenuItemCount] = {
     [PauseMenuItemContinue] =
         {
-            .text     = "Pause",
+            .text     = "Resume",
             .callback = unpause_callback,
         },
     [PauseMenuItemQuitToMenu] =
@@ -268,6 +287,19 @@ void Game_Run(Game *g) {
 
             if (event.type == PlayEventId) {
                 g->state.mode = GameModePlay;
+            }
+
+            if (event.type == PauseEventId) {
+                g->state.mode = GameModePause;
+            }
+
+            if (event.type == UnPauseEventId) {
+                g->state.mode = GameModePlay;
+            }
+
+            if (event.type == QuitToMenuEventId) {
+                Wave_End(&g->state.current_wave);
+                g->state.mode = GameModeMenu;
             }
         }
 

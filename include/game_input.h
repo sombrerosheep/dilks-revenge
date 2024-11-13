@@ -12,7 +12,8 @@ struct drev_controller {
     KeyState down;
     KeyState left;
     KeyState right;
-    KeyState space;
+    KeyState fire;
+    KeyState pause;
     u8       mouse_left;
     f32      mouse_screen_x;
     f32      mouse_screen_y;

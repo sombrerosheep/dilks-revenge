@@ -5,6 +5,7 @@
 #include "vec.h"
 
 #include <SDL.h>
+#include <SDL_keycode.h>
 
 static u8 is  = 0x01;
 static u8 was = 0x10;
@@ -14,7 +15,8 @@ int Controller_Init(GameInput *controller) {
     controller->down           = 0;
     controller->left           = 0;
     controller->right          = 0;
-    controller->space          = 0;
+    controller->fire           = 0;
+    controller->pause          = 0;
     controller->mouse_left     = 0;
     controller->mouse_screen_x = 0.f;
     controller->mouse_screen_y = 0.f;
@@ -46,7 +48,8 @@ void Controller_Update(GameInput *controller, System *sys) {
     controller->down <<= 4;
     controller->left <<= 4;
     controller->right <<= 4;
-    controller->space <<= 4;
+    controller->fire <<= 4;
+    controller->pause <<= 4;
 
     // set the is bits if pressed
     if (keys[SDL_GetScancodeFromKey(SDLK_w)]) {
@@ -66,7 +69,11 @@ void Controller_Update(GameInput *controller, System *sys) {
     }
 
     if (keys[SDL_GetScancodeFromKey(SDLK_SPACE)]) {
-        controller->space |= is;
+        controller->fire |= is;
+    }
+
+    if (keys[SDL_GetScancodeFromKey(SDLK_ESCAPE)]) {
+        controller->pause |= is;
     }
 
     controller->mouse_screen_x = (f32)mouse_x / (f32)win_w * (f32)render_w;
