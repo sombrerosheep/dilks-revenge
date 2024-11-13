@@ -6,7 +6,6 @@
 #include "font.h"
 #include "game_input.h"
 #include "game_mode.h"
-#include "main_menu.h"
 #include "player.h"
 #include "system.h"
 #include "ui.h"
@@ -25,7 +24,8 @@ struct drev_game_state {
 
     // GameMode and UI
     enum GameMode mode;
-    UI            main_menu_ui;
+    UI            main_menu;
+    UI            pause_menu;
     Camera        ui_camera;
 
     // Entities

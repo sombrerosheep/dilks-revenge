@@ -9,7 +9,6 @@
 #include "game_input.h"
 #include "game_state.h"
 #include "globals.h"
-#include "main_menu.h"
 #include "player.h"
 #include "random.h"
 #include "resources.h"
@@ -17,6 +16,7 @@
 #include "ui.h"
 #include "vec.h"
 #include "wave.h"
+#include <SDL_events.h>
 
 const char *font_path = "/home/swansong/.local/share/fonts/ProggyVector Regular.ttf";
 
@@ -26,6 +26,22 @@ struct drev_game {
     System   *system;
     GameState state;
 };
+
+static void unpause_callback(void) {
+    SDL_Event unpause = {
+        .type = UnPauseEventId,
+    };
+
+    SDL_PushEvent(&unpause);
+}
+
+static void quit_to_menu_callback(void) {
+    SDL_Event quit_to_menu = {
+        .type = QuitToMenuEventId,
+    };
+
+    SDL_PushEvent(&quit_to_menu);
+}
 
 static void play_callback(void) {
     SDL_Event play = {
@@ -63,7 +79,7 @@ static void Game_Update(Game *game, Frame delta) {
         case GameModeMenu:
             Camera_Update(&game->state.ui_camera, delta.sec);
             // MainMenu_Update(&game->state.main_menu);
-            UI_Update(&game->state.main_menu_ui);
+            UI_Update(&game->state.main_menu);
             break;
         case GameModePause: // fallthrough
         default:
@@ -89,7 +105,7 @@ static void Game_Draw(Game *game) {
         case GameModeMenu:
             Camera_Draw(&game->state.ui_camera, game->system->renderer);
             // MainMenu_Draw(&game->state.main_menu);
-            UI_Draw(&game->state.main_menu_ui);
+            UI_Draw(&game->state.main_menu);
             break;
         case GameModePause: // fallthrough
         default:
@@ -103,6 +119,31 @@ static void Game_Draw(Game *game) {
 
     SDL_RenderPresent(game->system->renderer);
 }
+
+enum pause_menu_items {
+    PauseMenuItemContinue = 0,
+    PauseMenuItemQuitToMenu,
+    PauseMenuItemQuit,
+    PauseMenuItemCount
+};
+
+Button pause_menu_buttons[PauseMenuItemCount] = {
+    [PauseMenuItemContinue] =
+        {
+            .text     = "Pause",
+            .callback = unpause_callback,
+        },
+    [PauseMenuItemQuitToMenu] =
+        {
+            .text     = "Quit to Menu",
+            .callback = quit_to_menu_callback,
+        },
+    [PauseMenuItemQuit] =
+        {
+            .text     = "Quit",
+            .callback = quit_callback,
+        },
+};
 
 enum main_menu_items {
     MainMenuItemPlay = 0,
@@ -147,10 +188,11 @@ static void Game_InitState(Game *game, System *sys) {
     Player_Init(&game->state.player);
     Entities_Init(&game->state.projectiles, &game->state.smallShips, &game->state.player);
 
-    UI_Init(&game->state.main_menu_ui,
+    UI_Init(&game->state.main_menu,
             "Dilks Revenge",
             MainMenuItemCount,
             (Button *)main_menu_buttons);
+    UI_Init(&game->state.pause_menu, "paused", PauseMenuItemCount, (Button *)pause_menu_buttons);
 
     game->state.mode = GameModeMenu;
 
@@ -192,8 +234,7 @@ void Game_Run(Game *g) {
 
     while (running) {
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT ||
-                (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
+            if (event.type == SDL_QUIT) {
                 running = 0;
             }
 
