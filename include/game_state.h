@@ -9,6 +9,7 @@
 #include "main_menu.h"
 #include "player.h"
 #include "system.h"
+#include "ui.h"
 #include "wave.h"
 
 typedef struct drev_game_state GameState;
@@ -24,7 +25,7 @@ struct drev_game_state {
 
     // GameMode and UI
     enum GameMode mode;
-    MainMenu      main_menu;
+    UI            main_menu_ui;
     Camera        ui_camera;
 
     // Entities

@@ -14,6 +14,7 @@
 #include "random.h"
 #include "resources.h"
 #include "system.h"
+#include "ui.h"
 #include "vec.h"
 #include "wave.h"
 
@@ -61,7 +62,8 @@ static void Game_Update(Game *game, Frame delta) {
             break;
         case GameModeMenu:
             Camera_Update(&game->state.ui_camera, delta.sec);
-            MainMenu_Update(&game->state.main_menu);
+            // MainMenu_Update(&game->state.main_menu);
+            UI_Update(&game->state.main_menu_ui);
             break;
         case GameModePause: // fallthrough
         default:
@@ -86,7 +88,8 @@ static void Game_Draw(Game *game) {
         }
         case GameModeMenu:
             Camera_Draw(&game->state.ui_camera, game->system->renderer);
-            MainMenu_Draw(&game->state.main_menu);
+            // MainMenu_Draw(&game->state.main_menu);
+            UI_Draw(&game->state.main_menu_ui);
             break;
         case GameModePause: // fallthrough
         default:
@@ -100,6 +103,25 @@ static void Game_Draw(Game *game) {
 
     SDL_RenderPresent(game->system->renderer);
 }
+
+enum main_menu_items {
+    MainMenuItemPlay = 0,
+    MainMenuItemQuit,
+    MainMenuItemCount
+};
+
+Button main_menu_buttons[MainMenuItemCount] = {
+    [MainMenuItemPlay] =
+        {
+            .text     = "Play",
+            .callback = play_callback,
+        },
+    [MainMenuItemQuit] =
+        {
+            .text     = "Quit",
+            .callback = quit_callback,
+        },
+};
 
 static void Game_InitState(Game *game, System *sys) {
     // Resources
@@ -125,7 +147,11 @@ static void Game_InitState(Game *game, System *sys) {
     Player_Init(&game->state.player);
     Entities_Init(&game->state.projectiles, &game->state.smallShips, &game->state.player);
 
-    MainMenu_Init(&game->state.main_menu, play_callback, quit_callback);
+    UI_Init(&game->state.main_menu_ui,
+            "Dilks Revenge",
+            MainMenuItemCount,
+            (Button *)main_menu_buttons);
+
     game->state.mode = GameModeMenu;
 
     Camera_Init(&game->state.ui_camera, units_high, ratio);
