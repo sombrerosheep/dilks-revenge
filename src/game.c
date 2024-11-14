@@ -85,28 +85,45 @@ static void Game_UpdateModePlay(Game *game, Frame delta) {
     Entities_Update(delta.sec);
 
     Entities_CheckAndHandleCollisions();
+
+    if (!Player_Alive(&game->state.player)) {
+        // game->state.mode = GameModeGameOver;
+        SDL_Event event = {
+            .type = GameOverEventId,
+        };
+        SDL_PushEvent(&event);
+    }
 }
 
 static void Game_Update(Game *game, Frame delta) {
     Controller_Update(&game->state.controller, game->system);
 
     switch (game->state.mode) {
-        case GameModePlay:
+        case GameModePlay: {
             Game_UpdateModePlay(game, delta);
             break;
-        case GameModeMenu:
+        }
+        case GameModeMenu: {
             Camera_Update(&game->state.ui_camera, delta.sec);
             UI_Update(&game->state.main_menu);
             break;
-        case GameModePause:
+        }
+        case GameModePause: {
             Camera_Update(&game->state.ui_camera, delta.sec);
             UI_Update(&game->state.pause_menu);
             break;
-        default:
+        }
+        case GameModeGameOver: {
+            Camera_Update(&game->state.ui_camera, delta.sec);
+            UI_Update(&game->state.game_over_menu);
+            break;
+        }
+        default: {
             SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION,
                         "Update::Non implemented mode: %s\n",
                         GameModeLabels[game->state.mode]);
             break;
+        }
     }
 }
 
@@ -130,6 +147,12 @@ static void Game_Draw(Game *game) {
         case GameModePause: {
             Camera_Draw(&game->state.ui_camera, game->system->renderer);
             UI_Draw(&game->state.pause_menu);
+            break;
+        }
+        case GameModeGameOver: {
+            Camera_Draw(&game->state.ui_camera, game->system->renderer);
+            // Wave_Draw(&game->state.current_wave);
+            UI_Draw(&game->state.game_over_menu);
             break;
         }
         default:
@@ -188,7 +211,27 @@ Button main_menu_buttons[MainMenuItemCount] = {
         },
 };
 
+enum game_over_items {
+    GameOverItemMenu = 0,
+    GameOverItemQuit,
+    GameOverItemCount
+};
+
+Button game_over_buttons[GameOverItemCount] = {
+    [GameOverItemMenu] =
+        {
+            .text     = "Main Menu",
+            .callback = quit_to_menu_callback,
+        },
+    [GameOverItemQuit] =
+        {
+            .text     = "Quit",
+            .callback = quit_callback,
+        },
+};
+
 static void Game_InitState(Game *game, System *sys) {
+
     // Resources
     f32 ratio      = (f32)sys->config.window_width / sys->config.window_height;
     f32 units_high = (f32)sys->config.window_height / sys->config.ppu;
@@ -216,6 +259,10 @@ static void Game_InitState(Game *game, System *sys) {
             MainMenuItemCount,
             (Button *)main_menu_buttons);
     UI_Init(&game->state.pause_menu, "paused", PauseMenuItemCount, (Button *)pause_menu_buttons);
+    UI_Init(&game->state.game_over_menu,
+            "Game Over",
+            GameOverItemCount,
+            (Button *)game_over_buttons);
 
     game->state.mode = GameModeMenu;
 
@@ -299,6 +346,10 @@ void Game_Run(Game *g) {
 
             if (event.type == UnPauseEventId) {
                 g->state.mode = GameModePlay;
+            }
+
+            if (event.type == GameOverEventId) {
+                g->state.mode = GameModeGameOver;
             }
 
             if (event.type == QuitToMenuEventId) {

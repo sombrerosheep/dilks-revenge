@@ -7,6 +7,7 @@ extern u32 PlayEventId;
 extern u32 PauseEventId;
 extern u32 UnPauseEventId;
 extern u32 QuitToMenuEventId;
+extern u32 GameOverEventId;
 
 void RegisterCustomEvents(void);
 

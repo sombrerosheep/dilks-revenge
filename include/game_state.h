@@ -26,6 +26,7 @@ struct drev_game_state {
     enum GameMode mode;
     UI            main_menu;
     UI            pause_menu;
+    UI            game_over_menu;
     Camera        ui_camera;
 
     // Entities

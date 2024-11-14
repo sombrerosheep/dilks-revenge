@@ -2,12 +2,14 @@
 
 #include "camera.h"
 #include "entities.h"
+#include "events.h"
 #include "game_input.h"
 #include "globals.h"
 #include "projectile.h"
 #include "resources.h"
 #include "util.h"
 #include "vec.h"
+#include <SDL_events.h>
 
 #define PLAYER_INIT_HEALTH        100.f
 #define AIM_RADIUS                15.f
@@ -47,6 +49,10 @@ void Player_Damage(Player *p, u64 amount) {
     } else {
         p->health -= amount;
     }
+}
+
+bool Player_Alive(const Player *p) {
+    return p->health > 0;
 }
 
 void Player_Kill(Player *p) {

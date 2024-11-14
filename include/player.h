@@ -28,6 +28,7 @@ void      Player_MoveTo(Player *p, Vec2 target);
 void      Player_Damage(Player *p, u64 amount);
 void      Player_Kill(Player *p);
 void      Player_Update(Player *p, f32 delta);
+bool      Player_Alive(const Player *p);
 SDL_FRect Player_GetBounds(const Player *p);
 void      Player_Draw(const Player *p);
 
