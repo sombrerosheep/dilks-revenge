@@ -228,7 +228,6 @@ void Camera_DrawPlusF(const Camera *camera, f32 x, f32 y, SDL_Color color) {
     SDL_Renderer *renderer = Resources_GetRenderer();
 
     Vec2 screen_p = Camera_WorldToScreenF(camera, x, y);
-    // printf("drawing plus at %.2fx%.2f (%.2fx%.2f)\n", screen_p.x, screen_p.y, p.x, p.y);
 
     SetRenderDrawColor(renderer, color);
     draw_plus(renderer,

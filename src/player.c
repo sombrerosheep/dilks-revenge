@@ -71,6 +71,13 @@ void Player_Update(Player *p, f32 delta) {
     f32              speed      = PlayerMeterPerSecond;
     f32              decay      = PlayerDecayMeterPerSecond;
 
+    if (p->health == 0) {
+        p->position.x += p->velocity.x * (delta * .25f);
+        p->position.y += p->velocity.y * (delta * .25f);
+
+        return;
+    }
+
     if (p->being_moved == 1) {
         const f32 ease_speed = PlayerMeterPerSecond;
         p->position.x        = ease(p->position.x, p->target_position.x, delta * ease_speed);
@@ -163,9 +170,34 @@ SDL_FRect Player_GetBounds(const Player *p) {
     return rect;
 }
 
+static void draw_health(const Player *p) {
+    f32       inset = 0.5;
+    Camera   *cam   = Resources_GetMainCamera();
+    SDL_FRect rect  = (SDL_FRect){
+         .x = p->position.x,
+         .y = p->position.y + (p->size.y / 2.f) + 2.f,
+         .w = p->size.x,
+         .h = 2.f,
+    };
+
+    Camera_DrawFillRect(cam, rect, ColorGrey);
+
+    rect.w -= (inset * 2.f);
+
+    f32 health_pcnt = (f32)(p->health / PLAYER_INIT_HEALTH);
+    f32 new_width   = rect.w * health_pcnt;
+    rect.x -= (rect.w - new_width) / 2.f;
+    rect.w = new_width;
+    rect.h -= (inset * 2.f);
+
+    Camera_DrawFillRect(cam, rect, ColorRed);
+}
+
 void Player_Draw(const Player *p) {
     Camera   *camera       = Resources_GetMainCamera();
     SDL_Color player_color = {.r = 0xAA, .g = 0x99, .b = 0x11, .a = 0xFF};
+
+    draw_health(p);
 
     Vec2 aim_point = (Vec2){
         .x = (p->aim.x * AIM_RADIUS) + p->position.x,
