@@ -68,6 +68,11 @@ static void quit_callback(void) {
     SDL_PushEvent(&quit);
 }
 
+static void reset_game(Game *game) {
+    Player_Init(&game->state.player);
+    Entities_Init(&game->state.projectiles, &game->state.smallShips, &game->state.player);
+}
+
 static void Game_UpdateModePlay(Game *game, Frame delta) {
     if (Controller_JustPressed(game->state.controller.pause)) {
         pause_callback();
@@ -204,8 +209,7 @@ static void Game_InitState(Game *game, System *sys) {
                    &game->state.debug_font);
 
     // Entities
-    Player_Init(&game->state.player);
-    Entities_Init(&game->state.projectiles, &game->state.smallShips, &game->state.player);
+    reset_game(game);
 
     UI_Init(&game->state.main_menu,
             "Dilks Revenge",
@@ -298,6 +302,7 @@ void Game_Run(Game *g) {
             }
 
             if (event.type == QuitToMenuEventId) {
+                reset_game(g);
                 Wave_End(&g->state.current_wave);
                 g->state.mode = GameModeMenu;
             }
