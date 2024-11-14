@@ -36,6 +36,9 @@ extern SDL_Color ColorRed;
 extern SDL_Color ColorGreen;
 extern SDL_Color ColorBlue;
 extern SDL_Color ColorCyan;
+extern SDL_Color ColorBlack;
+extern SDL_Color ColorGrey;
+extern SDL_Color ColorLightGrey;
 
 void SetTextureColorMod(SDL_Texture *texture, SDL_Color color);
 void SetRenderDrawColor(SDL_Renderer *renderer, SDL_Color color);
