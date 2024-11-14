@@ -1,4 +1,6 @@
 #include "system.h"
+#include <SDL_blendmode.h>
+#include <SDL_render.h>
 
 SysConfig SysConfig_HD = {
     .window_height = 720,
@@ -53,6 +55,8 @@ i8 System_Init(System *sys, char *title, SysConfig config) {
         System_Destroy(sys);
         return -1;
     }
+
+    SDL_SetRenderDrawBlendMode(sys->renderer, SDL_BLENDMODE_BLEND);
 
     sys->config = config;
 

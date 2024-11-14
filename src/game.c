@@ -15,9 +15,11 @@
 #include "resources.h"
 #include "system.h"
 #include "ui.h"
+#include "util.h"
 #include "vec.h"
 #include "wave.h"
 #include <SDL_events.h>
+#include <SDL_rect.h>
 
 const char *font_path = "/home/swansong/.local/share/fonts/ProggyVector Regular.ttf";
 
@@ -115,6 +117,7 @@ static void Game_Update(Game *game, Frame delta) {
         }
         case GameModeGameOver: {
             Camera_Update(&game->state.ui_camera, delta.sec);
+            Game_UpdateModePlay(game, delta);
             UI_Update(&game->state.game_over_menu);
             break;
         }
@@ -145,13 +148,40 @@ static void Game_Draw(Game *game) {
             break;
         }
         case GameModePause: {
+            Entities_Draw();
+            Camera_Draw(&game->state.main_camera, game->system->renderer);
+            Wave_Draw(&game->state.current_wave);
+
+            SDL_Color overlay = ColorBlack;
+            overlay.a >>= 1;
+            SDL_FRect rect = (SDL_FRect){
+                .x = 0.f,
+                .y = 0.f,
+                .w = game->state.ui_camera.half_size.x * 2.f,
+                .h = game->state.ui_camera.half_size.y * 2.f,
+            };
+            Camera_DrawFillRect(&game->state.ui_camera, rect, overlay);
+
             Camera_Draw(&game->state.ui_camera, game->system->renderer);
             UI_Draw(&game->state.pause_menu);
             break;
         }
         case GameModeGameOver: {
+            Entities_Draw();
+            Camera_Draw(&game->state.main_camera, game->system->renderer);
+            Wave_Draw(&game->state.current_wave);
+
+            SDL_Color overlay = ColorBlack;
+            overlay.a >>= 1;
+            SDL_FRect rect = (SDL_FRect){
+                .x = 0.f,
+                .y = 0.f,
+                .w = game->state.ui_camera.half_size.x * 2.f,
+                .h = game->state.ui_camera.half_size.y * 2.f,
+            };
+            Camera_DrawFillRect(&game->state.ui_camera, rect, overlay);
+
             Camera_Draw(&game->state.ui_camera, game->system->renderer);
-            // Wave_Draw(&game->state.current_wave);
             UI_Draw(&game->state.game_over_menu);
             break;
         }
