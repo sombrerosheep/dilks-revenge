@@ -5,7 +5,6 @@
 #include "vec.h"
 
 #include <SDL.h>
-#include <SDL_keycode.h>
 
 static u8 is  = 0x01;
 static u8 was = 0x10;

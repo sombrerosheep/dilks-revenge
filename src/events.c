@@ -1,7 +1,6 @@
 #include "events.h"
 
 #include <SDL.h>
-#include <SDL_events.h>
 
 u32 PlayEventId;
 u32 PauseEventId;

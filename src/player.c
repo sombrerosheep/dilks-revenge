@@ -9,7 +9,6 @@
 #include "resources.h"
 #include "util.h"
 #include "vec.h"
-#include <SDL_events.h>
 
 #define PLAYER_INIT_HEALTH        100.f
 #define AIM_RADIUS                15.f

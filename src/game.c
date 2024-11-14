@@ -18,8 +18,6 @@
 #include "util.h"
 #include "vec.h"
 #include "wave.h"
-#include <SDL_events.h>
-#include <SDL_rect.h>
 
 const char *font_path = "/home/swansong/.local/share/fonts/ProggyVector Regular.ttf";
 

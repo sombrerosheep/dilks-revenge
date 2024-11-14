@@ -1,6 +1,4 @@
 #include "system.h"
-#include <SDL_blendmode.h>
-#include <SDL_render.h>
 
 SysConfig SysConfig_HD = {
     .window_height = 720,
