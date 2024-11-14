@@ -25,7 +25,7 @@ i8 UI_Init(UI *ui, const char *title, u8 num_buttons, Button *buttons) {
 
         btn->hit_box = text_bb;
 
-        // todo: pretty sure this will return px and I'll need to conver that to units.
+        // Font_GetLineAdvance returns px and needs to be converted to units
         items_y += Font_GetLineAdvance(menu_font) / cfg->ppu;
     }
 
@@ -50,12 +50,10 @@ void UI_Update(UI *ui) {
         }
     }
 
-    // if (input->up && !prev.up) {
     if (Controller_JustPressed(input->up)) {
         ui->selected--;
     }
 
-    // if (input->down && !prev.down) {
     if (Controller_JustPressed(input->down)) {
         ui->selected++;
     }
@@ -80,7 +78,7 @@ void UI_Draw(UI *ui) {
     Font     *title          = Resources_GetTitleFont();
     Font     *ui_font        = Resources_GetMenuFont();
 
-    // does this give units?
+    // Font_MeasureText returns px. Need to convert to units.
     SDL_FRect rect = Font_MeasureText(title, ui->title);
     rect           = Camera_ScreenToWorldRect(camera, rect);
 
