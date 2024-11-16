@@ -284,14 +284,26 @@ void Wave_End(Wave *wave) {
     Entities_MovePlayerTo(Vec2_Zero);
 }
 
-static i32 get_ship_to_relocate(Wave *wave) {
-    for (u32 i = grid_columns; i < MaxSmallShips; i++) {
-        if (wave->ships[i] == NULL) {
-            continue;
+static i32 get_ship_to_relocate(Wave *wave, u32 dst_col) {
+    u32 start  = dst_col + grid_columns;
+    u32 bottom = grid_columns - 1;
+    u32 top    = MaxSmallShips;
+
+    for (u32 mark = 0;; mark++) {
+        u32 floor_col = start - mark;
+        u32 ceil_col  = start + mark;
+
+        if (floor_col <= bottom && ceil_col >= top) {
+            break;
         }
 
-        if (wave->ships[i]->in_use == 1) {
-            return i;
+        if (floor_col > bottom && wave->ships[floor_col] != NULL &&
+            wave->ships[floor_col]->in_use == 1) {
+            return floor_col;
+        }
+
+        if (ceil_col < top && wave->ships[ceil_col] != NULL && wave->ships[ceil_col]->in_use == 1) {
+            return ceil_col;
         }
     }
 
@@ -313,7 +325,7 @@ void Wave_Update(Wave *wave) {
         }
 
         // find a ship from the next row
-        i32 ship_to_move = get_ship_to_relocate(wave);
+        i32 ship_to_move = get_ship_to_relocate(wave, i);
         if (ship_to_move < 0) {
             break;
         }

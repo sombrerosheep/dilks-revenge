@@ -87,7 +87,6 @@ static void Game_UpdateModePlay(Game *game, Frame delta) {
     Entities_CheckAndHandleCollisions();
 
     if (!Player_Alive(&game->state.player)) {
-        // game->state.mode = GameModeGameOver;
         SDL_Event event = {
             .type = GameOverEventId,
         };

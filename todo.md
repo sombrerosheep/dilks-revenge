@@ -39,20 +39,6 @@
   - game loads the pack.
   - utilty bundles the package
 
-## waves II
-
-- [x] as closer enemies are killed, move a further enemy to the vacan spot
-- [x] wave done when all enemies are dead
-- [x] player moved to 0,0 then camera pans, then wave starts
-  - is this responsibility of the level?
-
-## waves III
-
-as an enemy dies:
-
-- [ ] if the immediate one behind dies, move it forward
-- [ ] if the immediate one behind dies, look for closest based on that position.
-
 ## waves IV
 
 - [ ] when a wave enters, movement to/from each extent with everyone on screen
@@ -102,24 +88,6 @@ as an enemy dies:
 ## background IV
 
 - [ ] smooth transitions between waves when switching directions
-
-## main menu
-
-- [x] play
-- [x] quit
-- [x] mouse
-
-## pause
-
-- [x] continue
-- [x] menu
-- [x] quit
-
-## game over
-
-- [ ] appears when player health is zero
-- [ ] back to main menu
-- [ ] quit
 
 ## bosses I
 
@@ -319,6 +287,20 @@ as an enemy dies:
 - [x] get group of enemies (Sequenced or seeded?)
 - [x] enter as a group (offscreen) stopping at a specific place on-screen
 
+## waves II
+
+- [x] as closer enemies are killed, move a further enemy to the vacan spot
+- [x] wave done when all enemies are dead
+- [x] player moved to 0,0 then camera pans, then wave starts
+  - is this responsibility of the level?
+
+## waves III
+
+as an enemy dies:
+
+- [x] if the immediate one behind dies, move it forward
+- [x] if the immediate one behind dies, look for closest based on that position.
+
 ## collisions I
 
 - [x] enemy bullets reduce player health
@@ -333,3 +315,21 @@ as an enemy dies:
 ## enemies III
 
 - [x] aim has a margin of error
+
+## main menu
+
+- [x] play
+- [x] quit
+- [x] mouse
+
+## pause
+
+- [x] continue
+- [x] menu
+- [x] quit
+
+## game over
+
+- [x] appears when player health is zero
+- [x] back to main menu
+- [x] quit
