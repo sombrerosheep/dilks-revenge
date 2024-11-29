@@ -282,6 +282,8 @@ void Wave_End(Wave *wave) {
     Wave_Clean(wave);
     Camera_SetFocus(camera, CameraFocusCenter);
     Entities_MovePlayerTo(Vec2_Zero);
+
+    wave->state = WaveStateFinished;
 }
 
 static i32 get_ship_to_relocate(Wave *wave, u32 dst_col) {

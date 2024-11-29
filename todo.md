@@ -47,15 +47,21 @@
 
 ## levels I
 
+- levels control enemy waves and iterations
+- [x] levels start waves when starting
+- [x] new level starts when one ends
+
+## levels II
+
 - [ ] 10 waves per level
   - sequenced or seeded?
 - [ ] 10 levels in the game
 
-## levels II
+## levels III
 
-- [ ] every 10th wave is a boss
+- [ ] every 10th wave is a boss(?)
 
-## camera II
+## camera IV
 
 - [x] lerp camera when moving to wave direction
 - [ ] small buffer outside of camera

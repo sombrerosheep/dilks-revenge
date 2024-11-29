@@ -10,6 +10,7 @@
 #include "game_mode.h"
 #include "game_state.h"
 #include "globals.h"
+#include "levels.h"
 #include "player.h"
 #include "random.h"
 #include "resources.h"
@@ -17,7 +18,6 @@
 #include "ui.h"
 #include "util.h"
 #include "vec.h"
-#include "wave.h"
 
 const char *font_path = "/home/swansong/.local/share/fonts/ProggyVector Regular.ttf";
 
@@ -71,6 +71,7 @@ static void quit_callback(void) {
 static void reset_game(Game *game) {
     Player_Init(&game->state.player);
     Entities_Init(&game->state.projectiles, &game->state.smallShips, &game->state.player);
+    Levels_Reset(&game->state.levels);
 }
 
 static void Game_UpdateModePlay(Game *game, Frame delta) {
@@ -80,7 +81,7 @@ static void Game_UpdateModePlay(Game *game, Frame delta) {
 
     Camera_Update(&game->state.main_camera, delta.sec);
 
-    Wave_Update(&game->state.current_wave);
+    Levels_Update(&game->state.levels, delta.sec);
 
     Entities_Update(delta.sec);
 
@@ -136,7 +137,7 @@ static void Game_Draw(Game *game) {
             Entities_Draw();
 
             Camera_Draw(&game->state.main_camera, game->system->renderer);
-            Wave_Draw(&game->state.current_wave);
+            Levels_Draw(&game->state.levels);
             break;
         }
         case GameModeMenu: {
@@ -147,7 +148,7 @@ static void Game_Draw(Game *game) {
         case GameModePause: {
             Entities_Draw();
             Camera_Draw(&game->state.main_camera, game->system->renderer);
-            Wave_Draw(&game->state.current_wave);
+            Levels_Draw(&game->state.levels);
 
             SDL_Color overlay = ColorBlack;
             overlay.a >>= 1;
@@ -166,7 +167,7 @@ static void Game_Draw(Game *game) {
         case GameModeGameOver: {
             Entities_Draw();
             Camera_Draw(&game->state.main_camera, game->system->renderer);
-            Wave_Draw(&game->state.current_wave);
+            Levels_Draw(&game->state.levels);
 
             SDL_Color overlay = ColorBlack;
             overlay.a >>= 1;
@@ -296,7 +297,7 @@ static void Game_InitState(Game *game, System *sys) {
     Camera_Init(&game->state.ui_camera, units_high, ratio);
     Camera_SetCenter(&game->state.ui_camera, Vec2_Zero);
 
-    game->state.current_wave.state = WaveStateIdle;
+    Levels_Init(&game->state.levels);
 }
 
 Game *Game_Create(System *sys) {
@@ -335,34 +336,6 @@ void Game_Run(Game *g) {
                 running = 0;
             }
 
-            if (event.type == SDL_KEYUP) {
-                if ( //
-                    event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_UP) ||
-                    event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_DOWN) ||
-                    event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_LEFT) ||
-                    event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_RIGHT) ||
-                    event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_c) //
-                ) {
-                    if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_UP)) {
-                        Wave_Clean(&g->state.current_wave);
-                        g->state.current_wave = Wave_New(CameraFocusTop);
-                    } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_DOWN)) {
-                        Wave_Clean(&g->state.current_wave);
-                        g->state.current_wave = Wave_New(CameraFocusBottom);
-                    } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_LEFT)) {
-                        Wave_Clean(&g->state.current_wave);
-                        g->state.current_wave = Wave_New(CameraFocusLeft);
-                    } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_RIGHT)) {
-                        Wave_Clean(&g->state.current_wave);
-                        g->state.current_wave = Wave_New(CameraFocusRight);
-                    } else if (event.key.keysym.scancode == SDL_GetScancodeFromKey(SDLK_c)) {
-                        Wave_End(&g->state.current_wave);
-                    }
-
-                    Wave_Start(&g->state.current_wave);
-                }
-            }
-
             if (event.type == PlayEventId) {
                 g->state.mode = GameModePlay;
             }
@@ -381,7 +354,6 @@ void Game_Run(Game *g) {
 
             if (event.type == QuitToMenuEventId) {
                 reset_game(g);
-                Wave_End(&g->state.current_wave);
                 g->state.mode = GameModeMenu;
             }
         }

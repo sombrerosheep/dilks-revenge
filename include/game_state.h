@@ -6,6 +6,7 @@
 #include "font.h"
 #include "game_input.h"
 #include "game_mode.h"
+#include "levels.h"
 #include "player.h"
 #include "system.h"
 #include "ui.h"
@@ -17,7 +18,7 @@ struct drev_game_state {
     // Resources
     Camera    main_camera;
     GameInput controller;
-    Wave      current_wave;
+    Levels    levels;
     Font      title_font;
     Font      menu_font;
     Font      debug_font;
