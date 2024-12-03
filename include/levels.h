@@ -17,7 +17,8 @@ enum level_state {
 extern const char *LevelStateLabels[LevelStateCount];
 
 struct levels {
-    u32              level_num;
+    u16              level_num;
+    u16              wave_num;
     f32              start_delay;
     Wave             wave;
     enum level_state state;
@@ -25,7 +26,6 @@ struct levels {
 
 i32  Levels_Init(Levels *l);
 void Levels_Reset(Levels *l);
-void Levels_Start(Levels *l);
 void Levels_Update(Levels *l, f32 delta);
 void Levels_Draw(Levels *l);
 

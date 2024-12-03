@@ -13,6 +13,20 @@ const char *LevelStateLabels[LevelStateCount] = {
     [LevelStatePlaying]   = "Playing",
 };
 
+static void Levels_Start(Levels *l) {
+    if (l->wave_num > 0 && l->wave_num % 10 == 0) {
+        l->wave_num = 0;
+        l->level_num++;
+    }
+
+    l->wave_num++;
+    printf("Starting level: %d::%d...\n", l->level_num, l->wave_num);
+    CameraFocus direction = (CameraFocus)random_get_between(CameraFocusTop, CameraFocusLeft);
+    l->wave               = Wave_New(direction);
+    printf("Starting wave: %s...\n", CameraFocusLabels[direction]);
+    Wave_Start(&l->wave);
+}
+
 i32 Levels_Init(Levels *l) {
     Levels_Reset(l);
 
@@ -20,18 +34,10 @@ i32 Levels_Init(Levels *l) {
 }
 
 void Levels_Reset(Levels *l) {
-    l->level_num = 0;
+    l->level_num = 1;
+    l->wave_num  = 0;
     l->state     = LevelStateIdle;
     Wave_Clean(&l->wave);
-}
-
-void Levels_Start(Levels *l) {
-    l->level_num++;
-    printf("Starting level: %d...\n", l->level_num);
-    CameraFocus direction = (CameraFocus)random_get_between(CameraFocusTop, CameraFocusLeft);
-    l->wave               = Wave_New(direction);
-    printf("Starting wave: %s...\n", CameraFocusLabels[direction]);
-    Wave_Start(&l->wave);
 }
 
 void Levels_Update(Levels *l, f32 delta) {
