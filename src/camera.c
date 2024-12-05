@@ -4,6 +4,7 @@
 #include "globals.h"
 #include "resources.h"
 #include "system.h"
+#include "texture.h"
 #include "util.h"
 #include "vec.h"
 
@@ -246,6 +247,26 @@ void Camera_DrawText(const Camera *cam, Font *f, const char *text, f32 x, f32 y,
     Vec2 screen_p = Camera_WorldToScreenF(cam, x, y);
 
     Font_DrawTextC(f, text, screen_p.x, screen_p.y, color);
+}
+
+void Camera_DrawTexture(const Camera *cam, Texture *t, Vec2 p, f32 rot) {
+    Vec2  screen_p = Camera_WorldToScreenF(cam, p.x, p.y);
+    Vec2i sz       = Texture_GetSize(t);
+
+    SDL_Rect src = {
+        .x = 0,
+        .y = 0,
+        .w = sz.x,
+        .h = sz.y,
+    };
+    SDL_FRect dst = {
+        .x = screen_p.x,
+        .y = screen_p.y,
+        .w = (f32)sz.x,
+        .h = (f32)sz.y,
+    };
+
+    SDL_RenderCopyExF(Resources_GetRenderer(), t->texture, &src, &dst, rot, NULL, SDL_FLIP_NONE);
 }
 
 void Camera_Destroy(Camera *camera) {

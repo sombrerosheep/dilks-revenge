@@ -1,11 +1,7 @@
 #include "texture.h"
 #include "resources.h"
-#include <SDL_assert.h>
-#include <SDL_error.h>
-#include <SDL_log.h>
-#include <SDL_pixels.h>
+#include "vec.h"
 #include <SDL_render.h>
-#include <SDL_surface.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
@@ -49,4 +45,17 @@ bool Texture_InitFromFile(Texture *t, const char *filename, SDL_Renderer *render
     }
 
     return true;
+}
+
+Vec2i Texture_GetSize(Texture *t) {
+    int w, h;
+
+    SDL_QueryTexture(t->texture, NULL, NULL, &w, &h);
+
+    Vec2i sz = (Vec2i){
+        .x = w,
+        .y = h,
+    };
+
+    return sz;
 }

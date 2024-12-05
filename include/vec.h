@@ -3,10 +3,15 @@
 
 #include "types.h"
 
-typedef struct drev_vec2 Vec2;
+typedef struct drev_vec2  Vec2;
+typedef struct drev_vec2i Vec2i;
 
 struct drev_vec2 {
     f32 x, y;
+};
+
+struct drev_vec2i {
+    i32 x, y;
 };
 
 #define Vec2_Zero \

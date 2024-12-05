@@ -3,6 +3,7 @@
 
 #include "font.h"
 #include "game_input.h"
+#include "texture.h"
 #include "vec.h"
 
 #include <SDL.h>
@@ -48,6 +49,7 @@ void Camera_DrawPlusF(const Camera *camera, f32 x, f32 y, SDL_Color color);
 void Camera_DrawPlus(const Camera *camera, Vec2 p, SDL_Color color);
 void Camera_DrawLine(const Camera *cam, f32 x1, f32 y1, f32 x2, f32 y2, SDL_Color color);
 void Camera_DrawText(const Camera *cam, Font *f, const char *text, f32 x, f32 y, SDL_Color color);
+void Camera_DrawTexture(const Camera *cam, Texture *t, Vec2 p, f32 rot);
 
 void Camera_Draw(const Camera *camera, SDL_Renderer *renderer);
 void Camera_Destroy(Camera *camera);
