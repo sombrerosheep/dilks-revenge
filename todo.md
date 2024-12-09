@@ -1,9 +1,5 @@
 # todo
 
-## core VI
-
-- [ ] args
-
 ## system
 
 - [ ] configurable "meters per unit"
@@ -234,6 +230,10 @@
 ## core V
 
 - [x] sprites
+
+## core VI
+
+- [x] args
 
 ## enemies I (light)
 
