@@ -4,6 +4,8 @@
 #include "globals.h"
 #include "resources.h"
 #include "util.h"
+#include <stdio.h>
+#include <string.h>
 
 #ifdef DREV_SAVE_FONT_BITMAP
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -24,8 +26,8 @@ i8 Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, f32 font_sz)
 
     // make a bitmap larger than what we need
     // we'll crop it later
-    i32            width      = 1024;
-    i32            max_height = 1024;
+    i32            width      = 2048;
+    i32            max_height = 2048;
     unsigned char *bitmap     = SDL_malloc(max_height * width);
 
     // do the packing, based on the ranges specified
@@ -98,7 +100,7 @@ i8 Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, f32 font_sz)
 
 // print font and glyph metrics
 #ifdef DREV_PRINT_FONT_DATA
-    printf("size    %lu:\n", font_sz);
+    printf("size    %.2f:\n", font_sz);
     printf("ascent  %3d:\n", f->ascent);
     printf("descent %.3d:\n", f->descent);
     printf("linegap %.3d:\n", f->linegap);
@@ -122,7 +124,11 @@ i8 Font_Load(SDL_Renderer *renderer, Font *f, const char *fontPath, f32 font_sz)
 
 // Write atlas to a file
 #ifdef DREV_SAVE_FONT_BITMAP
-    stbi_write_png("x1.png", width, height, 1, bitmap, 0);
+    char *fname = strrchr(fontPath, '/');
+    fname++;
+    char name[32];
+    sprintf(name, "%s_%.0f.png", fname, font_sz);
+    stbi_write_png(name, width, height, 1, bitmap, 0);
 #endif
 
     SDL_free(file_data);
