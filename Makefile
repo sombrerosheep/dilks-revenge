@@ -5,6 +5,8 @@ TARGET=$(BUILDDIR)/bin/$(BIN_NAME)
 
 CMAKE_FLAGS := "-DDREV_DRAW_BB=ON"
 # CMAKE_FLAGS += "-DDREV_DRAW_TEXT_BB=ON"
+# CMAKE_FLAGS += "-DDREV_PRINT_FONT_DATA=ON"
+# CMAKE_FLAGS += "-DDREV_SAVE_FONT_BITMAP=ON"
 
 CLANG_FMT_FILES += src/*.c
 CLANG_FMT_FILES += include/*.h
@@ -33,7 +35,7 @@ fmt:
 	clang-format -i --Werror --style=file --fallback-style="LLVM" $(CLANG_FMT_FILES)
 
 run:
-	$(TARGET)
+	$(TARGET) font_path="/home/swansong/.local/share/fonts/ProggyVector Regular.ttf"
 
 test:
 	cmake -B $(BUILDDIR) $(CMAKE_TEST_FLAGS);

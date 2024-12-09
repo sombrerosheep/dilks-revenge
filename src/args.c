@@ -66,7 +66,7 @@ static Pair parse(const char *buf) {
     return p;
 }
 
-Args ParseArgs(u32 argc, const char **argv) {
+Args Args_ParseArgv(u32 argc, const char **argv) {
     Args args = {
         .count = argc - 1,
         .pairs = NULL,
@@ -91,4 +91,14 @@ Args ParseArgs(u32 argc, const char **argv) {
     }
 
     return args;
+}
+
+void Args_Put(Args *args, FILE *f) {
+    for (u32 i = 0; i < args->count; i++) {
+        printf("Arg[%u]: ", i);
+        String_Put(&args->pairs[i].key, f);
+        printf("=");
+        String_Put(&args->pairs[i].value, f);
+        printf("\n");
+    }
 }

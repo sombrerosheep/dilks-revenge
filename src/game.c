@@ -1,5 +1,6 @@
 #include "game.h"
 
+#include "args.h"
 #include "camera.h"
 #include "clock.h"
 #include "debug.h"
@@ -14,14 +15,20 @@
 #include "player.h"
 #include "random.h"
 #include "resources.h"
+#include "sprite.h"
 #include "system.h"
+#include "texture.h"
 #include "ui.h"
 #include "util.h"
 #include "vec.h"
 
-const char *font_path = "/home/swansong/.local/share/fonts/ProggyVector Regular.ttf";
-
-// const char *font_path = "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf";
+void GameOptions_FromArgs(GameOptions *opts, Args *args) {
+    for (u32 i = 0; i < args->count; i++) {
+        if (String_EqualCstr(&args->pairs[i].key, "font_path")) {
+            opts->font_path = String_Cstr(&args->pairs[i].value);
+        }
+    }
+}
 
 struct drev_game {
     System   *system;
@@ -258,7 +265,7 @@ Button game_over_buttons[GameOverItemCount] = {
         },
 };
 
-static void Game_InitState(Game *game, System *sys) {
+static void Game_InitState(Game *game, System *sys, GameOptions *opts) {
 
     // Resources
     f32 ratio      = (f32)sys->config.window_width / sys->config.window_height;
@@ -266,9 +273,18 @@ static void Game_InitState(Game *game, System *sys) {
     Camera_Init(&game->state.main_camera, units_high, ratio);
     Camera_SetCenter(&game->state.main_camera, Vec2_Zero);
 
-    Font_Load(game->system->renderer, &game->state.title_font, font_path, 32 * sys->config.ppu);
-    Font_Load(game->system->renderer, &game->state.menu_font, font_path, 16 * sys->config.ppu);
-    Font_Load(game->system->renderer, &game->state.debug_font, font_path, 3.75 * sys->config.ppu);
+    Font_Load(game->system->renderer,
+              &game->state.title_font,
+              opts->font_path,
+              32 * sys->config.ppu);
+    Font_Load(game->system->renderer,
+              &game->state.menu_font,
+              opts->font_path,
+              16 * sys->config.ppu);
+    Font_Load(game->system->renderer,
+              &game->state.debug_font,
+              opts->font_path,
+              3.75 * sys->config.ppu);
 
     Resources_Init(&game->state.main_camera,
                    &game->state.ui_camera,
@@ -300,7 +316,7 @@ static void Game_InitState(Game *game, System *sys) {
     Levels_Init(&game->state.levels);
 }
 
-Game *Game_Create(System *sys) {
+Game *Game_Create(System *sys, GameOptions *opts) {
     random_init(42);
     Game *g = NULL;
 
@@ -319,7 +335,7 @@ Game *Game_Create(System *sys) {
 
     g->system = sys;
 
-    Game_InitState(g, sys);
+    Game_InitState(g, sys, opts);
 
     return g;
 }

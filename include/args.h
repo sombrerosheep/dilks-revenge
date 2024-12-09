@@ -10,9 +10,9 @@ struct string {
     u32         len;
 };
 
-void String_Put(String *s, FILE *dst);
-bool String_Equal(String *a, String *b);
-bool String_EqualCstr(String *s, const char *cstr);
+void  String_Put(String *s, FILE *dst);
+bool  String_Equal(String *a, String *b);
+bool  String_EqualCstr(String *s, const char *cstr);
 char *String_Cstr(String *s);
 
 // #define MAX_PATH_NAME  32
@@ -32,6 +32,7 @@ struct drev_args {
     u32   count;
 };
 
-Args ParseArgs(u32 count, const char **args);
+Args Args_ParseArgv(u32 count, const char **args);
+void Args_Put(Args *args, FILE *f);
 
 #endif // DREV_ARGS_H
