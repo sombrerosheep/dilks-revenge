@@ -28,7 +28,7 @@ struct drev_system {
     SysConfig     config;
 };
 
-i8   System_Init(System *sys, char *title, SysConfig config);
+i8   System_Init(System *sys, const char *title, SysConfig config);
 void System_Destroy(System *sys);
 
 #endif // DREV_SYSTEM
