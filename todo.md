@@ -1,12 +1,10 @@
 # todo
 
-## core IV
+## core VI
 
-- [ ] texture
-  - use SDL_Texture
-  - Do I really need an abstraction for this?
+- [ ] args
 
-## core V
+## system
 
 - [ ] configurable "meters per unit"
 - [ ] new ppu dimensions. need mpu first. Right now its 1:1
@@ -42,24 +40,22 @@
 ## waves IV
 
 - [ ] when a wave enters, movement to/from each extent with everyone on screen
-  - 5 enemies at the top move left to right, keeping everyone always on screen
+  - for example: 5 enemies at the top move left to right, keeping everyone always on screen
+  - space invaders style
+- [ ] enemies move until furthest enemy is within X of the edge
   - if 1 outside enemy dies, then the group moves slightly more (etc...)
-
-## levels I
-
-- levels control enemy waves and iterations
-- [x] levels start waves when starting
-- [x] new level starts when one ends
+  - when column 0 is empty, then column 1 moves to the extent
+  - when column 0-3 is empty, column 4 moves to the extent, etc...
 
 ## levels II
 
-- [ ] 10 waves per level
+- [x] 10 waves per level
   - sequenced or seeded?
 - [ ] 10 levels in the game
 
 ## levels III
 
-- [ ] every 10th wave is a boss(?)
+- [ ] every 10th level is a boss(?)
 
 ## camera IV
 
@@ -230,6 +226,15 @@
   - layout
   - only one up-front allocation
 
+## core IV
+
+- [x] texture
+  - use SDL_Texture
+
+## core V
+
+- [x] sprites
+
 ## enemies I (light)
 
 - [x] fires small bullets every 1000-1200ms
@@ -339,3 +344,9 @@ as an enemy dies:
 - [x] appears when player health is zero
 - [x] back to main menu
 - [x] quit
+
+## levels I
+
+- levels control enemy waves and iterations
+- [x] levels start waves when starting
+- [x] new level starts when one ends
