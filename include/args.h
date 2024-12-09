@@ -3,14 +3,17 @@
 
 #include "types.h"
 
-typedef struct slice Slice;
+typedef struct string String;
 
-struct slice {
+struct string {
     const char *buffer;
     u32         len;
 };
 
-void Slice_Put(Slice *s, FILE *dst);
+void String_Put(String *s, FILE *dst);
+bool String_Equal(String *a, String *b);
+bool String_EqualCstr(String *s, const char *cstr);
+char *String_Cstr(String *s);
 
 // #define MAX_PATH_NAME  32
 // #define MAX_PATH_VALUE 256
@@ -18,8 +21,8 @@ void Slice_Put(Slice *s, FILE *dst);
 typedef struct path_pair Pair;
 
 struct path_pair {
-    Slice key;
-    Slice value;
+    String key;
+    String value;
 };
 
 typedef struct drev_args Args;

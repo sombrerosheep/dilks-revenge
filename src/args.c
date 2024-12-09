@@ -1,9 +1,55 @@
 #include "args.h"
+#include <SDL_stdinc.h>
+#include <string.h>
 
-void Slice_Put(Slice *s, FILE *dst) {
+void String_Put(String *s, FILE *dst) {
     for (u32 i = 0; i < s->len; i++) {
         putc(s->buffer[i], dst);
     }
+}
+
+bool String_Equal(String *a, String *b) {
+    if (a->len != b->len) {
+        return false;
+    }
+
+    for (u32 i = 0; i < a->len; i++) {
+        if (a->buffer[i] != b->buffer[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool String_EqualCstr(String *s, const char *cstr) {
+    u32 cstrlen = SDL_strlen(cstr);
+
+    if (s->len != cstrlen) {
+        return false;
+    }
+
+    for (u32 i = 0; i < s->len; i++) {
+        if (s->buffer[i] != cstr[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+char *String_Cstr(String *s) {
+    char *cstr = NULL;
+
+    if ((cstr = SDL_malloc(sizeof(*cstr) * s->len + 1)) == NULL) {
+        return NULL;
+    }
+
+    memcpy(cstr, s->buffer, s->len);
+
+    cstr[s->len] = '\0';
+
+    return cstr;
 }
 
 static Pair parse(const char *buf) {
