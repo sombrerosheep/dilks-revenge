@@ -28,7 +28,7 @@ SysConfig SysConfig_4K = {
     .render_width  = 3840,
     .ppu           = 12.8,
 };
-SysConfig SysConfig_8k = {
+SysConfig SysConfig_8K = {
     .window_height = 4320,
     .window_width  = 7680,
     .render_height = 4320,

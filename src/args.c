@@ -97,8 +97,8 @@ void Args_Put(Args *args, FILE *f) {
     for (u32 i = 0; i < args->count; i++) {
         printf("Arg[%u]: ", i);
         String_Put(&args->pairs[i].key, f);
-        printf("=");
+        putc('=', f);
         String_Put(&args->pairs[i].value, f);
-        printf("\n");
+        putc('\n', f);
     }
 }
