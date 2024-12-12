@@ -35,7 +35,9 @@ fmt:
 	clang-format -i --Werror --style=file --fallback-style="LLVM" $(CLANG_FMT_FILES)
 
 run:
-	$(TARGET) font_path="/home/swansong/.local/share/fonts/ProggyVector Regular.ttf"
+	$(TARGET) \
+	font_path="/home/swansong/.local/share/fonts/ProggyVector Regular.ttf" \
+	asset_path="/home/swansong/Developer/SDL/dilks-revenge/assets/"
 
 test:
 	cmake -B $(BUILDDIR) $(CMAKE_TEST_FLAGS);

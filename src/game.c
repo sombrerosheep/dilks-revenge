@@ -1,6 +1,7 @@
 #include "game.h"
 
 #include "args.h"
+#include "assets.h"
 #include "camera.h"
 #include "clock.h"
 #include "debug.h"
@@ -22,10 +23,21 @@
 #include "util.h"
 #include "vec.h"
 
+static void Game_LoadAssets(GameOptions *opts) {
+    Assets_Init(opts->asset_path);
+    if (!Assets_LoadAllTextures(Resources_GetRenderer())) {
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "error loading assets1\n");
+    }
+}
+
 void GameOptions_FromArgs(GameOptions *opts, Args *args) {
     for (u32 i = 0; i < args->count; i++) {
         if (String_EqualCstr(&args->pairs[i].key, "font_path")) {
             opts->font_path = String_Cstr(&args->pairs[i].value);
+        }
+
+        if (String_EqualCstr(&args->pairs[i].key, "asset_path")) {
+            opts->asset_path = String_Cstr(&args->pairs[i].value);
         }
     }
 }
@@ -336,6 +348,7 @@ Game *Game_Create(System *sys, GameOptions *opts) {
     g->system = sys;
 
     Game_InitState(g, sys, opts);
+    Game_LoadAssets(opts);
 
     return g;
 }
