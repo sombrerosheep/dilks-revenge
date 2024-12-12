@@ -249,6 +249,7 @@ void Camera_DrawText(const Camera *cam, Font *f, const char *text, f32 x, f32 y,
     Font_DrawTextC(f, text, screen_p.x, screen_p.y, color);
 }
 
+// assumes pos is center orientation
 void Camera_DrawTexture(const Camera *cam, Texture *t, Vec2 p, f32 rot) {
     Vec2  screen_p = Camera_WorldToScreenF(cam, p.x, p.y);
     Vec2i sz       = Texture_GetSize(t);
@@ -260,8 +261,8 @@ void Camera_DrawTexture(const Camera *cam, Texture *t, Vec2 p, f32 rot) {
         .h = sz.y,
     };
     SDL_FRect dst = {
-        .x = screen_p.x,
-        .y = screen_p.y,
+        .x = screen_p.x - ((f32)sz.x / 2.f),
+        .y = screen_p.y - ((f32)sz.y / 2.f),
         .w = (f32)sz.x,
         .h = (f32)sz.y,
     };
