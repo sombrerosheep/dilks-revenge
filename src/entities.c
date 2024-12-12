@@ -67,7 +67,7 @@ i8 Entities_ClearSmallShips(void) {
 }
 
 Vec2 Entities_GetPlayerPosition(void) {
-    return GameEntities.player->position;
+    return Player_GetPosition(GameEntities.player);
 }
 
 void Entities_MovePlayerTo(Vec2 target) {

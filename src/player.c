@@ -1,5 +1,6 @@
 #include "player.h"
 
+#include "assets.h"
 #include "camera.h"
 #include "entities.h"
 #include "events.h"
@@ -7,6 +8,7 @@
 #include "globals.h"
 #include "projectile.h"
 #include "resources.h"
+#include "sprite.h"
 #include "util.h"
 #include "vec.h"
 
@@ -20,8 +22,10 @@
 #define PlayerProjectileSize      1.f
 
 i8 Player_Init(Player *p) {
-    p->health          = PLAYER_INIT_HEALTH;
-    p->position        = Vec2_Newf(0.f);
+    p->health = PLAYER_INIT_HEALTH;
+    // todo: load the texture for the current sysconfig
+    Sprite_Init(&p->sprite, Assets_GetTexture(TextureIDPlayerFHD));
+
     p->target_position = Vec2_Newf(0.f);
     p->velocity        = Vec2_Zero;
 
@@ -35,6 +39,10 @@ i8 Player_Init(Player *p) {
     p->fire_cooldown = PLAYER_FIRE_RATE;
 
     return 0;
+}
+
+Vec2 Player_GetPosition(const Player *p) {
+    return p->sprite.pos;
 }
 
 void Player_MoveTo(Player *p, Vec2 target) {
@@ -77,20 +85,20 @@ void Player_Update(Player *p, f32 delta) {
     f32              decay      = PlayerDecayMeterPerSecond;
 
     if (p->health == 0) {
-        p->position.x += p->velocity.x * (delta * .25f);
-        p->position.y += p->velocity.y * (delta * .25f);
+        p->sprite.pos.x += p->velocity.x * (delta * .25f);
+        p->sprite.pos.y += p->velocity.y * (delta * .25f);
 
         return;
     }
 
     if (p->being_moved == 1) {
         const f32 ease_speed = PlayerMeterPerSecond;
-        p->position.x        = ease(p->position.x, p->target_position.x, delta * ease_speed);
-        p->position.y        = ease(p->position.y, p->target_position.y, delta * ease_speed);
+        p->sprite.pos.x      = ease(p->sprite.pos.x, p->target_position.x, delta * ease_speed);
+        p->sprite.pos.y      = ease(p->sprite.pos.y, p->target_position.y, delta * ease_speed);
 
         const f32 close_enough = 0.01f;
-        if (SDL_fabsf(p->position.x - p->target_position.x) < close_enough &&
-            SDL_fabsf(p->position.y - p->target_position.y) < close_enough) {
+        if (SDL_fabsf(p->sprite.pos.x - p->target_position.x) < close_enough &&
+            SDL_fabsf(p->sprite.pos.y - p->target_position.y) < close_enough) {
             p->velocity    = Vec2_Zero;
             p->being_moved = 0;
         }
@@ -124,16 +132,17 @@ void Player_Update(Player *p, f32 delta) {
         p->velocity.x *= v_mag;
         p->velocity.y *= v_mag;
 
-        p->position.x += p->velocity.x * delta;
-        p->position.y += p->velocity.y * delta;
+        p->sprite.pos.x += p->velocity.x * delta;
+        p->sprite.pos.y += p->velocity.y * delta;
 
         p->aim = Camera_ScreenToWorldF(Resources_GetMainCamera(),
                                        controller->mouse_screen_x,
                                        controller->mouse_screen_y);
-        p->aim.x -= p->position.x;
-        p->aim.y -= p->position.y;
+        p->aim.x -= p->sprite.pos.x;
+        p->aim.y -= p->sprite.pos.y;
 
         p->aim = Vec2_Normalize(p->aim);
+        Sprite_SetRotation(&p->sprite, slope_to_deg(p->aim) + 90.f);
 
         // Shooting
         p->fire_cooldown -= delta;
@@ -141,8 +150,10 @@ void Player_Update(Player *p, f32 delta) {
         if (p->fire_cooldown < 0) {
             if (controller->mouse_left || Controller_Is(controller->fire)) {
                 Vec2 aim_point = (Vec2){
-                    .x = (p->aim.x * AIM_RADIUS) + p->position.x,
-                    .y = (p->aim.y * AIM_RADIUS) + p->position.y,
+                    // .x = (p->aim.x * AIM_RADIUS) + p->sprite.pos.x,
+                    // .y = (p->aim.y * AIM_RADIUS) + p->sprite.pos.y,
+                    .x = (p->aim.x * (p->size.x / 2.f)) + p->sprite.pos.x,
+                    .y = (p->aim.y * (p->size.y / 2.f)) + p->sprite.pos.y,
                 };
                 Player_Shoot(aim_point, p->aim);
                 p->fire_cooldown = PLAYER_FIRE_RATE;
@@ -152,22 +163,22 @@ void Player_Update(Player *p, f32 delta) {
 
     SDL_FRect cam_bounds = Camera_GetBounds(camera);
 
-    if (p->position.x < cam_bounds.x) {
-        p->position.x = cam_bounds.x;
-    } else if (p->position.x > cam_bounds.x + cam_bounds.w) {
-        p->position.x = cam_bounds.x + cam_bounds.w;
+    if (p->sprite.pos.x < cam_bounds.x) {
+        p->sprite.pos.x = cam_bounds.x;
+    } else if (p->sprite.pos.x > cam_bounds.x + cam_bounds.w) {
+        p->sprite.pos.x = cam_bounds.x + cam_bounds.w;
     }
-    if (p->position.y < cam_bounds.y) {
-        p->position.y = cam_bounds.y;
-    } else if (p->position.y > cam_bounds.y + cam_bounds.h) {
-        p->position.y = cam_bounds.y + cam_bounds.h;
+    if (p->sprite.pos.y < cam_bounds.y) {
+        p->sprite.pos.y = cam_bounds.y;
+    } else if (p->sprite.pos.y > cam_bounds.y + cam_bounds.h) {
+        p->sprite.pos.y = cam_bounds.y + cam_bounds.h;
     }
 }
 
 SDL_FRect Player_GetBounds(const Player *p) {
     SDL_FRect rect = {
-        .x = p->position.x,
-        .y = p->position.y,
+        .x = p->sprite.pos.x,
+        .y = p->sprite.pos.y,
         .w = p->size.x,
         .h = p->size.y,
     };
@@ -179,8 +190,8 @@ static void draw_health(const Player *p) {
     f32       inset = 0.5;
     Camera   *cam   = Resources_GetMainCamera();
     SDL_FRect rect  = (SDL_FRect){
-         .x = p->position.x,
-         .y = p->position.y + (p->size.y / 2.f) + 2.f,
+         .x = p->sprite.pos.x,
+         .y = p->sprite.pos.y + (p->size.y / 2.f) + 2.f,
          .w = p->size.x,
          .h = 2.f,
     };
@@ -199,32 +210,11 @@ static void draw_health(const Player *p) {
 }
 
 void Player_Draw(const Player *p) {
-    Camera   *camera       = Resources_GetMainCamera();
-    SDL_Color player_color = {.r = 0xAA, .g = 0x99, .b = 0x11, .a = 0xFF};
+    Camera *camera = Resources_GetMainCamera();
 
     draw_health(p);
 
-    Vec2 aim_point = (Vec2){
-        .x = (p->aim.x * AIM_RADIUS) + p->position.x,
-        .y = (p->aim.y * AIM_RADIUS) + p->position.y,
-    };
-
-    // draw the player
-    SDL_FRect rect = {
-        .x = p->position.x,
-        .y = p->position.y,
-        .w = p->size.x,
-        .h = p->size.y,
-    };
-
-    Camera_DrawFillRect(camera, rect, player_color);
-
-    // draw the crosshair box
-    rect.x = aim_point.x;
-    rect.y = aim_point.y;
-    rect.w = 1.f;
-    rect.h = 1.f;
-    Camera_DrawFillRect(camera, rect, player_color);
+    Sprite_Draw(&p->sprite);
 
 #ifdef DREV_DRAW_BB
     Camera_DrawRect(camera, Player_GetBounds(p), ColorRed);

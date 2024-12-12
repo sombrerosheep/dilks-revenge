@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "game_input.h"
 #include "projectile.h"
+#include "sprite.h"
 #include "types.h"
 #include "vec.h"
 
@@ -13,7 +14,8 @@ typedef struct drev_player       Player;
 typedef struct player_projectile PlayerProjectile;
 
 struct drev_player {
-    Vec2 position;
+    Sprite sprite;
+    // Vec2 position;
     Vec2 target_position;
     Vec2 velocity;
     Vec2 size;
@@ -24,6 +26,7 @@ struct drev_player {
 };
 
 i8        Player_Init(Player *p);
+Vec2      Player_GetPosition(const Player *p);
 void      Player_MoveTo(Player *p, Vec2 target);
 void      Player_Damage(Player *p, u64 amount);
 void      Player_Kill(Player *p);

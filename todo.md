@@ -1,5 +1,12 @@
 # todo
 
+# bugs
+
+- [ ] start a level, pause and go back to menu
+  - game does not properly reset.
+  - camera focus is still set
+  - player is not at the center
+
 ## system
 
 - [ ] configurable "meters per unit"
@@ -8,6 +15,7 @@
       | ---------- | ------ | ---------- | ---------- | ---------- | ----- |
       | 1280x720 | 10.67 | 4u (44px) | 120u | 67.5u | 1.777 |
       | 1920x1080 | 16 | 4u (64px) | 120u | 67.5u | 1.777 |
+      | 2560x1440 | 21.3 | 4u (85.3px) | 120u | 67.5u | 1.777 |
       | 3840x2160 | 32 | 4u (128px) | 120u | 67.5u | 1.777 |
       | 7680x4320 | 64 | 4u (256px) | 120u | 67.5u | 1.777 |
 
@@ -21,13 +29,18 @@
 
 ## assets I
 
+- [x] asset manager
+- [x] handling assets with multiple ppu's
+
+## assets II
+
 - [ ] asset packer
 - [ ] save and load assets
   - font atlas
   - sprites
 - [ ] loaded into resource manager
 
-## assets II
+## assets III
 
 - [ ] asset packer utility
   - game loads the pack.
