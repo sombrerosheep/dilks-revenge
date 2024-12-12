@@ -7,14 +7,15 @@
 typedef struct drev_sprite Sprite;
 
 struct drev_sprite {
-    Vec2    pos;
-    Texture texture;
-    f32     rotation;
+    Vec2     pos;
+    Texture *texture;
+    f32      rotation;
 };
 
-bool Sprite_Init(Sprite *s, Texture t);
+bool Sprite_Init(Sprite *s, Texture *t);
 void Sprite_SetPosition(Sprite *s, Vec2 p);
+void Sprite_SetPositionf(Sprite *s, f32 x, f32 y);
 void Sprite_SetRotation(Sprite *s, f32 deg);
-void Sprite_Draw(Sprite *s);
+void Sprite_Draw(const Sprite *s);
 
 #endif // DREV_SPRITE_H
