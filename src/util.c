@@ -30,6 +30,11 @@ f32 ease(f32 have, f32 want, f32 ease) {
     return result;
 }
 
+f32 slope_to_deg(Vec2 vec) {
+    f32 rad = SDL_atan2f(vec.y, vec.x);
+    return rad_to_deg(rad);
+}
+
 SDL_Color ColorWhite     = {0xFF, 0xFF, 0xFF, 0xFF};
 SDL_Color ColorRed       = {0xFF, 0x0, 0x0, 0xFF};
 SDL_Color ColorGreen     = {0x0, 0xFF, 0x0, 0xFF};
