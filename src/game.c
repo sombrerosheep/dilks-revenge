@@ -11,6 +11,7 @@
 #include "game_input.h"
 #include "game_mode.h"
 #include "game_state.h"
+#include "game_ui.h"
 #include "globals.h"
 #include "levels.h"
 #include "player.h"
@@ -46,46 +47,6 @@ struct drev_game {
     System   *system;
     GameState state;
 };
-
-static void pause_callback(void) {
-    SDL_Event pause = {
-        .type = PauseEventId,
-    };
-
-    SDL_PushEvent(&pause);
-}
-
-static void unpause_callback(void) {
-    SDL_Event unpause = {
-        .type = UnPauseEventId,
-    };
-
-    SDL_PushEvent(&unpause);
-}
-
-static void quit_to_menu_callback(void) {
-    SDL_Event quit_to_menu = {
-        .type = QuitToMenuEventId,
-    };
-
-    SDL_PushEvent(&quit_to_menu);
-}
-
-static void play_callback(void) {
-    SDL_Event play = {
-        .type = PlayEventId,
-    };
-
-    SDL_PushEvent(&play);
-}
-
-static void quit_callback(void) {
-    SDL_Event quit = {
-        .type = SDL_QUIT,
-    };
-
-    SDL_PushEvent(&quit);
-}
 
 static void reset_game(Game *game) {
     Player_Init(&game->state.player);
@@ -213,69 +174,6 @@ static void Game_Draw(Game *game) {
 
     SDL_RenderPresent(game->system->renderer);
 }
-
-enum pause_menu_items {
-    PauseMenuItemContinue = 0,
-    PauseMenuItemQuitToMenu,
-    PauseMenuItemQuit,
-    PauseMenuItemCount
-};
-
-Button pause_menu_buttons[PauseMenuItemCount] = {
-    [PauseMenuItemContinue] =
-        {
-            .text     = "Resume",
-            .callback = unpause_callback,
-        },
-    [PauseMenuItemQuitToMenu] =
-        {
-            .text     = "Quit to Menu",
-            .callback = quit_to_menu_callback,
-        },
-    [PauseMenuItemQuit] =
-        {
-            .text     = "Quit",
-            .callback = quit_callback,
-        },
-};
-
-enum main_menu_items {
-    MainMenuItemPlay = 0,
-    MainMenuItemQuit,
-    MainMenuItemCount
-};
-
-Button main_menu_buttons[MainMenuItemCount] = {
-    [MainMenuItemPlay] =
-        {
-            .text     = "Play",
-            .callback = play_callback,
-        },
-    [MainMenuItemQuit] =
-        {
-            .text     = "Quit",
-            .callback = quit_callback,
-        },
-};
-
-enum game_over_items {
-    GameOverItemMenu = 0,
-    GameOverItemQuit,
-    GameOverItemCount
-};
-
-Button game_over_buttons[GameOverItemCount] = {
-    [GameOverItemMenu] =
-        {
-            .text     = "Main Menu",
-            .callback = quit_to_menu_callback,
-        },
-    [GameOverItemQuit] =
-        {
-            .text     = "Quit",
-            .callback = quit_callback,
-        },
-};
 
 static void Game_InitState(Game *game, System *sys, GameOptions *opts) {
 
