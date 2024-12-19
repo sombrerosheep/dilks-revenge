@@ -8,6 +8,7 @@
 #include "vec.h"
 
 #include <SDL.h>
+#include <SDL_stdinc.h>
 
 #define TEXT_BUFFER_LEN 512
 #define UI_LEFT_INDENT  20.f
@@ -23,6 +24,7 @@ void Debug_Draw(void) {
     Vec2             player_screen = Camera_WorldToScreen(cam, player_pos);
     SDL_FRect        bounds        = Camera_GetBounds(cam);
     const GameInput *input         = Resources_GetController();
+    const char      *camera_focus  = CameraFocusLabels[Camera_GetFocus(cam)];
 
     f32 x = UI_LEFT_INDENT;
     f32 y = UI_TOP_INDENT;
@@ -67,6 +69,11 @@ void Debug_Draw(void) {
                  "MouseScreen: %.2f x %.2f",
                  input->mouse_screen_x,
                  input->mouse_screen_y);
+    Font_DrawText(debug, buffer, x, y);
+
+    y += Font_GetLineAdvance(debug);
+
+    SDL_snprintf(buffer, TEXT_BUFFER_LEN, "Camera Focus: %s\n", camera_focus);
     Font_DrawText(debug, buffer, x, y);
 
     y += Font_GetLineAdvance(debug);

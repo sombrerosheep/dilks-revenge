@@ -45,6 +45,10 @@ Vec2 Player_GetPosition(const Player *p) {
     return p->sprite.pos;
 }
 
+void Player_SetPosition(Player *p, Vec2 pos) {
+    p->sprite.pos = pos;
+}
+
 void Player_MoveTo(Player *p, Vec2 target) {
     p->target_position = target;
     p->being_moved     = 1;

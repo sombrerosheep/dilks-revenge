@@ -15,18 +15,18 @@ typedef struct player_projectile PlayerProjectile;
 
 struct drev_player {
     Sprite sprite;
-    // Vec2 position;
-    Vec2 target_position;
-    Vec2 velocity;
-    Vec2 size;
-    Vec2 aim;
-    i8   being_moved;
-    f32  fire_cooldown;
-    u64  health;
+    Vec2   target_position;
+    Vec2   velocity;
+    Vec2   size;
+    Vec2   aim;
+    i8     being_moved;
+    f32    fire_cooldown;
+    u64    health;
 };
 
 i8        Player_Init(Player *p);
 Vec2      Player_GetPosition(const Player *p);
+void      Player_SetPosition(Player *p, Vec2 pos);
 void      Player_MoveTo(Player *p, Vec2 target);
 void      Player_Damage(Player *p, u64 amount);
 void      Player_Kill(Player *p);

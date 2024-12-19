@@ -313,7 +313,7 @@ static i32 get_ship_to_relocate(Wave *wave, u32 dst_col) {
 }
 
 void Wave_Update(Wave *wave) {
-    if (wave->wave_direction == CameraFocusCenter || wave->wave_direction == CameraFocusCenter) {
+    if (wave->wave_direction == CameraFocusCenter) {
         return;
     }
 
@@ -370,6 +370,7 @@ void Wave_Draw(Wave *wave) {
 }
 
 void Wave_Clean(Wave *wave) {
+    Camera_SetCenter(Resources_GetMainCamera(), Vec2_Zero);
     wave->wave_direction = CameraFocusCenter;
     wave->state          = WaveStateIdle;
 

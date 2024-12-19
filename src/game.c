@@ -50,8 +50,12 @@ struct drev_game {
 
 static void reset_game(Game *game) {
     Player_Init(&game->state.player);
+
     Entities_Init(&game->state.projectiles, &game->state.smallShips, &game->state.player);
     Levels_Reset(&game->state.levels);
+
+    Camera_SetCenter(Resources_GetMainCamera(), Vec2_Zero);
+    Camera_SetFocus(Resources_GetMainCamera(), CameraFocusCenter);
 }
 
 static void Game_UpdateModePlay(Game *game, Frame delta) {
@@ -181,7 +185,7 @@ static void Game_InitState(Game *game, System *sys, GameOptions *opts) {
     f32 ratio      = (f32)sys->config.window_width / sys->config.window_height;
     f32 units_high = (f32)sys->config.window_height / sys->config.ppu;
     Camera_Init(&game->state.main_camera, units_high, ratio);
-    Camera_SetCenter(&game->state.main_camera, Vec2_Zero);
+    Camera_MoveCenter(&game->state.main_camera, Vec2_Zero);
 
     Font_Load(game->system->renderer,
               &game->state.title_font,
@@ -221,7 +225,7 @@ static void Game_InitState(Game *game, System *sys, GameOptions *opts) {
     game->state.mode = GameModeMenu;
 
     Camera_Init(&game->state.ui_camera, units_high, ratio);
-    Camera_SetCenter(&game->state.ui_camera, Vec2_Zero);
+    Camera_MoveCenter(&game->state.ui_camera, Vec2_Zero);
 
     Levels_Init(&game->state.levels);
 }

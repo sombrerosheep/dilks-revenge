@@ -22,7 +22,7 @@ i8 Camera_Init(Camera *camera, f32 unit_height, f32 ratio) {
     camera->half_size.y = unit_height / 2.f;
     camera->half_size.x = unit_height * ratio / 2.f;
 
-    Camera_SetCenter(camera, Vec2_Zero);
+    Camera_MoveCenter(camera, Vec2_Zero);
     camera->position = camera->target_position;
 
     return 0;
@@ -32,6 +32,10 @@ void Camera_Update(Camera *camera, f32 delta) {
     const f32 speed    = 250.f;
     camera->position.x = ease(camera->position.x, camera->target_position.x, delta * speed);
     camera->position.y = ease(camera->position.y, camera->target_position.y, delta * speed);
+}
+
+CameraFocus Camera_GetFocus(Camera *camera) {
+    return camera->focus;
 }
 
 void Camera_SetFocus(Camera *camera, CameraFocus focus) {
@@ -48,11 +52,16 @@ void Camera_SetFocus(Camera *camera, CameraFocus focus) {
         center.x += FOCUS_OFFSET;
     }
 
-    Camera_SetCenter(camera, center);
+    Camera_MoveCenter(camera, center);
+}
+
+void Camera_SetCenter(Camera *camera, Vec2 center) {
+    camera->position.x = center.x - camera->half_size.x;
+    camera->position.y = center.y - camera->half_size.y;
 }
 
 // camera position should be in top-left origin
-void Camera_SetCenter(Camera *camera, Vec2 center) {
+void Camera_MoveCenter(Camera *camera, Vec2 center) {
     camera->target_position.x = center.x - camera->half_size.x;
     camera->target_position.y = center.y - camera->half_size.y;
 }
