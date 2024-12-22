@@ -5,6 +5,16 @@
 
 #include <SDL.h>
 
+#define bit_set(t, slot)                \
+    SDL_assert(slot < (sizeof(t) * 8)); \
+    (t) |= (1 << slot)
+
+#define bit_unset(t, slot)              \
+    SDL_assert(slot < (sizeof(t) * 8)); \
+    (t) ^= (1 << slot)
+
+#define bit_isset(t, slot) (t) & (1 << slot)
+
 // Maths
 
 f32 clamp(f32 value, f32 upper, f32 lower);

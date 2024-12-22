@@ -2,10 +2,11 @@
 
 # bugs
 
-- [ ] start a level, pause and go back to menu
+- [x] start a level, pause and go back to menu
   - game does not properly reset.
   - camera focus is still set
   - player is not at the center
+- [x] game over screen allows you to pause
 
 ## system
 

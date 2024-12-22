@@ -25,6 +25,7 @@ struct drev_game_state {
 
     // GameMode and UI
     enum GameMode mode;
+    int           modeGraph[GameModeCount];
     UI            main_menu;
     UI            pause_menu;
     UI            game_over_menu;
