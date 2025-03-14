@@ -1,12 +1,6 @@
-# todo
-
 # bugs
 
-- [x] start a level, pause and go back to menu
-  - game does not properly reset.
-  - camera focus is still set
-  - player is not at the center
-- [x] game over screen allows you to pause
+# todo
 
 ## system
 
@@ -20,20 +14,20 @@
       | 3840x2160 | 32 | 4u (128px) | 120u | 67.5u | 1.777 |
       | 7680x4320 | 64 | 4u (256px) | 120u | 67.5u | 1.777 |
 
-## resources IV
-
-- [ ] integrate images
-
 ## resources V
 
 - [ ] integrate sounds
 
-## assets I
-
-- [x] asset manager
-- [x] handling assets with multiple ppu's
-
 ## assets II
+
+- [ ] Loading assets with multiple ppu's
+  - when an entity requests its texture, it needs to know which version to request?
+  - or does the asset library need refactored to return the asset for the current ppu?
+    - Sprites have a pointer reference to the Texture. This would need refactoring to fetch
+      the texture at each draw
+  - how will each entity know what the ppu is?
+
+## assets III
 
 - [ ] asset packer
 - [ ] save and load assets
@@ -41,7 +35,7 @@
   - sprites
 - [ ] loaded into resource manager
 
-## assets III
+## assets IV
 
 - [ ] asset packer utility
   - game loads the pack.
@@ -67,6 +61,11 @@
 
 - [ ] every 10th level is a boss(?)
 
+## camera III (juice)
+
+- [ ] small shake when player is hit
+- [ ] even smaller shake when enemy dies?
+
 ## camera IV
 
 - [x] lerp camera when moving to wave direction
@@ -78,11 +77,6 @@
 ## player III
 
 - [ ] refine movement; make the drift feel less slippery
-
-## camera III (juice)
-
-- [ ] small shake when player is hit
-- [ ] even smaller shake when enemy dies?
 
 ## background I
 
@@ -364,3 +358,20 @@ as an enemy dies:
 - levels control enemy waves and iterations
 - [x] levels start waves when starting
 - [x] new level starts when one ends
+
+## resources IV
+
+- [x] integrate images
+
+## assets I
+
+- [x] asset manager
+- [x] handling assets with multiple ppu's
+
+# bugs
+
+- [x] start a level, pause and go back to menu
+  - game does not properly reset.
+  - camera focus is still set
+  - player is not at the center
+- [x] game over screen allows you to pause
