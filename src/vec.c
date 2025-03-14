@@ -1,4 +1,5 @@
 #include "vec.h"
+#include "maths.h"
 
 #include <SDL.h>
 
@@ -29,8 +30,12 @@ Vec2 Vec2_Normalize(Vec2 vec) {
 }
 
 Vec2 Vec2_Rotate(Vec2 vec, f32 deg) {
+    // todo: this accepted the angel in degress but really wanted it
+    // in radians. Since i'm only using this with deg currently, moving
+    // that conversion inside the function.
+    f32 rad = DegToRad(deg);
     Vec2 rot   = Vec2_Zero;
-    f32  a_sin = SDL_sinf(deg);
+    f32  a_sin = SDL_sinf(rad);
     f32  a_cos = SDL_cosf(deg);
 
     rot.x = vec.x * a_cos - vec.y * a_sin;

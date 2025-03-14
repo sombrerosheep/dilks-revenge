@@ -98,7 +98,9 @@ void SmallShip_Update(SmallShip *ship, f32 delta) {
             };
 
             f32 err = random_getf_between(-SmallShipAimErrorDeg, SmallShipAimErrorDeg);
-            err     = DegToRad(err);
+            // Since rotate uses 'deg' as its param name,
+            // might as well do the conversion in there
+            // err     = DegToRad(err);
             aim     = Vec2_Normalize(aim);
             aim     = Vec2_Rotate(aim, err);
 

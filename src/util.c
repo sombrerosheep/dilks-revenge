@@ -1,4 +1,5 @@
 #include "util.h"
+#include "maths.h"
 
 f32 clamp(f32 value, f32 upper, f32 lower) {
     f32 result = value;
@@ -32,7 +33,7 @@ f32 ease(f32 have, f32 want, f32 ease) {
 
 f32 slope_to_deg(Vec2 vec) {
     f32 rad = SDL_atan2f(vec.y, vec.x);
-    return rad_to_deg(rad);
+    return RadToDeg(rad);
 }
 
 SDL_Color ColorWhite     = {0xFF, 0xFF, 0xFF, 0xFF};

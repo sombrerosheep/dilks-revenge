@@ -21,9 +21,6 @@ f32 clamp(f32 value, f32 upper, f32 lower);
 
 f32 ease(f32 have, f32 want, f32 ease);
 
-#define deg_to_rad(deg) ((deg) * ((M_PI) / 180.f))
-#define rad_to_deg(rad) ((rad) * (180.f / (M_PI)))
-
 f32 slope_to_deg(Vec2 vec);
 
 // Containers
