@@ -24,7 +24,8 @@ bool Texture_InitFromFile(Texture *t, const char *filename, SDL_Renderer *render
     SDL_PixelFormatEnumToMasks(SDL_PIXELFORMAT_RGBA32, &bpp, &rmask, &gmask, &bmask, &amask);
     SDL_assert(bpp == stb_bpp);
 
-    SDL_CreateRGBSurfaceWithFormatFrom(data, width, height, stb_bpp, pitch, SDL_PIXELFORMAT_RGBA32);
+    // todo: was this leftover from something? I'm not using the resulting surface and its leaking memory
+    // SDL_CreateRGBSurfaceWithFormatFrom(data, width, height, stb_bpp, pitch, SDL_PIXELFORMAT_RGBA32);
 
     SDL_Surface *canvas =
         SDL_CreateRGBSurfaceFrom(data, width, height, bpp, pitch, rmask, gmask, bmask, amask);
