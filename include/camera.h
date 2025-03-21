@@ -11,11 +11,11 @@
 typedef struct drev_camera Camera;
 
 typedef enum {
-    CameraFocusCenter = 0,
-    CameraFocusTop,
-    CameraFocusBottom,
-    CameraFocusRight,
+    CameraFocusBottom = 0,
     CameraFocusLeft,
+    CameraFocusTop,
+    CameraFocusRight,
+    CameraFocusCenter,
 
     CameraFocusCount
 } CameraFocus;

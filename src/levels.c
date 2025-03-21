@@ -21,7 +21,7 @@ static void Levels_Start(Levels *l) {
 
     l->wave_num++;
     printf("Starting level: %d::%d...\n", l->level_num, l->wave_num);
-    CameraFocus direction = (CameraFocus)random_get_between(CameraFocusTop, CameraFocusLeft);
+    CameraFocus direction = (CameraFocus)random_get_between(CameraFocusBottom, CameraFocusRight);
     l->wave               = Wave_New(direction);
     printf("Starting wave: %s...\n", CameraFocusLabels[direction]);
     Wave_Start(&l->wave);

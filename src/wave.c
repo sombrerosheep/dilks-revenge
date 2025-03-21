@@ -248,7 +248,7 @@ Wave Wave_New(CameraFocus direction) {
             SmallShipType type = random_get_between(SmallShipType_Light, SmallShipType_Heavy);
             SmallShip     ship;
 
-            SmallShip_Init(&ship, type, start_at, Vec2_Zero, 0.f);
+            SmallShip_Init(&ship, type, start_at, Vec2_Zero, 90.f * direction);
             SmallShip_MoveTo(&ship, pos);
             ContainedSmallShip *con_ship = Entities_InsertSmallShip(ship);
             set_grid_ship(&w, con_ship, col, row, grid.columns);
