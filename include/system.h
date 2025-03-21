@@ -9,6 +9,7 @@ typedef struct drev_system    System;
 typedef struct drev_sysconfig SysConfig;
 
 struct drev_sysconfig {
+    char        *label;
     unsigned int window_height;
     unsigned int window_width;
     unsigned int render_height;

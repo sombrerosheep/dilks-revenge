@@ -51,21 +51,12 @@ static void Game_InitModeGraph(GameState *state, int sz, enum GameMode init_mode
     bit_set(state->modeGraph[GameModePause], GameModePlay);
     bit_set(state->modeGraph[GameModeGameOver], GameModeMenu);
 
-    for (int i = 0; i < sz; i++) {
-        for (int j = 0; j < sz; j++) {
-            printf("%s => %s == %d\n",
-                   GameModeLabels[i],
-                   GameModeLabels[j],
-                   bit_isset(state->modeGraph[i], j));
-        }
-    }
-
     state->mode = init_mode;
 }
 
-static void Game_LoadAssets(GameOptions *opts) {
+static void Game_LoadAssets(GameOptions *opts, SysConfig *config) {
     Assets_Init(opts->asset_path);
-    if (!Assets_LoadAllTextures(Resources_GetRenderer())) {
+    if (!Assets_LoadAllTextures(config, Resources_GetRenderer())) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "error loading assets1\n");
     }
 }
@@ -261,16 +252,7 @@ static void Game_InitState(Game *game, System *sys, GameOptions *opts) {
             GameOverItemCount,
             (Button *)game_over_buttons);
 
-    // game->state.mode = GameModeMenu;
     Game_InitModeGraph(&game->state, GameModeCount, GameModeMenu);
-    for (int i = 0; i < GameModeCount; i++) {
-        for (int j = 0; j < GameModeCount; j++) {
-            printf("%s => %s == %d\n",
-                   GameModeLabels[i],
-                   GameModeLabels[j],
-                   bit_isset(game->state.modeGraph[i], j));
-        }
-    }
 
     Camera_Init(&game->state.ui_camera, units_high, ratio);
     Camera_MoveCenter(&game->state.ui_camera, Vec2_Zero);
@@ -298,7 +280,7 @@ Game *Game_Create(System *sys, GameOptions *opts) {
     g->system = sys;
 
     Game_InitState(g, sys, opts);
-    Game_LoadAssets(opts);
+    Game_LoadAssets(opts, &sys->config);
 
     return g;
 }

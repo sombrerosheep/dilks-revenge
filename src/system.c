@@ -1,6 +1,7 @@
 #include "system.h"
 
 SysConfig SysConfig_HD = {
+    .label         = "hd",
     .window_height = 720,
     .window_width  = 1280,
     .render_height = 720,
@@ -8,6 +9,7 @@ SysConfig SysConfig_HD = {
     .ppu           = 4.27, // hmm
 };
 SysConfig SysConfig_FHD = {
+    .label         = "fhd",
     .window_height = 1080,
     .window_width  = 1920,
     .render_height = 1080,
@@ -15,6 +17,7 @@ SysConfig SysConfig_FHD = {
     .ppu           = 6.4f,
 };
 SysConfig SysConfig_QHD = {
+    .label         = "qhd",
     .window_height = 1440,
     .window_width  = 2560,
     .render_height = 1440,
@@ -22,6 +25,7 @@ SysConfig SysConfig_QHD = {
     .ppu           = 8.53, // hmm
 };
 SysConfig SysConfig_4K = {
+    .label         = "4k",
     .window_height = 2160,
     .window_width  = 3840,
     .render_height = 2160,
@@ -29,6 +33,7 @@ SysConfig SysConfig_4K = {
     .ppu           = 12.8,
 };
 SysConfig SysConfig_8K = {
+    .label         = "8k",
     .window_height = 4320,
     .window_width  = 7680,
     .render_height = 4320,
@@ -39,7 +44,7 @@ SysConfig SysConfig_8K = {
 i8 System_Init(System *sys, const char *title, SysConfig config) {
     if ((sys->window = SDL_CreateWindow(title,
                                         100,
-                                        50,
+                                        150,
                                         config.window_width,
                                         config.window_height,
                                         SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)) == NULL) {
