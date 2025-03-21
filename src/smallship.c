@@ -48,7 +48,7 @@ static struct drev_smallshipconfig configs[SmallShipType_Count] = {
 };
 
 #define SmallShipTravelSpeed 125.f
-#define SmallShipAimErrorDeg 15.0
+#define SmallShipAimErrorDeg 15.f
 
 i8 SmallShip_Init(SmallShip *ship, SmallShipType type, Vec2 position, Vec2 velocity, f32 rotation) {
     struct drev_smallshipconfig config = configs[type];

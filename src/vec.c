@@ -36,7 +36,7 @@ Vec2 Vec2_Rotate(Vec2 vec, f32 deg) {
     f32 rad = DegToRad(deg);
     Vec2 rot   = Vec2_Zero;
     f32  a_sin = SDL_sinf(rad);
-    f32  a_cos = SDL_cosf(deg);
+    f32  a_cos = SDL_cosf(rad);
 
     rot.x = vec.x * a_cos - vec.y * a_sin;
     rot.y = vec.y * a_cos + vec.x * a_sin;
