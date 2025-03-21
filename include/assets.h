@@ -14,6 +14,8 @@
 // will request the texture as needed, instead of "owning" them.
 typedef enum drev_texture_id {
     TextureIDPlayer = 0,
+    TextureIDLightShip,
+    TextureIDHeavyShip,
 
     TextureIDCount
 } TextureID;

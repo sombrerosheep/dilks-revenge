@@ -23,7 +23,6 @@
 
 i8 Player_Init(Player *p) {
     p->health = PLAYER_INIT_HEALTH;
-    // todo: load the texture for the current sysconfig
     Sprite_Init(&p->sprite, Assets_GetTexture(TextureIDPlayer));
 
     p->target_position = Vec2_Newf(0.f);

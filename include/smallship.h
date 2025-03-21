@@ -1,6 +1,7 @@
 #ifndef DREV_SMALL_SHIP_H
 #define DREV_SMALL_SHIP_H
 
+#include "sprite.h"
 #include "types.h"
 #include "vec.h"
 
@@ -17,11 +18,10 @@ typedef enum {
 
 struct drev_small_ship {
     SmallShipType type;
-    Vec2          position;
+    Sprite        sprite;
     Vec2          target_position;
     Vec2          velocity;
     Vec2          size;
-    f32           rotation;
     f32           fire_cooldown;
     u32           health;
 };

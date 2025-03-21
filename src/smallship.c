@@ -1,5 +1,6 @@
 #include "smallship.h"
 
+#include "assets.h"
 #include "camera.h"
 #include "entities.h"
 #include "maths.h"
@@ -53,13 +54,18 @@ i8 SmallShip_Init(SmallShip *ship, SmallShipType type, Vec2 position, Vec2 veloc
     struct drev_smallshipconfig config = configs[type];
 
     ship->type            = type;
-    ship->position        = position;
     ship->target_position = position;
     ship->velocity        = Vec2_Normalize(velocity);
-    ship->rotation        = rotation;
     ship->fire_cooldown   = random_getf_between(config.fire_rate_min, config.fire_rate_max);
     ship->size            = Vec2_Newf(config.size);
     ship->health          = config.inititial_health;
+
+    TextureID shipTextureId =
+        ship->type == SmallShipType_Light ? TextureIDLightShip : TextureIDHeavyShip;
+
+    Sprite_Init(&ship->sprite, Assets_GetTexture(shipTextureId));
+    Sprite_SetPosition(&ship->sprite, position);
+    Sprite_SetRotation(&ship->sprite, rotation);
 
     return 0;
 }
@@ -76,16 +82,16 @@ static void SmallShip_Shoot(Vec2 pos, Vec2 vel, float speed, u32 strength, float
 
 void SmallShip_Update(SmallShip *ship, f32 delta) {
     struct drev_smallshipconfig config = configs[ship->type];
-    if (Vec2_Equal(ship->position, ship->target_position) == 0) {
-        ship->position.x =
-            ease(ship->position.x, ship->target_position.x, delta * SmallShipTravelSpeed);
-        ship->position.y =
-            ease(ship->position.y, ship->target_position.y, delta * SmallShipTravelSpeed);
+    if (Vec2_Equal(ship->sprite.pos, ship->target_position) == 0) {
+        ship->sprite.pos.x =
+            ease(ship->sprite.pos.x, ship->target_position.x, delta * SmallShipTravelSpeed);
+        ship->sprite.pos.y =
+            ease(ship->sprite.pos.y, ship->target_position.y, delta * SmallShipTravelSpeed);
 
         const f32 close_enough = 0.01f;
-        if (SDL_fabsf(ship->position.x - ship->target_position.x) < close_enough &&
-            SDL_fabsf(ship->position.y - ship->target_position.y) < close_enough) {
-            ship->position = ship->target_position;
+        if (SDL_fabsf(ship->sprite.pos.x - ship->target_position.x) < close_enough &&
+            SDL_fabsf(ship->sprite.pos.y - ship->target_position.y) < close_enough) {
+            ship->sprite.pos = ship->target_position;
         }
     } else {
         ship->fire_cooldown -= delta;
@@ -93,18 +99,15 @@ void SmallShip_Update(SmallShip *ship, f32 delta) {
         if (ship->fire_cooldown < 0.f) {
             Vec2 playerPos = Entities_GetPlayerPosition();
             Vec2 aim       = {
-                      .x = playerPos.x - ship->position.x,
-                      .y = playerPos.y - ship->position.y,
+                      .x = playerPos.x - ship->sprite.pos.x,
+                      .y = playerPos.y - ship->sprite.pos.y,
             };
 
             f32 err = random_getf_between(-SmallShipAimErrorDeg, SmallShipAimErrorDeg);
-            // Since rotate uses 'deg' as its param name,
-            // might as well do the conversion in there
-            // err     = DegToRad(err);
             aim     = Vec2_Normalize(aim);
             aim     = Vec2_Rotate(aim, err);
 
-            SmallShip_Shoot(ship->position,
+            SmallShip_Shoot(ship->sprite.pos,
                             aim,
                             config.projectile_speed,
                             config.projectile_damage,
@@ -113,14 +116,14 @@ void SmallShip_Update(SmallShip *ship, f32 delta) {
         }
     }
 
-    ship->position.x += ship->velocity.x * config.ship_speed * delta;
-    ship->position.y += ship->velocity.y * config.ship_speed * delta;
+    ship->sprite.pos.x += ship->velocity.x * config.ship_speed * delta;
+    ship->sprite.pos.y += ship->velocity.y * config.ship_speed * delta;
 }
 
 SDL_FRect SmallShip_GetBounds(const SmallShip *ship) {
     SDL_FRect rect = {
-        .x = ship->position.x,
-        .y = ship->position.y,
+        .x = ship->sprite.pos.x,
+        .y = ship->sprite.pos.y,
         .w = ship->size.x,
         .h = ship->size.y,
     };
@@ -141,23 +144,9 @@ void SmallShip_Kill(SmallShip *ship) {
 }
 
 void SmallShip_Draw(SmallShip *ship) {
-    Camera   *camera           = Resources_GetMainCamera();
-    SDL_Color light_ship_color = {.r = 0x11, .g = 0x11, .b = 0xCC, .a = 0xAA};
-    SDL_Color heavy_ship_color = ColorRed;
-    SDL_Color ship_color       = light_ship_color;
+    Camera *camera = Resources_GetMainCamera();
 
-    if (ship->type == SmallShipType_Heavy) {
-        ship_color = heavy_ship_color;
-    }
-
-    SDL_FRect rect = {
-        .x = ship->position.x,
-        .y = ship->position.y,
-        .w = ship->size.x,
-        .h = ship->size.y,
-    };
-
-    Camera_DrawFillRect(camera, rect, ship_color);
+    Sprite_Draw(&ship->sprite);
 
 #ifdef DREV_DRAW_BB
     Camera_DrawRect(camera, SmallShip_GetBounds(ship), ColorRed);
