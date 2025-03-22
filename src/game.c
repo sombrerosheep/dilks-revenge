@@ -2,6 +2,7 @@
 
 #include "args.h"
 #include "assets.h"
+#include "background.h"
 #include "camera.h"
 #include "clock.h"
 #include "debug.h"
@@ -80,8 +81,12 @@ struct drev_game {
 
 static void reset_game(Game *game) {
     Player_Init(&game->state.player);
+    Background_Init(&game->state.background, Vec2_Down);
 
-    Entities_Init(&game->state.projectiles, &game->state.smallShips, &game->state.player);
+    Entities_Init(&game->state.projectiles,
+                  &game->state.smallShips,
+                  &game->state.player,
+                  &game->state.background);
     Levels_Reset(&game->state.levels);
 
     Camera_SetCenter(Resources_GetMainCamera(), Vec2_Zero);
@@ -210,7 +215,6 @@ static void Game_Draw(Game *game) {
 }
 
 static void Game_InitState(Game *game, System *sys, GameOptions *opts) {
-
     // Resources
     f32 ratio      = (f32)sys->config.window_width / sys->config.window_height;
     f32 units_high = (f32)sys->config.window_height / sys->config.ppu;

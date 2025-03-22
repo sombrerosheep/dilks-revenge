@@ -1,6 +1,7 @@
 #ifndef DREV_ENTITIES_H
 #define DREV_ENTITIES_H
 
+#include "background.h"
 #include "player.h"
 #include "projectile.h"
 #include "smallship.h"
@@ -21,11 +22,13 @@ struct drev_entity_manager {
     ProjectileContainer *projectiles;
     SmallShipContainer  *small_ships;
     Player              *player;
+    ParallaxBackground  *background;
 };
 
 void Entities_Init(ProjectileContainer *projectiles,
                    SmallShipContainer  *small_ships,
-                   Player              *player);
+                   Player              *player,
+                   ParallaxBackground  *background);
 
 i8                  Entities_AddProjectile(Projectile p);
 ContainedSmallShip *Entities_InsertSmallShip(SmallShip ship);
@@ -33,6 +36,7 @@ i8                  Entities_ClearSmallShips(void);
 Vec2                Entities_GetPlayerPosition(void);
 void                Entities_MovePlayerTo(Vec2 target);
 void                Entities_KillProjectile(Projectile *p);
+void                Enities_SetBackgroundDirection(Vec2 direction);
 
 void Entities_CheckAndHandleCollisions(void);
 

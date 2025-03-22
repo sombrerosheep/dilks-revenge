@@ -7,9 +7,14 @@
 #define PATH_BUFFER_SZ 1024
 
 const char *TextureKey[TextureIDCount] = {
+    //
     [TextureIDPlayer]    = "textures/player/player",
     [TextureIDLightShip] = "textures/ship/ship-light",
     [TextureIDHeavyShip] = "textures/ship/ship-heavy",
+
+    [TextureIDBackgroundNear] = "textures/background/near",
+    [TextureIDBackgroundMid]  = "textures/background/mid",
+    [TextureIDBackgroundFar]  = "textures/background/far",
 };
 
 struct drev_asset_catalog {

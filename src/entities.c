@@ -1,5 +1,6 @@
 #include "entities.h"
 
+#include "background.h"
 #include "camera.h"
 #include "collisions.h"
 #include "player.h"
@@ -15,7 +16,8 @@ static EntityManager GameEntities;
 
 void Entities_Init(ProjectileContainer *projectiles,
                    SmallShipContainer  *small_ships,
-                   Player              *player //
+                   Player              *player,
+                   ParallaxBackground  *background //
 ) {
     clean_container(projectiles);
     projectiles->capacity = MaxProjectiles;
@@ -27,6 +29,7 @@ void Entities_Init(ProjectileContainer *projectiles,
         .projectiles = projectiles,
         .player      = player,
         .small_ships = small_ships,
+        .background  = background,
     };
 
     return;
@@ -111,6 +114,7 @@ void Entities_Update(f32 delta) {
     Entities_UpdateProjectiles(bounds, delta);
     Entities_UpdateSmallShips(delta);
     Player_Update(GameEntities.player, delta);
+    Background_Update(GameEntities.background, delta);
 }
 
 void Entities_KillProjectile(Projectile *p) {
@@ -205,7 +209,13 @@ static void Entities_DrawSmallShips(void) {
 }
 
 void Entities_Draw(void) {
+    Background_Draw(GameEntities.background);
     Entities_DrawProjectiles();
     Entities_DrawSmallShips();
     Player_Draw(GameEntities.player);
+}
+
+void Enities_SetBackgroundDirection(Vec2 direction) {
+    // todo: transitions
+    GameEntities.background->direction = direction;
 }

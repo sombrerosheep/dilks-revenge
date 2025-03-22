@@ -1,6 +1,7 @@
 #ifndef DREV_GAME_MEMORY_H
 #define DREV_GAME_MEMORY_H
 
+#include "background.h"
 #include "camera.h"
 #include "entities.h"
 #include "font.h"
@@ -32,6 +33,7 @@ struct drev_game_state {
     Camera        ui_camera;
 
     // Entities
+    ParallaxBackground  background;
     Player              player;
     ProjectileContainer projectiles;
     SmallShipContainer  smallShips;

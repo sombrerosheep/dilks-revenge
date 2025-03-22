@@ -17,6 +17,10 @@ typedef enum drev_texture_id {
     TextureIDLightShip,
     TextureIDHeavyShip,
 
+    TextureIDBackgroundNear,
+    TextureIDBackgroundMid,
+    TextureIDBackgroundFar,
+
     TextureIDCount
 } TextureID;
 
