@@ -36,7 +36,7 @@ i8                  Entities_ClearSmallShips(void);
 Vec2                Entities_GetPlayerPosition(void);
 void                Entities_MovePlayerTo(Vec2 target);
 void                Entities_KillProjectile(Projectile *p);
-void                Enities_SetBackgroundDirection(Vec2 direction);
+void                Entities_SetBackgroundDirection(Vec2 direction);
 
 void Entities_CheckAndHandleCollisions(void);
 

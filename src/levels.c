@@ -1,7 +1,9 @@
 #include "levels.h"
 #include "camera.h"
+#include "entities.h"
 #include "globals.h"
 #include "random.h"
+#include "vec.h"
 #include "wave.h"
 
 const f32 wave_countown_s = 3.f;
@@ -23,6 +25,27 @@ static void Levels_Start(Levels *l) {
     printf("Starting level: %d::%d...\n", l->level_num, l->wave_num);
     CameraFocus direction = (CameraFocus)random_get_between(CameraFocusBottom, CameraFocusRight);
     l->wave               = Wave_New(direction);
+
+    Vec2 background_velocity = Vec2_Zero;
+    switch (direction) {
+        case CameraFocusBottom:
+            background_velocity = Vec2_Up;
+            break;
+        case CameraFocusLeft:
+            background_velocity = Vec2_Right;
+            break;
+        case CameraFocusTop:
+            background_velocity = Vec2_Down;
+            break;
+        case CameraFocusRight:
+            background_velocity = Vec2_Left;
+            break;
+        default:
+            background_velocity = Vec2_Zero;
+    }
+
+    Entities_SetBackgroundDirection(background_velocity);
+
     printf("Starting wave: %s...\n", CameraFocusLabels[direction]);
     Wave_Start(&l->wave);
 }

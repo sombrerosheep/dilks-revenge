@@ -6,26 +6,22 @@
 
 - [ ] configurable "meters per unit"
 - [ ] new ppu dimensions. need mpu first. Right now its 1:1
-      | Resolution | PPU | Player | Screen (W) | Screen (H) | Ratio |
-      | ---------- | ------ | ---------- | ---------- | ---------- | ----- |
-      | 1280x720 | 10.67 | 4u (44px) | 120u | 67.5u | 1.777 |
-      | 1920x1080 | 16 | 4u (64px) | 120u | 67.5u | 1.777 |
-      | 2560x1440 | 21.3 | 4u (85.3px) | 120u | 67.5u | 1.777 |
-      | 3840x2160 | 32 | 4u (128px) | 120u | 67.5u | 1.777 |
-      | 7680x4320 | 64 | 4u (256px) | 120u | 67.5u | 1.777 |
+
+| Resolution | PPU   | Player      | Screen (W) | Screen (H) | Ratio |
+| ---------- | ----- | ----------- | ---------- | ---------- | ----- |
+| 1280x720   | 10.67 | 4u (44px)   | 120u       | 67.5u      | 1.777 |
+| 1920x1080  | 16    | 4u (64px)   | 120u       | 67.5u      | 1.777 |
+| 2560x1440  | 21.3  | 4u (85.3px) | 120u       | 67.5u      | 1.777 |
+| 3840x2160  | 32    | 4u (128px)  | 120u       | 67.5u      | 1.777 |
+| 7680x4320  | 64    | 4u (256px)  | 120u       | 67.5u      | 1.777 |
+
+- this was a good execise to wrap my head around, however, it did take awhile
+  to fully understand and what I ended up with may not be as useful as I wanted.
+  we shall see!
 
 ## resources V
 
 - [ ] integrate sounds
-
-## assets II
-
-- [ ] Loading assets with multiple ppu's
-  - when an entity requests its texture, it needs to know which version to request?
-  - or does the asset library need refactored to return the asset for the current ppu?
-    - Sprites have a pointer reference to the Texture. This would need refactoring to fetch
-      the texture at each draw
-  - how will each entity know what the ppu is?
 
 ## assets III
 
@@ -77,14 +73,6 @@
 ## player III
 
 - [ ] refine movement; make the drift feel less slippery
-
-## background I
-
-- [ ] stars moving slowly in direction of wave
-
-## background II
-
-- [ ] slight parallax with camera movement
 
 ## backgroud III
 
@@ -367,6 +355,25 @@ as an enemy dies:
 
 - [x] asset manager
 - [x] handling assets with multiple ppu's
+
+## assets II
+
+- [x] Loading assets with multiple ppu's
+  - when an entity requests its texture, it needs to know which version to request?
+  - or does the asset library need refactored to return the asset for the current ppu?
+    - Sprites have a pointer reference to the Texture. This would need refactoring to fetch
+      the texture at each draw
+  - how will each entity know what the ppu is?
+- [x] Implemented by removing the concern from the entity. the asset mangaer will load
+      assets based upon the system config.
+
+## background I
+
+- [x] stars moving slowly in direction of wave
+
+## background II
+
+- [x] slight parallax with camera movement
 
 # bugs
 

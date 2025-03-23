@@ -215,7 +215,7 @@ void Entities_Draw(void) {
     Player_Draw(GameEntities.player);
 }
 
-void Enities_SetBackgroundDirection(Vec2 direction) {
+void Entities_SetBackgroundDirection(Vec2 direction) {
     // todo: transitions
     GameEntities.background->velocity = direction;
 }
