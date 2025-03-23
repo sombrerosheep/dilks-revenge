@@ -14,13 +14,13 @@ struct drev_parallax_layer {
 };
 
 struct drev_background {
-    Vec2          direction;
+    Vec2          velocity;
     ParallaxLayer near;
     ParallaxLayer mid;
     ParallaxLayer far;
 };
 
-void Background_Init(ParallaxBackground *b, Vec2 direction);
+void Background_Init(ParallaxBackground *b, Vec2 velocity);
 void Background_Update(ParallaxBackground *b, f32 delta);
 void Background_Draw(ParallaxBackground *b);
 

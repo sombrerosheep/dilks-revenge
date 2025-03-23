@@ -4,7 +4,6 @@
 #include "system.h"
 #include "texture.h"
 #include "vec.h"
-#include <SDL_rect.h>
 
 bool Sprite_Init(Sprite *s, Texture *t) {
     s->pos      = Vec2_Zero;

@@ -81,7 +81,7 @@ struct drev_game {
 
 static void reset_game(Game *game) {
     Player_Init(&game->state.player);
-    Background_Init(&game->state.background, Vec2_Down);
+    Background_Init(&game->state.background, Vec2_Up);
 
     Entities_Init(&game->state.projectiles,
                   &game->state.smallShips,
@@ -100,7 +100,7 @@ static void Game_UpdateModePlay(Game *game, Frame delta) {
 
     Camera_Update(&game->state.main_camera, delta.sec);
 
-    Levels_Update(&game->state.levels, delta.sec);
+    // Levels_Update(&game->state.levels, delta.sec);
 
     Entities_Update(delta.sec);
 
