@@ -38,45 +38,49 @@ static void ParallaxLayer_Update(ParallaxLayer *l, Vec2 velocity, f32 delta) {
     }
 }
 
-static void ParallaxLayer_Draw(ParallaxLayer *l, Vec2 velocity) {
-    UNUSED(velocity);
-    // draw the tracked sprite
-    Sprite_Draw(&l->sprite);
+static void ParallaxLayer_Draw(ParallaxLayer *l) {
+    SDL_FRect cam_bounds = Camera_GetBounds(Resources_GetMainCamera());
+    SDL_FRect bounds     = Sprite_GetBounds(&l->sprite);
+    Vec2      half       = {.x = bounds.w / 2.f, .y = bounds.h / 2.f};
 
-    SDL_FRect bounds = Sprite_GetBounds(&l->sprite);
+    // find min and max for texture that goes off screen
+    // draw X copies of the sprite.
+    f32 min_x = bounds.x - half.x;
+    f32 min_y = bounds.y - half.y;
+    f32 max_x = bounds.x + half.x;
+    f32 max_y = bounds.y + half.y;
+    u32 crows = 1;
+    u32 ccols = 1;
 
-    // todo: this assumes the layer is at least the same size as
-    // the camera bounds but in a lazy way
-    // this should be updated to "ftile" the images based on
-    // the texture, camera bounds and velocity.
-    if (velocity.x < 0.f) {
-        Vec2 pos = l->sprite.pos;
-        pos.x += bounds.w;
-
-        Sprite_DrawAt(&l->sprite, pos);
-    } else if (velocity.x > 0.f) {
-        Vec2 pos = l->sprite.pos;
-        pos.x -= bounds.w;
-
-        Sprite_DrawAt(&l->sprite, pos);
+    while (min_x > cam_bounds.x) {
+        min_x -= bounds.w;
+        ccols++;
     }
 
-    if (velocity.y < 0.f) {
-        Vec2 pos = l->sprite.pos;
-        pos.y += bounds.h;
-
-        Sprite_DrawAt(&l->sprite, pos);
-    } else if (velocity.y > 0.f) {
-        Vec2 pos = l->sprite.pos;
-        pos.y -= bounds.h;
-
-        Sprite_DrawAt(&l->sprite, pos);
+    while (min_y > cam_bounds.y) {
+        min_y -= bounds.h;
+        crows++;
     }
 
-    // todo: handle multi-axis velocity
-    // this only accounts for x or y plane velocity not both
-    // if we were moving in a diagonal direction, we'd have an
-    // issue.
+    while (max_x < cam_bounds.x + bounds.w) {
+        max_x += bounds.w;
+        ccols++;
+    }
+
+    while (max_y < cam_bounds.y + bounds.h) {
+        max_y += bounds.h;
+        crows++;
+    }
+
+    for (u32 r = 0; r < crows; r++) {
+        for (u32 c = 0; c < ccols; c++) {
+            Vec2 pos = {
+                .x = min_x + half.x + (bounds.w * c),
+                .y = min_y + half.y + (bounds.h * r),
+            };
+            Sprite_DrawAt(&l->sprite, pos);
+        }
+    }
 
 #if DREV_DRAW_BB
     Camera_DrawRect(Resources_GetMainCamera(), bounds, ColorRed);
@@ -109,7 +113,7 @@ void Background_Update(ParallaxBackground *b, f32 delta) {
 }
 
 void Background_Draw(ParallaxBackground *b) {
-    ParallaxLayer_Draw(&b->near, b->velocity);
-    ParallaxLayer_Draw(&b->mid, b->velocity);
-    ParallaxLayer_Draw(&b->far, b->velocity);
+    ParallaxLayer_Draw(&b->near);
+    ParallaxLayer_Draw(&b->mid);
+    ParallaxLayer_Draw(&b->far);
 }
