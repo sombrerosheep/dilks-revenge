@@ -42,11 +42,6 @@ void UI_Update(UI *ui) {
     for (i8 i = 0; i < ui->num_buttons; i++) {
         if (SDL_PointInFRect(&p, &ui->buttons[i].hit_box)) {
             ui->selected = i;
-
-            if (input->mouse_left) {
-                ui->buttons[i].callback();
-            }
-            return;
         }
     }
 

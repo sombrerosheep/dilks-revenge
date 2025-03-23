@@ -67,7 +67,7 @@ void Controller_Update(GameInput *controller, System *sys) {
         controller->right |= is;
     }
 
-    if (keys[SDL_GetScancodeFromKey(SDLK_SPACE)]) {
+    if (keys[SDL_GetScancodeFromKey(SDLK_SPACE)] || (mouse_state & SDL_BUTTON_LEFT)) {
         controller->fire |= is;
     }
 
