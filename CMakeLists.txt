@@ -38,6 +38,11 @@ if (DREV_DRAW_TEXT_BB)
   add_compile_definitions(DREV_DRAW_TEXT_BB)
 endif(DREV_DRAW_TEXT_BB)
 
+OPTION(DREV_DRAW_PARALLAX_BB "draws bounding box for parallax layers" OFF)
+if (DREV_DRAW_PARALLAX_BB)
+    add_compile_definitions(DREV_DRAW_PARALLAX_BB)
+endif(DREV_DRAW_PARALLAX_BB)
+
 # Dependencies
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})

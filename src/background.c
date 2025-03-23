@@ -8,6 +8,7 @@
 #include "types.h"
 #include "util.h"
 #include <SDL.h>
+#include <SDL_rect.h>
 
 #define BACKGROUND_SPEED    20.f
 #define BACKGROUND_FAR_MOD  1.f
@@ -79,12 +80,14 @@ static void ParallaxLayer_Draw(ParallaxLayer *l) {
                 .y = min_y + half.y + (bounds.h * r),
             };
             Sprite_DrawAt(&l->sprite, pos);
+#if DREV_DRAW_PARALLAX_BB
+            SDL_FRect bb_bounds = bounds;
+            bb_bounds.x         = pos.x;
+            bb_bounds.y         = pos.y;
+            Camera_DrawRect(Resources_GetMainCamera(), bb_bounds, ColorRed);
+#endif
         }
     }
-
-#if DREV_DRAW_BB
-    Camera_DrawRect(Resources_GetMainCamera(), bounds, ColorRed);
-#endif
 }
 
 void Background_Init(ParallaxBackground *b, Vec2 velocity) {
