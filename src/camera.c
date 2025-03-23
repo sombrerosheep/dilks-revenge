@@ -98,7 +98,7 @@ Vec2 Camera_ScreenToWorld(const Camera *cam, Vec2 pos) {
     return world;
 }
 
-// Camera bounds in world position
+// Camera bounds in world position.
 SDL_FRect Camera_GetBounds(const Camera *cam) {
     SDL_FRect rect = (SDL_FRect){
         .x = cam->position.x,

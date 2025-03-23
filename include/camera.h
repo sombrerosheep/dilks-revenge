@@ -23,6 +23,7 @@ typedef enum {
 extern const char *CameraFocusLabels[CameraFocusCount];
 
 struct drev_camera {
+    // Camera position in top-left origin
     Vec2        position;
     Vec2        target_position;
     Vec2        half_size;
@@ -42,7 +43,9 @@ Vec2        Camera_WorldToScreenF(const Camera *cam, f32 x, f32 y);
 Vec2        Camera_ScreenToWorld(const Camera *cam, Vec2 pos);
 Vec2        Camera_ScreenToWorldF(const Camera *cam, f32 x, f32 y);
 SDL_FRect   Camera_ScreenToWorldRect(Camera *cam, SDL_FRect rect);
-SDL_FRect   Camera_GetBounds(const Camera *cam);
+
+// Returns the camera's rect in a top-left origin
+SDL_FRect Camera_GetBounds(const Camera *cam);
 
 // all coordinates for draw functions should be in world coordinates (x/y) and units.
 void Camera_DrawFillRect(const Camera *cam, SDL_FRect rect, SDL_Color color);
