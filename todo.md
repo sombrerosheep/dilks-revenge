@@ -67,6 +67,8 @@
 - [x] lerp camera when moving to wave direction
 - [ ] small buffer outside of camera
   - will move with player but still constrained
+  - player is constrained to the same bounds but camera will extend
+    an additional bit (more than player but not much more.)
 - [ ] slightly move camera when moving
   - slight "tilt"
 
@@ -374,6 +376,19 @@ as an enemy dies:
 ## background II
 
 - [x] slight parallax with camera movement
+
+## background IIa
+
+- [x] Update graphics
+  - colors:
+    - white (#ffffff)
+    - yellow (#e3e679)
+    - red (#bf0600)
+    - blue (#005a7e)
+  - brush: stamp sparkles
+  - near: 200px
+  - mid: 100px
+  - far: 45px
 
 # bugs
 
