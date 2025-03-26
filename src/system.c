@@ -6,7 +6,7 @@ SysConfig SysConfig_HD = {
     .window_width  = 1280,
     .render_height = 720,
     .render_width  = 1280,
-    .ppu           = 4.27, // hmm
+    .ppu           = 4.27,
 };
 SysConfig SysConfig_FHD = {
     .label         = "fhd",
@@ -22,7 +22,7 @@ SysConfig SysConfig_QHD = {
     .window_width  = 2560,
     .render_height = 1440,
     .render_width  = 2560,
-    .ppu           = 8.53, // hmm
+    .ppu           = 8.53,
 };
 SysConfig SysConfig_4K = {
     .label         = "4k",

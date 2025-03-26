@@ -29,7 +29,7 @@ i8 Camera_Init(Camera *camera, f32 unit_height, f32 ratio) {
 }
 
 void Camera_Update(Camera *camera, f32 delta) {
-    const f32 speed    = 250.f;
+    const f32 speed    = 75.f;
     camera->position.x = ease(camera->position.x, camera->target_position.x, delta * speed);
     camera->position.y = ease(camera->position.y, camera->target_position.y, delta * speed);
 }

@@ -302,28 +302,23 @@ void Game_Run(Game *g) {
             }
 
             if (event.type == PlayEventId) {
-                // g->state.mode = GameModePlay;
                 Game_SetMode(&g->state, GameModePlay);
             }
 
             if (event.type == PauseEventId) {
-                // g->state.mode = GameModePause;
                 Game_SetMode(&g->state, GameModePause);
             }
 
             if (event.type == UnPauseEventId) {
-                // g->state.mode = GameModePlay;
                 Game_SetMode(&g->state, GameModePlay);
             }
 
             if (event.type == GameOverEventId) {
-                // g->state.mode = GameModeGameOver;
                 Game_SetMode(&g->state, GameModeGameOver);
             }
 
             if (event.type == QuitToMenuEventId) {
                 reset_game(g);
-                // g->state.mode = GameModeMenu;
                 Game_SetMode(&g->state, GameModeMenu);
             }
         }
